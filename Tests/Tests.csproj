@@ -23,4 +23,8 @@
       <ProjectReference Include="..\RackPeek\RackPeek.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Hardware\Switches\" />
+    </ItemGroup>
+
 </Project>

@@ -7,9 +7,11 @@ using Microsoft.Extensions.Logging;
 using RackPeek.Commands;
 using RackPeek.Commands.Server;
 using RackPeek.Commands.Server.Cpus;
+using RackPeek.Commands.Switches;
 using RackPeek.Domain.Resources.Hardware.Reports;
 using RackPeek.Domain.Resources.Hardware.Server;
 using RackPeek.Domain.Resources.Hardware.Server.Cpu;
+using RackPeek.Domain.Resources.Hardware.Switchs;
 using RackPeek.Yaml;
 
 namespace RackPeek;
@@ -91,6 +93,21 @@ public static class Program
         services.AddScoped<ServerCpuSetCommand>();
         services.AddScoped<ServerCpuRemoveCommand>();
         
+        // Switch commands
+        services.AddScoped<SwitchAddCommand>();
+        services.AddScoped<SwitchDeleteCommand>();
+        services.AddScoped<SwitchDescribeCommand>();
+        services.AddScoped<SwitchGetByNameCommand>();
+        services.AddScoped<SwitchGetCommand>();
+        services.AddScoped<SwitchSetCommand>();
+        
+        // Switch Usecases
+        services.AddScoped<AddSwitchUseCase>();
+        services.AddScoped<DeleteSwitchUseCase>();
+        services.AddScoped<GetSwitchUseCase>();
+        services.AddScoped<GetSwitchesUseCase>();
+        services.AddScoped<UpdateSwitchUseCase>();
+
         // Spectre bootstrap
         var registrar = new TypeRegistrar(services);
         var app = new CommandApp(registrar);
@@ -139,6 +156,29 @@ public static class Program
                 });
             });
 
+            config.AddBranch("switches", server =>
+            {
+                server.SetDescription("Manage switches");
+                
+                server.AddCommand<SwitchReportCommand>("summary")
+                    .WithDescription("Show switch hardware report");
+                
+                server.AddCommand<SwitchAddCommand>("add")
+                    .WithDescription("Add a new switch");
+
+                server.AddCommand<SwitchGetByNameCommand>("get")
+                    .WithDescription("List switches or get a switches by name");
+
+                server.AddCommand<SwitchDescribeCommand>("describe")
+                    .WithDescription("Show detailed information about a switch");
+
+                server.AddCommand<SwitchSetCommand>("set")
+                    .WithDescription("Update switch properties");
+
+                server.AddCommand<SwitchDeleteCommand>("del")
+                    .WithDescription("Delete a switch");
+            });
+            
             // ----------------------------
             // Reports (read-only summaries)
             // ----------------------------
@@ -147,9 +187,6 @@ public static class Program
 
             config.AddCommand<DesktopReportCommand>("desktops")
                 .WithDescription("Show desktop hardware report");
-
-            config.AddCommand<SwitchReportCommand>("switches")
-                .WithDescription("Show switch hardware report");
 
             config.AddCommand<UpsReportCommand>("ups")
                 .WithDescription("Show UPS hardware report");
