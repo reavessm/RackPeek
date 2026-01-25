@@ -9,7 +9,7 @@ public class HardwareDeserializationTests
     public static IHardwareRepository CreateSut(string yaml)
     {
         var yamlResourceCollection = new YamlResourceCollection();
-        yamlResourceCollection.Load([yaml]);
+        yamlResourceCollection.Load(yaml, "test.yaml");
         return new YamlHardwareRepository(yamlResourceCollection);
     }
     

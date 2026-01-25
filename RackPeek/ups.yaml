@@ -1,5 +1,6 @@
 resources:
-  - kind: Ups
-    name: rack-ups
-    model: Volta
-    va: 2200
+- kind: Ups
+  model: Volta
+  va: 2200
+  name: rack-ups
+  tags: 

@@ -8,7 +8,7 @@ public class ServiceDeserializationTests
     public static ISystemRepository CreateSut(string yaml)
     {
         var yamlResourceCollection = new YamlResourceCollection();
-        yamlResourceCollection.Load([yaml]);
+        yamlResourceCollection.Load(yaml, "test.yaml");
         return new YamlSystemRepository(yamlResourceCollection);
     }
     
