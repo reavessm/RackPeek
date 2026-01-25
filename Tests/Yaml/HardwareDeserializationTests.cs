@@ -1,10 +1,18 @@
-﻿using RackPeek.Resources;
-using RackPeek.Resources.Hardware;
+﻿using RackPeek;
+using RackPeek.Domain.Resources.Hardware;
+using RackPeek.Domain.Resources.Hardware.Models;
 
 namespace Tests;
 
 public class HardwareDeserializationTests
 {
+    public static IHardwareRepository CreateSut(string yaml)
+    {
+        var yamlResourceCollection = new YamlResourceCollection();
+        yamlResourceCollection.Load([yaml]);
+        return new YamlHardwareRepository(yamlResourceCollection);
+    }
+    
     [Theory]
     [InlineData("Server", typeof(Server))]
     [InlineData("Switch", typeof(Switch))]
@@ -14,7 +22,7 @@ public class HardwareDeserializationTests
     [InlineData("Router", typeof(Router))]
     [InlineData("AccessPoint", typeof(AccessPoint))]
     [InlineData("Ups", typeof(Ups))]
-    public void deserialize_yaml_kind(string kind, Type type)
+    public async Task deserialize_yaml_kind(string kind, Type type)
     {
         // Given
         var yaml = $@"
@@ -22,8 +30,10 @@ resources:
   - kind: {kind}
 ";
         
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
         
         // Then
         var hardware = Assert.Single(resources);
@@ -31,7 +41,7 @@ resources:
     }
     
     [Fact]
-    public void deserialize_yaml_kind_server()
+    public async Task deserialize_yaml_kind_server()
     {
         // Given
         var yaml = $@"
@@ -59,8 +69,11 @@ resources:
           ports: 2
     ipmi: true
 ";
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
+
         
         // Then
         var hardware = Assert.Single(resources);
@@ -105,7 +118,7 @@ resources:
     }
     
     [Fact]
-    public void deserialize_yaml_kind_switch()
+    public async Task deserialize_yaml_kind_switch()
     {
         // Given
         var yaml = @"
@@ -124,8 +137,11 @@ resources:
     poe: true
 ";
 
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
+
 
         // Then
         var hardware = Assert.Single(resources);
@@ -152,7 +168,7 @@ resources:
         
     }
     [Fact]
-    public void deserialize_yaml_kind_firewall()
+    public async Task deserialize_yaml_kind_firewall()
     {
         // Given
         var yaml = @"
@@ -171,8 +187,11 @@ resources:
     poe: true
 ";
 
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
+
 
         // Then
         var hardware = Assert.Single(resources);
@@ -198,7 +217,7 @@ resources:
         Assert.Equal(2, nic1.Count);
     }
     [Fact]
-    public void deserialize_yaml_kind_router()
+    public async Task deserialize_yaml_kind_router()
     {
         // Given
         var yaml = @"
@@ -217,8 +236,11 @@ resources:
     poe: true
 ";
 
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
+
 
         // Then
         var hardware = Assert.Single(resources);
@@ -243,8 +265,9 @@ resources:
         Assert.Equal(10, nic1.Speed);
         Assert.Equal(2, nic1.Count);
     }
+    
     [Fact]
-    public void deserialize_yaml_kind_desktop()
+    public async Task deserialize_yaml_kind_desktop()
     {
         // Given
         var yaml = @"
@@ -270,8 +293,11 @@ resources:
          vram: 12gb
 ";
 
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
+
 
         // Then
         var hardware = Assert.Single(resources);
@@ -305,7 +331,7 @@ resources:
         Assert.Equal(1, desktop.Nics[0].Ports);
     }
     [Fact]
-    public void deserialize_yaml_kind_laptop()
+    public async Task deserialize_yaml_kind_laptop()
     {
         // Given
         var yaml = @"
@@ -327,8 +353,11 @@ resources:
          vram: 12gb
 ";
 
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
+
 
         // Then
         var hardware = Assert.Single(resources);
@@ -357,7 +386,7 @@ resources:
     }
     
     [Fact]
-    public void deserialize_yaml_kind_accesspoint()
+    public async Task deserialize_yaml_kind_accesspoint()
     {
         // Given
         var yaml = @"
@@ -368,8 +397,11 @@ resources:
     speed: 1gb
 ";
 
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
+
 
         // Then
         var hardware = Assert.Single(resources);
@@ -385,7 +417,7 @@ resources:
     }
     
     [Fact]
-    public void deserialize_yaml_kind_ups()
+    public async Task deserialize_yaml_kind_ups()
     {
         // Given
         var yaml = @"
@@ -396,8 +428,11 @@ resources:
     va: 2200
 ";
 
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
+
 
         // Then
         var hardware = Assert.Single(resources);

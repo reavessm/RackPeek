@@ -1,12 +1,19 @@
-﻿using RackPeek.Resources;
-using RackPeek.Resources.Hardware;
+﻿using RackPeek;
+using RackPeek.Domain.Resources.SystemResources;
 
 namespace Tests;
 
 public class ServiceDeserializationTests
 {
+    public static ISystemRepository CreateSut(string yaml)
+    {
+        var yamlResourceCollection = new YamlResourceCollection();
+        yamlResourceCollection.Load([yaml]);
+        return new YamlSystemRepository(yamlResourceCollection);
+    }
+    
     [Fact]
-    public void deserialize_yaml_kind_System()
+    public async Task deserialize_yaml_kind_System()
     {
         // type: Hypervisor | Baremetal | VM | Container 
         
@@ -24,8 +31,10 @@ resources:
         - size: 1tb   
     runsOn: dell-c6400-node-01
 ";
+        var sut = CreateSut(yaml);
+        
         // When
-        var resources = LabLoader.Load(yaml);
+        var resources = await sut.GetAllAsync();
         
         // Then
         var resource = Assert.Single(resources);

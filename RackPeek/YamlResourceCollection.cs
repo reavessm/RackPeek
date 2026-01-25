@@ -1,12 +1,27 @@
-using RackPeek.Resources.Hardware;
+using RackPeek.Domain.Resources;
+using RackPeek.Domain.Resources.Hardware.Models;
+using RackPeek.Domain.Resources.SystemResources;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace RackPeek.Resources;
+namespace RackPeek;
 
-public static class LabLoader
+public class YamlResourceCollection
 {
-    public static List<Resource> Load(string yaml)
+    private readonly List<Resource> _resources = new();
+    
+    public IReadOnlyList<Hardware> HardwareResources => _resources.OfType<Hardware>().ToList();
+    public IReadOnlyList<SystemResource> SystemResources => _resources.OfType<SystemResource>().ToList();
+
+    public void Load(List<string> yamlContents)
+    {
+        foreach (var yamlContent in yamlContents)
+        {
+            _resources.AddRange(Deserialize(yamlContent));
+        }
+    }
+    
+    private static List<Resource> Deserialize(string yaml)
     {
         var deserializer = new DeserializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -46,4 +61,5 @@ public static class LabLoader
 
         return resources;
     }
+    
 }

@@ -1,6 +1,6 @@
-namespace RackPeek.Resources.Hardware;
+namespace RackPeek.Domain.Resources.Hardware.Models;
 
-public class Firewall : Hardware
+public class Switch : Hardware
 {
     public string? Model { get; set; }
     public bool? Managed { get; set; }

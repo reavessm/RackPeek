@@ -1,4 +1,6 @@
-namespace RackPeek.Resources.Hardware;
+using RackPeek.Domain.Resources.Hardware.Models;
+
+namespace RackPeek.Domain.Resources.SystemResources;
 
 public class SystemResource : Resource
 {

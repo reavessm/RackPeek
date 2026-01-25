@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RackPeek", "RackPeek\RackPe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{2B19149A-FBD7-415E-9FE3-3BA53F2A0DD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RackPeek.Domain", "RackPeek.Domain\RackPeek.Domain.csproj", "{760E6165-A7E0-4144-B289-1BAB6483FD29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2B19149A-FBD7-415E-9FE3-3BA53F2A0DD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B19149A-FBD7-415E-9FE3-3BA53F2A0DD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B19149A-FBD7-415E-9FE3-3BA53F2A0DD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{760E6165-A7E0-4144-B289-1BAB6483FD29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{760E6165-A7E0-4144-B289-1BAB6483FD29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{760E6165-A7E0-4144-B289-1BAB6483FD29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{760E6165-A7E0-4144-B289-1BAB6483FD29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

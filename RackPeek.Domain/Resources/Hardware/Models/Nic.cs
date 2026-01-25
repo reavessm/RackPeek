@@ -1,4 +1,4 @@
-namespace RackPeek.Resources.Hardware;
+namespace RackPeek.Domain.Resources.Hardware.Models;
 
 public class Nic
 {
