@@ -1,15 +1,16 @@
 ﻿using RackPeek;
 using RackPeek.Domain.Resources.Hardware;
 using RackPeek.Domain.Resources.Hardware.Models;
+using RackPeek.Yaml;
 
-namespace Tests;
+namespace Tests.Yaml;
 
 public class HardwareDeserializationTests
 {
     public static IHardwareRepository CreateSut(string yaml)
     {
         var yamlResourceCollection = new YamlResourceCollection();
-        yamlResourceCollection.Load([yaml]);
+        yamlResourceCollection.Load(yaml, "test.yaml");
         return new YamlHardwareRepository(yamlResourceCollection);
     }
     

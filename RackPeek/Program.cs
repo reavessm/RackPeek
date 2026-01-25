@@ -4,7 +4,13 @@ using RackPeek.Domain.Resources.Hardware;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Microsoft.Extensions.Logging;
+using RackPeek.Commands;
+using RackPeek.Commands.Server;
+using RackPeek.Commands.Server.Cpus;
 using RackPeek.Domain.Resources.Hardware.Reports;
+using RackPeek.Domain.Resources.Hardware.Server;
+using RackPeek.Domain.Resources.Hardware.Server.Cpu;
+using RackPeek.Yaml;
 
 namespace RackPeek;
 
@@ -23,6 +29,31 @@ public static class Program
 
         services.AddSingleton<IConfiguration>(configuration);
 
+        // Infrastructure
+        services.AddScoped<IHardwareRepository>(_ =>
+        {
+            var path = configuration["HardwareFile"] ?? "hardware.yaml";
+            
+            var collection = new YamlResourceCollection();
+            collection.LoadFiles([
+                "servers.yaml",
+                "aps.yaml",
+                "desktops.yaml",
+                "switches.yaml",
+                "ups.yaml",
+                "firewalls.yaml",
+                "laptops.yaml",
+                "routers.yaml"]);
+
+            return new YamlHardwareRepository(collection);
+        });
+        
+        services.AddLogging(configure =>
+            configure
+                .AddSimpleConsole(opts => { opts.TimestampFormat = "yyyy-MM-dd HH:mm:ss "; }));
+
+
+        
         // Application
         services.AddScoped<ServerHardwareReportUseCase>();
         services.AddScoped<ServerReportCommand>();
@@ -34,31 +65,32 @@ public static class Program
         services.AddScoped<UpsReportCommand>();
         services.AddScoped<DesktopHardwareReportUseCase>();
         services.AddScoped<DesktopReportCommand>();
-
-        // Infrastructure
-        services.AddScoped<IHardwareRepository>(_ =>
-        {
-            var path = configuration["HardwareFile"] ?? "hardware.yaml";
-            
-            var collection = new YamlResourceCollection();
-            collection.Load([
-                File.ReadAllText("servers.yaml"),
-                File.ReadAllText("aps.yaml"),
-                File.ReadAllText("desktops.yaml"),
-                File.ReadAllText("switches.yaml"),
-                File.ReadAllText("ups.yaml"),
-                File.ReadAllText("firewalls.yaml"),
-                File.ReadAllText("laptops.yaml"),
-                File.ReadAllText("routers.yaml")]);
-
-            return new YamlHardwareRepository(collection);
-        });
         
-        services.AddLogging(configure =>
-            configure
-                .AddSimpleConsole(opts => { opts.TimestampFormat = "yyyy-MM-dd HH:mm:ss "; }));
+        services.AddScoped<AddServerUseCase>();
+        services.AddScoped<ServerAddCommand>();
+        
+        services.AddScoped<DeleteServerUseCase>();
+        services.AddScoped<ServerDeleteCommand>();
 
+        services.AddScoped<DescribeServerUseCase>();
+        services.AddScoped<ServerDescribeCommand>();
+        
+        services.AddScoped<GetServerUseCase>();
+        services.AddScoped<ServerGetByNameCommand>();
+        
+        services.AddScoped<UpdateServerUseCase>();
+        services.AddScoped<ServerSetCommand>();
+        
+        // CPU use cases
+        services.AddScoped<AddCpuUseCase>();
+        services.AddScoped<UpdateCpuUseCase>();
+        services.AddScoped<RemoveCpuUseCase>();
 
+        // CPU commands
+        services.AddScoped<ServerCpuAddCommand>();
+        services.AddScoped<ServerCpuSetCommand>();
+        services.AddScoped<ServerCpuRemoveCommand>();
+        
         // Spectre bootstrap
         var registrar = new TypeRegistrar(services);
         var app = new CommandApp(registrar);
@@ -67,21 +99,61 @@ public static class Program
         {
             config.SetApplicationName("rackpeek");
 
-            config.AddCommand<ServerReportCommand>("servers")
-                .WithDescription("Show server hardware report");
+            // ----------------------------
+            // Server commands (CRUD-style)
+            // ----------------------------
+            config.AddBranch("servers", server =>
+            {
+                server.SetDescription("Manage servers");
+                
+                server.AddCommand<ServerReportCommand>("summary")
+                    .WithDescription("Show server hardware report");
+                
+                server.AddCommand<ServerAddCommand>("add")
+                    .WithDescription("Add a new server");
 
+                server.AddCommand<ServerGetByNameCommand>("get")
+                    .WithDescription("List servers or get a server by name");
+
+                server.AddCommand<ServerDescribeCommand>("describe")
+                    .WithDescription("Show detailed information about a server");
+
+                server.AddCommand<ServerSetCommand>("set")
+                    .WithDescription("Update server properties");
+
+                server.AddCommand<ServerDeleteCommand>("del")
+                    .WithDescription("Delete a server");
+                
+                server.AddBranch("cpu", cpu =>
+                {
+                    cpu.SetDescription("Manage server CPUs");
+
+                    cpu.AddCommand<ServerCpuAddCommand>("add")
+                        .WithDescription("Add a CPU to a server");
+
+                    cpu.AddCommand<ServerCpuSetCommand>("set")
+                        .WithDescription("Update a CPU on a server");
+
+                    cpu.AddCommand<ServerCpuRemoveCommand>("del")
+                        .WithDescription("Remove a CPU from a server");
+                });
+            });
+
+            // ----------------------------
+            // Reports (read-only summaries)
+            // ----------------------------
             config.AddCommand<AccessPointReportCommand>("ap")
                 .WithDescription("Show access point hardware report");
-            
+
             config.AddCommand<DesktopReportCommand>("desktops")
                 .WithDescription("Show desktop hardware report");
-            
+
             config.AddCommand<SwitchReportCommand>("switches")
                 .WithDescription("Show switch hardware report");
-            
+
             config.AddCommand<UpsReportCommand>("ups")
-                .WithDescription("Show ups hardware report");
-            
+                .WithDescription("Show UPS hardware report");
+
             config.ValidateExamples();
         });
 
