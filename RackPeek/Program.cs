@@ -189,7 +189,7 @@ public static class CliBootstrap
         // Spectre bootstrap
         app.Configure(config =>
         {
-            config.SetApplicationName("rackpeek");
+            config.SetApplicationName("rpk");
 
             // ----------------------------
             // Server commands (CRUD-style)

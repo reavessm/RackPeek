@@ -28,7 +28,7 @@ public sealed class YamlResourceCollection
             if (!_knownFiles.Contains(file))
                 _knownFiles.Add(file);
 
-            var yaml = File.ReadAllText(file);
+            var yaml = File.Exists(file) ? File.ReadAllText(file) : "";
             var resources = Deserialize(yaml);
 
             foreach (var resource in resources)
