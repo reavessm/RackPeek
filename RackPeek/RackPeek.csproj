@@ -23,4 +23,8 @@
         <ProjectReference Include="..\RackPeek.Domain\RackPeek.Domain.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Commands\Server\Gpu\" />
+    </ItemGroup>
+
 </Project>
