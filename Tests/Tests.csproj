@@ -25,7 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Hardware\AccessPoint\" />
       <Folder Include="Hardware\Desktop\" />
       <Folder Include="Hardware\Ups\" />
     </ItemGroup>

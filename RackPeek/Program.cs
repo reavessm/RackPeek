@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RackPeek.Commands;
+using RackPeek.Commands.AccessPoints;
 using RackPeek.Commands.Server;
 using RackPeek.Commands.Server.Cpus;
 using RackPeek.Commands.Server.Drives;
@@ -10,6 +11,7 @@ using RackPeek.Commands.Server.Nics;
 using RackPeek.Commands.Switches;
 using RackPeek.Commands.Systems;
 using RackPeek.Domain.Resources.Hardware;
+using RackPeek.Domain.Resources.Hardware.AccessPoints;
 using RackPeek.Domain.Resources.Hardware.Reports;
 using RackPeek.Domain.Resources.Hardware.Server;
 using RackPeek.Domain.Resources.Hardware.Server.Cpu;
@@ -183,6 +185,26 @@ public static class CliBootstrap
         services.AddScoped<SystemDeleteCommand>();
         services.AddScoped<SystemAddCommand>();
         services.AddScoped<SystemReportCommand>();
+        
+        // AccessPoint use cases
+        services.AddScoped<AddAccessPointUseCase>();
+        services.AddScoped<DeleteAccessPointUseCase>();
+        services.AddScoped<GetAccessPointUseCase>();
+        services.AddScoped<GetAccessPointsUseCase>();
+        services.AddScoped<UpdateAccessPointUseCase>();
+        services.AddScoped<DescribeAccessPointUseCase>();
+        
+        // AccessPoint commands
+        services.AddScoped<AccessPointAddCommand>();
+        services.AddScoped<AccessPointDeleteCommand>();
+        services.AddScoped<AccessPointDescribeCommand>();
+        services.AddScoped<AccessPointGetByNameCommand>();
+        services.AddScoped<AccessPointGetCommand>();
+        services.AddScoped<AccessPointSetCommand>();
+
+
+        
+        
 
         
         
@@ -325,6 +347,33 @@ public static class CliBootstrap
                     system.AddCommand<SystemDeleteCommand>("del")
                         .WithDescription("Delete a system");
                 });
+                
+                config.AddBranch("accesspoints", ap =>
+                {
+                    ap.SetDescription("Manage access points");
+
+                    ap.AddCommand<AccessPointReportCommand>("summary")
+                        .WithDescription("Show access point hardware report");
+
+                    ap.AddCommand<AccessPointAddCommand>("add")
+                        .WithDescription("Add a new access point");
+
+                    ap.AddCommand<AccessPointGetCommand>("list")
+                        .WithDescription("List access points");
+
+                    ap.AddCommand<AccessPointGetByNameCommand>("get")
+                        .WithDescription("Get an access point by name");
+
+                    ap.AddCommand<AccessPointDescribeCommand>("describe")
+                        .WithDescription("Show detailed information about an access point");
+
+                    ap.AddCommand<AccessPointSetCommand>("set")
+                        .WithDescription("Update access point properties");
+
+                    ap.AddCommand<AccessPointDeleteCommand>("del")
+                        .WithDescription("Delete an access point");
+                });
+
                 
                 // ----------------------------
                 // Reports (read-only summaries)
