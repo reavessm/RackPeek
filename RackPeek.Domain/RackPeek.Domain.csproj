@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <Folder Include="Resources\Hardware\Desktop\" />
-      <Folder Include="Resources\Hardware\Ups\" />
     </ItemGroup>
 
 </Project>

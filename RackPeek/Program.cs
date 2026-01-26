@@ -10,6 +10,7 @@ using RackPeek.Commands.Server.Gpu;
 using RackPeek.Commands.Server.Nics;
 using RackPeek.Commands.Switches;
 using RackPeek.Commands.Systems;
+using RackPeek.Commands.Ups;
 using RackPeek.Domain.Resources.Hardware;
 using RackPeek.Domain.Resources.Hardware.AccessPoints;
 using RackPeek.Domain.Resources.Hardware.Reports;
@@ -19,6 +20,7 @@ using RackPeek.Domain.Resources.Hardware.Server.Drive;
 using RackPeek.Domain.Resources.Hardware.Server.Gpu;
 using RackPeek.Domain.Resources.Hardware.Server.Nic;
 using RackPeek.Domain.Resources.Hardware.Switches;
+using RackPeek.Domain.Resources.Hardware.UpsUnits;
 using RackPeek.Domain.Resources.SystemResources;
 using RackPeek.Domain.Resources.SystemResources.UseCases;
 using RackPeek.Spectre;
@@ -202,8 +204,22 @@ public static class CliBootstrap
         services.AddScoped<AccessPointGetCommand>();
         services.AddScoped<AccessPointSetCommand>();
 
+        // UPS use cases
+        services.AddScoped<AddUpsUseCase>();
+        services.AddScoped<DeleteUpsUseCase>();
+        services.AddScoped<GetUpsUnitUseCase>();
+        services.AddScoped<GetUpsUseCase>();
+        services.AddScoped<UpdateUpsUseCase>();
+        services.AddScoped<DescribeUpsUseCase>();
 
-        
+        // UPS commands
+        services.AddScoped<UpsAddCommand>();
+        services.AddScoped<UpsDeleteCommand>();
+        services.AddScoped<UpsDescribeCommand>();
+        services.AddScoped<UpsGetByNameCommand>();
+        services.AddScoped<UpsGetCommand>();
+        services.AddScoped<UpsSetCommand>();
+
         
 
         
@@ -372,6 +388,32 @@ public static class CliBootstrap
 
                     ap.AddCommand<AccessPointDeleteCommand>("del")
                         .WithDescription("Delete an access point");
+                });
+                
+                config.AddBranch("ups", ups =>
+                {
+                    ups.SetDescription("Manage UPS units");
+
+                    ups.AddCommand<UpsReportCommand>("summary")
+                        .WithDescription("Show UPS hardware report");
+
+                    ups.AddCommand<UpsAddCommand>("add")
+                        .WithDescription("Add a new UPS");
+
+                    ups.AddCommand<UpsGetCommand>("list")
+                        .WithDescription("List UPS units");
+
+                    ups.AddCommand<UpsGetByNameCommand>("get")
+                        .WithDescription("Get a UPS by name");
+
+                    ups.AddCommand<UpsDescribeCommand>("describe")
+                        .WithDescription("Show detailed information about a UPS");
+
+                    ups.AddCommand<UpsSetCommand>("set")
+                        .WithDescription("Update UPS properties");
+
+                    ups.AddCommand<UpsDeleteCommand>("del")
+                        .WithDescription("Delete a UPS");
                 });
 
                 
