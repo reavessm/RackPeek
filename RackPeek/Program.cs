@@ -2,6 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RackPeek.Commands;
+using RackPeek.Commands.AccessPoints;
+using RackPeek.Commands.Desktop;
+using RackPeek.Commands.Desktop.Cpus;
+using RackPeek.Commands.Desktop.Drives;
+using RackPeek.Commands.Desktop.Gpu;
+using RackPeek.Commands.Desktop.Nics;
 using RackPeek.Commands.Server;
 using RackPeek.Commands.Server.Cpus;
 using RackPeek.Commands.Server.Drives;
@@ -9,7 +15,10 @@ using RackPeek.Commands.Server.Gpu;
 using RackPeek.Commands.Server.Nics;
 using RackPeek.Commands.Switches;
 using RackPeek.Commands.Systems;
+using RackPeek.Commands.Ups;
 using RackPeek.Domain.Resources.Hardware;
+using RackPeek.Domain.Resources.Hardware.AccessPoints;
+using RackPeek.Domain.Resources.Hardware.Desktop;
 using RackPeek.Domain.Resources.Hardware.Reports;
 using RackPeek.Domain.Resources.Hardware.Server;
 using RackPeek.Domain.Resources.Hardware.Server.Cpu;
@@ -17,6 +26,7 @@ using RackPeek.Domain.Resources.Hardware.Server.Drive;
 using RackPeek.Domain.Resources.Hardware.Server.Gpu;
 using RackPeek.Domain.Resources.Hardware.Server.Nic;
 using RackPeek.Domain.Resources.Hardware.Switches;
+using RackPeek.Domain.Resources.Hardware.UpsUnits;
 using RackPeek.Domain.Resources.SystemResources;
 using RackPeek.Domain.Resources.SystemResources.UseCases;
 using RackPeek.Spectre;
@@ -183,6 +193,99 @@ public static class CliBootstrap
         services.AddScoped<SystemDeleteCommand>();
         services.AddScoped<SystemAddCommand>();
         services.AddScoped<SystemReportCommand>();
+        
+        // AccessPoint use cases
+        services.AddScoped<AddAccessPointUseCase>();
+        services.AddScoped<DeleteAccessPointUseCase>();
+        services.AddScoped<GetAccessPointUseCase>();
+        services.AddScoped<GetAccessPointsUseCase>();
+        services.AddScoped<UpdateAccessPointUseCase>();
+        services.AddScoped<DescribeAccessPointUseCase>();
+        
+        // AccessPoint commands
+        services.AddScoped<AccessPointAddCommand>();
+        services.AddScoped<AccessPointDeleteCommand>();
+        services.AddScoped<AccessPointDescribeCommand>();
+        services.AddScoped<AccessPointGetByNameCommand>();
+        services.AddScoped<AccessPointGetCommand>();
+        services.AddScoped<AccessPointSetCommand>();
+
+        // UPS use cases
+        services.AddScoped<AddUpsUseCase>();
+        services.AddScoped<DeleteUpsUseCase>();
+        services.AddScoped<GetUpsUnitUseCase>();
+        services.AddScoped<GetUpsUseCase>();
+        services.AddScoped<UpdateUpsUseCase>();
+        services.AddScoped<DescribeUpsUseCase>();
+
+        // UPS commands
+        services.AddScoped<UpsAddCommand>();
+        services.AddScoped<UpsDeleteCommand>();
+        services.AddScoped<UpsDescribeCommand>();
+        services.AddScoped<UpsGetByNameCommand>();
+        services.AddScoped<UpsGetCommand>();
+        services.AddScoped<UpsSetCommand>();
+        
+        // Desktop use cases
+        services.AddScoped<AddDesktopUseCase>();
+        services.AddScoped<DeleteDesktopUseCase>();
+        services.AddScoped<DescribeDesktopUseCase>();
+        services.AddScoped<GetDesktopUseCase>();
+        services.AddScoped<GetDesktopsUseCase>();
+        services.AddScoped<UpdateDesktopUseCase>();
+
+// Desktop CPU use cases
+        services.AddScoped<AddDesktopCpuUseCase>();
+        services.AddScoped<UpdateDesktopCpuUseCase>();
+        services.AddScoped<RemoveDesktopCpuUseCase>();
+
+// Desktop Drive use cases
+        services.AddScoped<AddDesktopDriveUseCase>();
+        services.AddScoped<UpdateDesktopDriveUseCase>();
+        services.AddScoped<RemoveDesktopDriveUseCase>();
+
+// Desktop GPU use cases
+        services.AddScoped<AddDesktopGpuUseCase>();
+        services.AddScoped<UpdateDesktopGpuUseCase>();
+        services.AddScoped<RemoveDesktopGpuUseCase>();
+
+// Desktop NIC use cases
+        services.AddScoped<AddDesktopNicUseCase>();
+        services.AddScoped<UpdateDesktopNicUseCase>();
+        services.AddScoped<RemoveDesktopNicUseCase>();
+
+// Desktop CRUD commands
+        services.AddScoped<DesktopAddCommand>();
+        services.AddScoped<DesktopDeleteCommand>();
+        services.AddScoped<DesktopDescribeCommand>();
+        services.AddScoped<DesktopGetByNameCommand>();
+        services.AddScoped<DesktopGetCommand>();
+        services.AddScoped<DesktopSetCommand>();
+
+// Desktop CPU commands
+        services.AddScoped<DesktopCpuAddCommand>();
+        services.AddScoped<DesktopCpuSetCommand>();
+        services.AddScoped<DesktopCpuRemoveCommand>();
+
+// Desktop Drive commands
+        services.AddScoped<DesktopDriveAddCommand>();
+        services.AddScoped<DesktopDriveSetCommand>();
+        services.AddScoped<DesktopDriveRemoveCommand>();
+
+// Desktop GPU commands
+        services.AddScoped<DesktopGpuAddCommand>();
+        services.AddScoped<DesktopGpuSetCommand>();
+        services.AddScoped<DesktopGpuRemoveCommand>();
+
+// Desktop NIC commands
+        services.AddScoped<DesktopNicAddCommand>();
+        services.AddScoped<DesktopNicSetCommand>();
+        services.AddScoped<DesktopNicRemoveCommand>();
+        
+
+
+
+        
 
         
         
@@ -325,6 +428,103 @@ public static class CliBootstrap
                     system.AddCommand<SystemDeleteCommand>("del")
                         .WithDescription("Delete a system");
                 });
+                
+                config.AddBranch("accesspoints", ap =>
+                {
+                    ap.SetDescription("Manage access points");
+
+                    ap.AddCommand<AccessPointReportCommand>("summary")
+                        .WithDescription("Show access point hardware report");
+
+                    ap.AddCommand<AccessPointAddCommand>("add")
+                        .WithDescription("Add a new access point");
+
+                    ap.AddCommand<AccessPointGetCommand>("list")
+                        .WithDescription("List access points");
+
+                    ap.AddCommand<AccessPointGetByNameCommand>("get")
+                        .WithDescription("Get an access point by name");
+
+                    ap.AddCommand<AccessPointDescribeCommand>("describe")
+                        .WithDescription("Show detailed information about an access point");
+
+                    ap.AddCommand<AccessPointSetCommand>("set")
+                        .WithDescription("Update access point properties");
+
+                    ap.AddCommand<AccessPointDeleteCommand>("del")
+                        .WithDescription("Delete an access point");
+                });
+                
+                config.AddBranch("ups", ups =>
+                {
+                    ups.SetDescription("Manage UPS units");
+
+                    ups.AddCommand<UpsReportCommand>("summary")
+                        .WithDescription("Show UPS hardware report");
+
+                    ups.AddCommand<UpsAddCommand>("add")
+                        .WithDescription("Add a new UPS");
+
+                    ups.AddCommand<UpsGetCommand>("list")
+                        .WithDescription("List UPS units");
+
+                    ups.AddCommand<UpsGetByNameCommand>("get")
+                        .WithDescription("Get a UPS by name");
+
+                    ups.AddCommand<UpsDescribeCommand>("describe")
+                        .WithDescription("Show detailed information about a UPS");
+
+                    ups.AddCommand<UpsSetCommand>("set")
+                        .WithDescription("Update UPS properties");
+
+                    ups.AddCommand<UpsDeleteCommand>("del")
+                        .WithDescription("Delete a UPS");
+                });
+
+                config.AddBranch("desktops", desktops =>
+                {
+                    // CRUD
+                    desktops.AddCommand<DesktopAddCommand>("add");
+                    desktops.AddCommand<DesktopGetCommand>("list");
+                    desktops.AddCommand<DesktopGetByNameCommand>("get");
+                    desktops.AddCommand<DesktopDescribeCommand>("describe");
+                    desktops.AddCommand<DesktopSetCommand>("set");
+                    desktops.AddCommand<DesktopDeleteCommand>("del");
+
+                    // CPU
+                    desktops.AddBranch("cpu", cpu =>
+                    {
+                        cpu.AddCommand<DesktopCpuAddCommand>("add");
+                        cpu.AddCommand<DesktopCpuSetCommand>("set");
+                        cpu.AddCommand<DesktopCpuRemoveCommand>("del");
+                    });
+
+                    // Drives
+                    desktops.AddBranch("drive", drive =>
+                    {
+                        drive.AddCommand<DesktopDriveAddCommand>("add");
+                        drive.AddCommand<DesktopDriveSetCommand>("set");
+                        drive.AddCommand<DesktopDriveRemoveCommand>("del");
+                    });
+
+                    // GPUs
+                    desktops.AddBranch("gpu", gpu =>
+                    {
+                        gpu.AddCommand<DesktopGpuAddCommand>("add");
+                        gpu.AddCommand<DesktopGpuSetCommand>("set");
+                        gpu.AddCommand<DesktopGpuRemoveCommand>("del");
+                    });
+
+                    // NICs
+                    desktops.AddBranch("nic", nic =>
+                    {
+                        nic.AddCommand<DesktopNicAddCommand>("add");
+                        nic.AddCommand<DesktopNicSetCommand>("set");
+                        nic.AddCommand<DesktopNicRemoveCommand>("del");
+                    });
+                    
+                });
+
                 
                 // ----------------------------
                 // Reports (read-only summaries)
