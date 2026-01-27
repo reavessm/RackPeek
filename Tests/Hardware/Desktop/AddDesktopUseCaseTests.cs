@@ -8,7 +8,7 @@ public class AddDesktopUseCaseTests
     [Fact]
     public async Task Adds_New_Desktop()
     {
-        var repo = Substitute.For<IHardwareR epository>();
+        var repo = Substitute.For<IHardwareRepository>();
         repo.GetByNameAsync("desk1").Returns((Hardware?)null);
 
         var useCase = new AddDesktopUseCase(repo);
