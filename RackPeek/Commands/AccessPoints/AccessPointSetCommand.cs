@@ -33,7 +33,7 @@ public class AccessPointSetCommand(
             settings.Speed
         );
 
-        AnsiConsole.MarkupLine($"[green]Access point '{settings.Name}' updated.[/]");
+        AnsiConsole.MarkupLine($"[green]Access Point '{settings.Name}' updated.[/]");
         return 0;
     }
 }
