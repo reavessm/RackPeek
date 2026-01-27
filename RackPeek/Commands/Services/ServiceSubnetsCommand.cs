@@ -19,6 +19,25 @@ public class ServiceSubnetsCommand(
         [CommandOption("--prefix <PREFIX>")]
         public int? Prefix { get; set; }
     }
+    
+    private static string BuildUtilizationBar(double fullness, int width = 30)
+    {
+        fullness = Math.Clamp(fullness, 0, 100);
+        int filled = (int)(width * (fullness / 100.0));
+        int empty = width - filled;
+
+        var color = fullness switch
+        {
+            < 50 => Color.Green,
+            < 80 => Color.Yellow,
+            _ => Color.Red
+        };
+
+        string filledBar = new string('█', filled);
+        string emptyBar = new string('░', empty);
+
+        return $"[{color.ToString().ToLower()}]{filledBar}[/]{emptyBar} {fullness:0}%";
+    }
 
     public override async Task<int> ExecuteAsync(
         CommandContext context,
@@ -37,7 +56,7 @@ public class ServiceSubnetsCommand(
             return 1;
         }
 
-        // CIDR filter mode
+       
         if (settings.Cidr is not null)
         {
             var services = result.Services;
@@ -49,7 +68,6 @@ public class ServiceSubnetsCommand(
             }
 
             var table = new Table()
-                .Expand()
                 .Border(TableBorder.Rounded)
                 .AddColumn("Name")
                 .AddColumn("IP")
@@ -63,9 +81,19 @@ public class ServiceSubnetsCommand(
             return 0;
         }
 
-        // Subnet discovery mode
+   
         var subnets = result.Subnets;
-
+        
+        subnets = subnets
+            .OrderByDescending(s =>
+            {
+                var parts = s.Cidr.Split('/');
+                int prefix = int.Parse(parts[1]);
+                double alloc = Math.Pow(2, 32 - prefix) - 2;
+                return alloc <= 0 ? 0 : (s.Count / alloc);
+            })
+            .ToList();
+        
         if (subnets.Count == 0)
         {
             AnsiConsole.MarkupLine("[yellow]No subnets found.[/]");
@@ -73,15 +101,28 @@ public class ServiceSubnetsCommand(
         }
 
         var subnetTable = new Table()
-            .Expand()
             .Border(TableBorder.Rounded)
             .AddColumn("Subnet")
-            .AddColumn("Services");
+            .AddColumn("Services")
+            .AddColumn("Utilization");
 
         foreach (var subnet in subnets)
-            subnetTable.AddRow(subnet.Cidr, subnet.Count.ToString());
+        {
+            var parts = subnet.Cidr.Split('/');
+            int prefix = int.Parse(parts[1]);
+
+            // allocatable addresses
+            double alloc = Math.Pow(2, 32 - prefix) - 2;
+            double used = subnet.Count;
+            double fullness = alloc <= 0 ? 0 : (used / alloc) * 100;
+
+            string bar = BuildUtilizationBar(fullness);
+
+            subnetTable.AddRow(subnet.Cidr, subnet.Count.ToString(), bar);
+        }
 
         AnsiConsole.Write(subnetTable);
+
         return 0;
     }
 }
