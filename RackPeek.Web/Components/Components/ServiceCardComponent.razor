@@ -9,9 +9,11 @@
 
         @if (!string.IsNullOrWhiteSpace(Service.RunsOn))
         {
-            <span class="text-xs text-emerald-400">
-                Runs on: @Service.RunsOn
-            </span>
+            <NavLink href="@($"/resources/systems/{Service.RunsOn}")" class="block">
+                <span class="text-xs text-emerald-400">
+                    Runs on: @Service.RunsOn
+                </span>
+            </NavLink>
         }
     </div>
 
