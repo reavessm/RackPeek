@@ -30,7 +30,8 @@ public static class Program
             "ups.yaml",
             "firewalls.yaml",
             "laptops.yaml",
-            "routers.yaml"
+            "routers.yaml",
+            "Services.yaml"
         ]);
 
         services.AddLogging(configure =>

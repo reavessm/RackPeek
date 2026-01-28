@@ -263,6 +263,7 @@ public static class CliBootstrap
         services.AddScoped<GetServiceUseCase>();
         services.AddScoped<UpdateServiceUseCase>();
         services.AddScoped<ServiceReportUseCase>();
+        services.AddScoped<ServiceSubnetsUseCase>();
 
         // Service commands
         services.AddScoped<ServiceSetCommand>();
@@ -272,6 +273,8 @@ public static class CliBootstrap
         services.AddScoped<ServiceDeleteCommand>();
         services.AddScoped<ServiceAddCommand>();
         services.AddScoped<ServiceReportCommand>();
+        services.AddScoped<ServiceSubnetsCommand>();
+        
         // Spectre bootstrap
         app.Configure(config =>
         {
@@ -535,6 +538,9 @@ public static class CliBootstrap
 
                     service.AddCommand<ServiceDeleteCommand>("del")
                         .WithDescription("Delete a service");
+                    
+                    service.AddCommand<ServiceSubnetsCommand>("subnets")
+                        .WithDescription("List service subnets or filter by CIDR");
 
                 });
 
