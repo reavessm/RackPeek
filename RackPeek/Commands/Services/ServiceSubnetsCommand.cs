@@ -38,6 +38,17 @@ public class ServiceSubnetsCommand(
 
         return $"[{color.ToString().ToLower()}]{filledBar}[/]{emptyBar} {fullness:0}%";
     }
+    
+    private static uint IpToUInt32(string ip)
+    {
+        var parts = ip.Split('.');
+        return (uint)(
+            (int.Parse(parts[0]) << 24) |
+            (int.Parse(parts[1]) << 16) |
+            (int.Parse(parts[2]) << 8) |
+            int.Parse(parts[3]));
+    }
+
 
     public override async Task<int> ExecuteAsync(
         CommandContext context,
@@ -59,7 +70,10 @@ public class ServiceSubnetsCommand(
        
         if (settings.Cidr is not null)
         {
-            var services = result.Services;
+            var services = result.Services
+                .OrderBy(s => IpToUInt32(s.Ip))
+                .ToList();
+
 
             if (services.Count == 0)
             {
