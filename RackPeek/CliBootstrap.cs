@@ -267,6 +267,8 @@ public static class CliBootstrap
 
             config.AddBranch("desktops", desktops =>
             {
+                desktops.SetDescription("Manage Desktops.");
+
                 // CRUD
                 desktops.AddCommand<DesktopAddCommand>("add");
                 desktops.AddCommand<DesktopGetCommand>("list");

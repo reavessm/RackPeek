@@ -1,8 +1,53 @@
 # RackPeek
 
-RackPeek is a lightweight CLI tool for managing and documenting your IT infrastructure and home lab.
-Track servers, switches, routers, desktops, access points, UPS systems, and more — including software systems, services, and networks — all from the command line.
-It’s designed to help you inventory, configure, and audit your environment in a consistent, reusable way.
+RackPeek is a lightweight, opinionated CLI tool for documenting and managing home lab and small-scale IT infrastructure.
+
+It helps you track hardware, services, networks, and their relationships in a clear, scriptable, and reusable way without enterprise bloat or proprietary lock-in.
+
+RackPeek is open source and community-driven.
+Code, docs, ideas, bug reports, and real-world usage feedback are all massively appreciated.
+If you run a home lab, you belong here.
+
+## Philosophy
+RackPeek treats infrastructure documentation as living reference data rather than static paperwork.
+
+You should be able to document your environment as you build it, explore relationships between systems, and quickly understand how everything fits together, without drowning in unnecessary metadata or process.
+
+RackPeek is not a CMDB replacement. It’s a clean framework for understanding and maintaining your lab.
+
+[![RackPeek demo](./vhs/rpk-demo.gif)](./rpk-demo.gif)
+
+## Core Values
+
+**Simplicity**  
+RackPeek focuses on clarity and usefulness. Its scope is intentionally kept narrow to avoid unnecessary abstraction and feature creep.
+
+**Ease of Deployment**  
+The tool exists to reduce operational complexity. Installation, upgrades, and day-to-day usage should be straightforward and low-friction.
+
+**Openness**  
+RackPeek uses open, non-proprietary data formats. You fully own your data and should be free to easily inspect, migrate, or reuse it however you choose.
+
+**Community**  
+Contributors of all experience levels are welcome. Knowledge sharing, mentorship, and collaboration are core to the project’s culture.
+
+**Privacy & Security**  
+No telemetry, no ads, no tracking, and no artificial restrictions. What runs on your infrastructure stays on your infrastructure.
+
+**Dogfooding**  
+RackPeek is built to solve real problems we actively have. If a feature isn’t useful in practice, it doesn’t belong.
+
+**Opinionated**  
+The project is optimized for home labs and self-hosted environments, not enterprise CMDBs or corporate documentation workflows.
+
+## Release Status
+```
+[x] Ideation
+[~] Development
+[ ] Alpha Release
+[ ] Beta Release
+[ ] v1.0.0 Release
+```
 
 ## Command Tree
 

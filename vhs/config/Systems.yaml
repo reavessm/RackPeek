@@ -1,184 +1,154 @@
 resources:
+  # --------------------------------------------------
+  # Hypervisors (Bare Metal)
+  # --------------------------------------------------
   - kind: System
     type: Hypervisor
-    name: proxmox-host
+    name: proxmox-cluster-node01
     os: proxmox
     cores: 16
-    ram: 64gb
-    runsOn: dell-c6400-node01
+    ram: 128gb
+    drives:
+      - size: 1tb
+      - size: 1tb
+    runsOn: proxmox-node01
 
   - kind: System
-    type: ContainerHost
-    name: docker-host
-    os: ubuntu
-    cores: 12
-    ram: 32gb
-    runsOn: dell-c6400-node01
+    type: Hypervisor
+    name: proxmox-cluster-node02
+    os: proxmox
+    cores: 10
+    ram: 96gb
+    drives:
+      - size: 1tb
+      - size: 4tb
+    runsOn: proxmox-node02
 
+  # --------------------------------------------------
+  # Storage OS (Bare Metal)
+  # --------------------------------------------------
   - kind: System
-    type: KubernetesNode
-    name: k8s-node-1
-    os: ubuntu
-    cores: 8
-    ram: 32gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: KubernetesNode
-    name: k8s-node-2
-    os: ubuntu
-    cores: 8
-    ram: 32gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: KubernetesNode
-    name: k8s-node-3
-    os: ubuntu
-    cores: 8
-    ram: 32gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: KubernetesControlPlane
-    name: k8s-control-plane
-    os: ubuntu
-    cores: 4
-    ram: 16gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Monitoring
-    name: monitoring-node
-    os: ubuntu
-    cores: 8
-    ram: 32gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Storage
-    name: storage-node-1
+    type: Baremetal
+    name: truenas-core-os
     os: truenas
-    cores: 8
-    ram: 64gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Storage
-    name: storage-node-2
-    os: truenas
-    cores: 8
-    ram: 64gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Storage
-    name: storage-node-3
-    os: truenas
-    cores: 8
-    ram: 64gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Database
-    name: db-node-1
-    os: ubuntu
-    cores: 8
-    ram: 32gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Database
-    name: db-node-2
-    os: ubuntu
-    cores: 8
-    ram: 32gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Cache
-    name: cache-node
-    os: ubuntu
-    cores: 4
-    ram: 16gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Search
-    name: search-node
-    os: ubuntu
-    cores: 8
-    ram: 32gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Development
-    name: dev-node-1
-    os: ubuntu
-    cores: 4
-    ram: 16gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Development
-    name: dev-node-2
-    os: ubuntu
-    cores: 4
-    ram: 16gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: Development
-    name: dev-node-3
-    os: ubuntu
     cores: 6
-    ram: 24gb
-    runsOn: dell-c6400-node01
+    ram: 64gb
+    drives:
+      - size: 8tb
+      - size: 8tb
+      - size: 8tb
+      - size: 8tb
+    runsOn: truenas-storage
+
+  # --------------------------------------------------
+  # IPMI / BMC Management
+  # --------------------------------------------------
+  - kind: System
+    type: Baremetal
+    name: ipmi-proxmox-node01
+    os: idrac
+    cores: 1
+    ram: 1gb
+    runsOn: proxmox-node01
 
   - kind: System
-    type: VirtualMachineCluster
-    name: vm-cluster-1
-    os: proxmox
-    cores: 12
-    ram: 48gb
-    runsOn: dell-c6400-node01
+    type: Baremetal
+    name: ipmi-proxmox-node02
+    os: ipmi
+    cores: 1
+    ram: 1gb
+    runsOn: proxmox-node02
 
   - kind: System
-    type: VirtualMachineCluster
-    name: vm-cluster-2
-    os: proxmox
-    cores: 12
-    ram: 48gb
-    runsOn: dell-c6400-node01
+    type: Baremetal
+    name: ipmi-truenas-storage
+    os: ipmi
+    cores: 1
+    ram: 1gb
+    runsOn: truenas-storage
 
+  # --------------------------------------------------
+  # Core Network Systems
+  # --------------------------------------------------
   - kind: System
-    type: BareMetal
-    name: baremetal-rpi4
-    os: raspbian
+    type: Baremetal
+    name: firewall-os
+    os: pfsense
     cores: 4
     ram: 8gb
-    runsOn: rack-edge
+    drives:
+      - size: 32gb
+    runsOn: pfsense-fw
 
   - kind: System
-    type: BareMetal
-    name: baremetal-rpi3
-    os: raspbian
+    type: Baremetal
+    name: router-os
+    os: edgeos
     cores: 4
     ram: 4gb
-    runsOn: rack-edge
+    drives:
+      - size: 4gb
+    runsOn: core-router
 
   - kind: System
-    type: Infrastructure
-    name: infra-node
-    os: ubuntu
-    cores: 4
-    ram: 16gb
-    runsOn: dell-c6400-node01
-
-  - kind: System
-    type: NetworkAppliance
-    name: router-appliance
-    os: openwrt
+    type: Baremetal
+    name: unifi-core-switch-os
+    os: unifi-os
     cores: 2
     ram: 2gb
-    runsOn: network-rack
+    drives:
+      - size: 8gb
+    runsOn: core-switch
+
+  - kind: System
+    type: Baremetal
+    name: unifi-access-switch-os
+    os: unifi-os
+    cores: 2
+    ram: 2gb
+    drives:
+      - size: 8gb
+    runsOn: access-switch
+
+  - kind: System
+    type: Baremetal
+    name: unifi-lounge-ap-os
+    os: unifi-firmware
+    cores: 2
+    ram: 1gb
+    drives:
+      - size: 4gb
+    runsOn: lounge-ap
+
+  # --------------------------------------------------
+  # Virtual Machines
+  # --------------------------------------------------
+  - kind: System
+    type: VM
+    name: vm-home-assistant
+    os: hassos
+    cores: 2
+    ram: 4gb
+    drives:
+      - size: 64gb
+    runsOn: proxmox-node01
+
+  - kind: System
+    type: VM
+    name: vm-media-server
+    os: ubuntu-22.04
+    cores: 4
+    ram: 8gb
+    drives:
+      - size: 500gb
+    runsOn: proxmox-node02
+
+  - kind: System
+    type: VM
+    name: vm-monitoring
+    os: debian-12
+    cores: 2
+    ram: 4gb
+    drives:
+      - size: 64gb
+    runsOn: proxmox-node01
