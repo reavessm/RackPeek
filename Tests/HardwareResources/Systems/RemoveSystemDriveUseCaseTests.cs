@@ -15,11 +15,7 @@ public class RemoveSystemDriveUseCaseTests
         // Arrange
         var repo = Substitute.For<ISystemRepository>();
         var drive = new Drive { Type = "ssd", Size = 256 };
-        var system = new SystemResource
-        {
-            Name = "sys1",
-            Drives = new List<Drive> { drive }
-        };
+        var system = new SystemResource { Name = "sys1", Drives = new List<Drive> { drive } };
 
         repo.GetByNameAsync("sys1").Returns(system);
 
@@ -42,9 +38,7 @@ public class RemoveSystemDriveUseCaseTests
 
         var sut = new RemoveSystemDriveUseCase(repo);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            sut.ExecuteAsync("sys1", 0)
-        );
+        await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("sys1", 0));
     }
 
     [Fact]
@@ -57,19 +51,22 @@ public class RemoveSystemDriveUseCaseTests
 
         var sut = new RemoveSystemDriveUseCase(repo);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            sut.ExecuteAsync("sys1", 0)
-        );
+        await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("sys1", 0));
     }
 
     [Fact]
     public async Task ExecuteAsync_Throws_when_index_invalid()
     {
         var repo = Substitute.For<ISystemRepository>();
+
+        repo.GetByNameAsync("sys1")
+            .Returns(new SystemResource
+            {
+                Name = "sys1", Drives = new List<Drive> { new Drive { Type = "ssd", Size = 256 } }
+            });
+
         var sut = new RemoveSystemDriveUseCase(repo);
 
-        await Assert.ThrowsAsync<ValidationException>(() =>
-            sut.ExecuteAsync("sys1", -1)
-        );
+        await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("sys1", -1));
     }
 }

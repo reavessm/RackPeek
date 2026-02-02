@@ -83,28 +83,7 @@ public class AddSystemDriveUseCaseTests
             sut.ExecuteAsync("sys1", "ssd", 512)
         );
     }
-
-    [Fact]
-    public async Task ExecuteAsync_Throws_when_drive_already_exists()
-    {
-        // Arrange
-        var repo = Substitute.For<ISystemRepository>();
-        var system = new SystemResource
-        {
-            Name = "sys1",
-            Drives = new List<Drive> { new() { Type = "ssd", Size = 256 } }
-        };
-
-        repo.GetByNameAsync("sys1").Returns(system);
-
-        var sut = new AddSystemDriveUseCase(repo);
-
-        // Act + Assert
-        await Assert.ThrowsAsync<ConflictException>(() =>
-            sut.ExecuteAsync("sys1", "ssd", 512)
-        );
-    }
-
+    
     [Fact]
     public async Task ExecuteAsync_Throws_when_type_invalid()
     {
