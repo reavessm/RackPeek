@@ -11,10 +11,10 @@ public class RemoveDesktopGpuUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var desktop = await repository.GetByNameAsync(name) as Desktop
-                      ?? throw new InvalidOperationException($"Desktop '{name}' not found.");
+                      ?? throw new NotFoundException($"Desktop '{name}' not found.");
 
         if (desktop.Gpus == null || index < 0 || index >= desktop.Gpus.Count)
-            throw new InvalidOperationException($"GPU index {index} not found on desktop '{name}'.");
+            throw new NotFoundException($"GPU index {index} not found on desktop '{name}'.");
 
         desktop.Gpus.RemoveAt(index);
 

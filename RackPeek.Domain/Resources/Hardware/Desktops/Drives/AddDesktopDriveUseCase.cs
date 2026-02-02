@@ -11,7 +11,7 @@ public class AddDesktopDriveUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var desktop = await repository.GetByNameAsync(name) as Desktop
-                      ?? throw new InvalidOperationException($"Desktop '{name}' not found.");
+                      ?? throw new NotFoundException($"Desktop '{name}' not found.");
 
         desktop.Drives ??= new List<Drive>();
         desktop.Drives.Add(drive);

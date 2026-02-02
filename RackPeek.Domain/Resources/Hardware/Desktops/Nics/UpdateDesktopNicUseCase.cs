@@ -11,10 +11,10 @@ public class UpdateDesktopNicUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var desktop = await repository.GetByNameAsync(name) as Desktop
-                      ?? throw new InvalidOperationException($"Desktop '{name}' not found.");
+                      ?? throw new NotFoundException($"Desktop '{name}' not found.");
 
         if (desktop.Nics == null || index < 0 || index >= desktop.Nics.Count)
-            throw new InvalidOperationException($"NIC index {index} not found on desktop '{name}'.");
+            throw new NotFoundException($"NIC index {index} not found on desktop '{name}'.");
 
         desktop.Nics[index] = updated;
 

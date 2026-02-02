@@ -11,10 +11,10 @@ public class RemoveDesktopDriveUseCase(IHardwareRepository repository) : IUseCas
         ThrowIfInvalid.ResourceName(name);
 
         var desktop = await repository.GetByNameAsync(name) as Desktop
-                      ?? throw new InvalidOperationException($"Desktop '{name}' not found.");
+                      ?? throw new NotFoundException($"Desktop '{name}' not found.");
 
         if (desktop.Drives == null || index < 0 || index >= desktop.Drives.Count)
-            throw new InvalidOperationException($"Drive index {index} not found on desktop '{name}'.");
+            throw new NotFoundException($"Drive index {index} not found on desktop '{name}'.");
 
         desktop.Drives.RemoveAt(index);
 

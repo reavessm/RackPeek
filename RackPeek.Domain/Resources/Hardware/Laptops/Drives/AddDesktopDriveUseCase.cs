@@ -11,7 +11,7 @@ public class AddLaptopDriveUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var laptop = await repository.GetByNameAsync(name) as Laptop
-                     ?? throw new InvalidOperationException($"Laptop '{name}' not found.");
+                     ?? throw new NotFoundException($"Laptop '{name}' not found.");
 
         laptop.Drives ??= new List<Drive>();
         laptop.Drives.Add(drive);

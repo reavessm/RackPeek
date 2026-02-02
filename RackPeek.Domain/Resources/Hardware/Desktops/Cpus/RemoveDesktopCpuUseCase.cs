@@ -11,10 +11,10 @@ public class RemoveDesktopCpuUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var desktop = await repository.GetByNameAsync(name) as Desktop
-                      ?? throw new InvalidOperationException($"Desktop '{name}' not found.");
+                      ?? throw new NotFoundException($"Desktop '{name}' not found.");
 
         if (desktop.Cpus == null || index < 0 || index >= desktop.Cpus.Count)
-            throw new InvalidOperationException($"CPU index {index} not found on desktop '{name}'.");
+            throw new NotFoundException($"CPU index {index} not found on desktop '{name}'.");
 
         desktop.Cpus.RemoveAt(index);
 
