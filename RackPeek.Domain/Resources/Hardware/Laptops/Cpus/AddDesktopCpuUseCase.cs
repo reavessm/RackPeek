@@ -8,10 +8,10 @@ public class AddLaptopCpuUseCase(IHardwareRepository repository) : IUseCase
     public async Task ExecuteAsync(string name, string? model, int? cores, int? threads)
     {
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
-        
+
         var laptop = await repository.GetByNameAsync(name) as Laptop
                      ?? throw new NotFoundException($"Laptop '{name}' not found.");
 

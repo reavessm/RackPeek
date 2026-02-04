@@ -18,7 +18,7 @@ public class ServiceGetByNameCommand(
         var useCase = scope.ServiceProvider.GetRequiredService<DescribeServiceUseCase>();
 
         var service = await useCase.ExecuteAsync(settings.Name);
-        
+
         AnsiConsole.MarkupLine(
             $"[green]{service.Name}[/]  Ip: {service.Ip ?? "Unknown"}, Port: {service.Port.ToString() ?? "Unknown"}, Protocol: {service.Protocol ?? "Unknown"}, Url: {service.Url ?? "Unknown"}, RunsOn: {ServicesFormatExtensions.FormatRunsOn(service.RunsOnSystemHost, service.RunsOnPhysicalHost)}");
         return 0;

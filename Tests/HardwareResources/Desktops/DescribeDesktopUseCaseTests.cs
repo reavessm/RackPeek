@@ -44,6 +44,5 @@ public class DescribeDesktopUseCaseTests
         var useCase = new DescribeDesktopUseCase(repo);
 
         await Assert.ThrowsAsync<NotFoundException>(() => useCase.ExecuteAsync("desk1"));
-
     }
 }

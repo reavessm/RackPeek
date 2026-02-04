@@ -83,7 +83,7 @@ public class AddSystemDriveUseCaseTests
             sut.ExecuteAsync("sys1", "ssd", 512)
         );
     }
-    
+
     [Fact]
     public async Task ExecuteAsync_Throws_when_type_invalid()
     {

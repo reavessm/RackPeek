@@ -14,15 +14,15 @@ public class UpdateRouterPortUseCase(IHardwareRepository repository) : IUseCase
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
-        
+
         var nicType = Normalize.NicType(type);
         ThrowIfInvalid.NicType(nicType);
-        
+
         var Router = await repository.GetByNameAsync(name) as Router
-                      ?? throw new NotFoundException($"Router '{name}' not found.");
+                     ?? throw new NotFoundException($"Router '{name}' not found.");
 
         if (Router.Ports == null || index < 0 || index >= Router.Ports.Count)
             throw new NotFoundException($"Port index {index} not found on Router '{name}'.");
@@ -31,7 +31,7 @@ public class UpdateRouterPortUseCase(IHardwareRepository repository) : IUseCase
         nic.Type = nicType;
         nic.Speed = speed;
         nic.Count = ports;
-        
+
         await repository.UpdateAsync(Router);
     }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using RackPeek.Domain.Resources.Hardware.Models;
+using RackPeek.Domain.Resources.SystemResources;
 
 namespace RackPeek.Domain.Helpers;
 
@@ -28,9 +29,34 @@ public static class ThrowIfInvalid
         if (value < 0) throw new ValidationException("RAM value must be a non negative number of gigabytes.");
     }
 
+    public static void SystemType(string systemType)
+    {
+        if (string.IsNullOrWhiteSpace(systemType)) throw new ValidationException("System type is required.");
+
+        var normalized = systemType.Trim().ToLowerInvariant();
+
+        if (SystemResource.ValidSystemTypes.Contains(normalized)) return;
+
+        var suggestions = GetSystemTypeSuggestions(normalized).ToList();
+
+        var message = suggestions.Any()
+            ? $"System type '{systemType}' is not valid. Did you mean: {string.Join(", ", suggestions)}?"
+            : $"System type '{systemType}' is not valid. Valid System types include hypervisor, baremetal vm, container, other etc";
+
+        throw new ValidationException(message);
+    }
+
+    private static IEnumerable<string> GetSystemTypeSuggestions(string input)
+    {
+        return SystemResource.ValidSystemTypes.Select(type => new { Type = type, Score = SimilarityScore(input, type) })
+            .Where(x => x.Score >= 0.5)
+            .OrderByDescending(x => x.Score)
+            .Take(3)
+            .Select(x => x.Type);
+    }
+
     #region Nics
 
-    
     public static void NicType(string nicType)
     {
         if (string.IsNullOrWhiteSpace(nicType)) throw new ValidationException("NIC type is required.");
@@ -88,7 +114,7 @@ public static class ThrowIfInvalid
     #endregion
 
     #region Drives
-    
+
     public static void DriveType(string driveType)
     {
         if (string.IsNullOrWhiteSpace(driveType)) throw new ValidationException("Drive type is required.");

@@ -10,11 +10,8 @@ public class GetSystemUseCase(ISystemRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
         var system = await repository.GetByNameAsync(name);
 
-        if (system == null)
-        {
-            throw new NotFoundException($"System '{name}' not found.");
-        }
-        
+        if (system == null) throw new NotFoundException($"System '{name}' not found.");
+
         return system;
     }
 }

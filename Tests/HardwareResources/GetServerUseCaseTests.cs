@@ -37,7 +37,6 @@ public class GetServerUseCaseTests
 
         // Act
         await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("node01"));
-
     }
 
     [Fact]
@@ -51,6 +50,5 @@ public class GetServerUseCaseTests
 
         // Act
         await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("node01"));
-
     }
 }

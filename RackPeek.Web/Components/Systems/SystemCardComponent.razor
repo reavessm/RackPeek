@@ -1,22 +1,20 @@
-﻿@inject UpdateSystemUseCase UpdateSystemUseCase
+﻿@using RackPeek.Domain.Resources.Hardware.Models
+@using RackPeek.Domain.Resources.SystemResources
+@using RackPeek.Domain.Resources.SystemResources.UseCases
+@using RackPeek.Web.Components.Modals
+@inject UpdateSystemUseCase UpdateSystemUseCase
 @inject GetSystemUseCase GetSystemUseCase
 @inject AddSystemDriveUseCase AddSystemDriveUseCase
 @inject RemoveSystemDriveUseCase RemoveSystemDriveUseCase
 @inject UpdateSystemDriveUseCase UpdateSystemDriveUseCase
 @inject DeleteSystemUseCase DeleteSystemUseCase
-@using RackPeek.Domain.Resources.Hardware.Models
-@using RackPeek.Domain.Resources.Hardware.Servers
-@using RackPeek.Domain.Resources.Hardware.Servers.Drives
-@using RackPeek.Domain.Resources.SystemResources
-@using RackPeek.Domain.Resources.SystemResources.UseCases
-@using RackPeek.Web.Components.Modals
 <div class="border border-zinc-800 rounded p-4 bg-zinc-900">
     <div class="flex justify-between items-center mb-3">
         <NavLink href="@($"/resources/systems/{System.Name}")" class="block">
 
-        <div class="text-zinc-100 hover:text-emerald-300">
-            @System.Name
-        </div>
+            <div class="text-zinc-100 hover:text-emerald-300">
+                @System.Name
+            </div>
         </NavLink>
 
         <div class="flex gap-3 text-xs">
@@ -26,7 +24,7 @@
                         @onclick="BeginEdit">
                     Edit
                 </button>
-                
+
                 <button
                     class="text-xs text-red-400 hover:text-red-300 transition"
                     title="Delete server"
@@ -51,18 +49,26 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
 
         <!-- Type -->
+        <!-- Type -->
         <div>
             <div class="text-zinc-400 mb-1">Type</div>
+
             @if (_isEditing)
             {
-                <input class="input"
-                       @bind="_edit.Type"/>
+                <select class="input"
+                        @bind="_edit.Type">
+                    @foreach (var type in SystemResource.ValidSystemTypes)
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </select>
             }
             else if (!string.IsNullOrWhiteSpace(System.Type))
             {
                 <div class="text-zinc-300">@System.Type</div>
             }
         </div>
+
 
         <!-- OS -->
         <div>
@@ -125,9 +131,8 @@
                     {
                         @("Edit parent")
                     }
-                   
-                </button>
 
+                </button>
             }
             else if (!string.IsNullOrWhiteSpace(System.RunsOn))
             {
@@ -178,12 +183,12 @@
     IsOpenChanged="v => _selectParentOpen = v"
     Title="Select a parent"
     Value="@SelectedParentName"
-    OnAccept="HandleParentSelected" />
+    OnAccept="HandleParentSelected"/>
 <DriveModal
     IsOpen="@_driveModalOpen"
     IsOpenChanged="v => _driveModalOpen = v"
     Value="@_editingDrive"
-    OnSubmit="HandleDriveSubmit" 
+    OnSubmit="HandleDriveSubmit"
     OnDelete="HandleDriveDelete"/>
 
 <ConfirmModal
@@ -194,7 +199,7 @@
     ConfirmClass="bg-red-600 hover:bg-red-500"
     OnConfirm="DeleteServer">
     Are you sure you want to delete <strong>@System.Name</strong>?
-    <br />
+    <br/>
     This will detach all dependent systems.
 </ConfirmModal>
 
@@ -230,40 +235,42 @@
     {
         SelectedParentName = name;
         await UpdateSystemUseCase.ExecuteAsync(
-            System.Name, 
+            System.Name,
             System.Type,
             System.Os,
             System.Cores,
             System.Ram,
             name);
         System = await GetSystemUseCase.ExecuteAsync(System.Name);
-        _edit =  SystemEditModel.From(System);
+        _edit = SystemEditModel.From(System);
     }
-    
-       
+
+
     #region Drives
+
     bool _driveModalOpen;
     int _editingDriveIndex;
     Drive? _editingDrive;
-    
+
     void OpenAddDrive()
     {
         _editingDriveIndex = -1;
         _editingDrive = null;
         _driveModalOpen = true;
     }
-    
+
     void OpenEditDrives(Drive drive)
     {
         _editingDrive = drive;
-        System.Drives ??= new();
-        _editingDriveIndex = System.Drives.IndexOf(drive);;
+        System.Drives ??= new List<Drive>();
+        _editingDriveIndex = System.Drives.IndexOf(drive);
+        ;
         _driveModalOpen = true;
     }
-    
+
     async Task HandleDriveSubmit(Drive drive)
     {
-        System.Drives ??= new();
+        System.Drives ??= new List<Drive>();
 
         if (_editingDriveIndex < 0)
         {
@@ -271,9 +278,9 @@
         }
         else
         {
-            await UpdateSystemDriveUseCase.ExecuteAsync(System.Name, _editingDriveIndex,  drive.Type ?? "hdd", drive.Size ?? 0);
+            await UpdateSystemDriveUseCase.ExecuteAsync(System.Name, _editingDriveIndex, drive.Type ?? "hdd", drive.Size ?? 0);
         }
-        
+
         System = await GetSystemUseCase.ExecuteAsync(System.Name);
         StateHasChanged();
     }
@@ -284,19 +291,17 @@
         System = await GetSystemUseCase.ExecuteAsync(System.Name);
         StateHasChanged();
     }
-    
-        
+
     #endregion
-    
+
 
 }
 
 
 @code {
     private bool _confirmDeleteOpen;
-    [Parameter]
-    public EventCallback<string> OnDeleted { get; set; }
-    
+    [Parameter] public EventCallback<string> OnDeleted { get; set; }
+
     void ConfirmDelete()
     {
         _confirmDeleteOpen = true;
@@ -311,4 +316,5 @@
         if (OnDeleted.HasDelegate)
             await OnDeleted.InvokeAsync(System.Name);
     }
+
 }

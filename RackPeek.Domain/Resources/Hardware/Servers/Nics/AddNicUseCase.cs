@@ -13,17 +13,11 @@ public class AddNicUseCase(IHardwareRepository repository) : IUseCase
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
-        if (speed.HasValue)
-        {
-            ThrowIfInvalid.NicSpeed(speed.Value);
-        }
-        if (ports.HasValue)
-        {
-            ThrowIfInvalid.NicPorts(ports.Value);
-        }
+        if (speed.HasValue) ThrowIfInvalid.NicSpeed(speed.Value);
+        if (ports.HasValue) ThrowIfInvalid.NicPorts(ports.Value);
 
 
         var nicType = Normalize.NicType(type);

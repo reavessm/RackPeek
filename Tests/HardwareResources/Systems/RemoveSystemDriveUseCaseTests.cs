@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using NSubstitute;
 using RackPeek.Domain.Helpers;
 using RackPeek.Domain.Resources.Hardware.Models;
@@ -62,7 +61,7 @@ public class RemoveSystemDriveUseCaseTests
         repo.GetByNameAsync("sys1")
             .Returns(new SystemResource
             {
-                Name = "sys1", Drives = new List<Drive> { new Drive { Type = "ssd", Size = 256 } }
+                Name = "sys1", Drives = new List<Drive> { new() { Type = "ssd", Size = 256 } }
             });
 
         var sut = new RemoveSystemDriveUseCase(repo);

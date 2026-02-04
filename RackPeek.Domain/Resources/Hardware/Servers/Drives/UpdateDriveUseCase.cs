@@ -9,7 +9,7 @@ public class UpdateDriveUseCase(IHardwareRepository repository) : IUseCase
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
 
@@ -21,7 +21,7 @@ public class UpdateDriveUseCase(IHardwareRepository repository) : IUseCase
         server.Drives ??= [];
         if (index < 0 || index >= server.Drives.Count)
             throw new ArgumentOutOfRangeException(nameof(index), "Drive index out of range.");
-        
+
         var drive = server.Drives[index];
         drive.Type = type;
         drive.Size = size;

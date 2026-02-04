@@ -11,10 +11,7 @@ public class GetDesktopUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var hardware = await repository.GetByNameAsync(name);
-        if (hardware is not Desktop desktop)
-        {
-            throw new NotFoundException($"Desktop '{name}' not found.");
-        }
+        if (hardware is not Desktop desktop) throw new NotFoundException($"Desktop '{name}' not found.");
 
         return desktop;
     }

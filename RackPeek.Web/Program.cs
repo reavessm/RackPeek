@@ -32,7 +32,7 @@ public class Program
             throw new DirectoryNotFoundException(
                 $"YAML directory not found: {yamlPath}"
             );
-        
+
         var collection = new YamlResourceCollection(Path.Combine(yamlDir, "config.yaml"));
 
 

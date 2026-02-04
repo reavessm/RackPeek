@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using RackPeek.Domain.Resources.Hardware.Desktops.Gpus;
-using RackPeek.Domain.Resources.Hardware.Models;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -16,7 +15,7 @@ public class DesktopGpuAddCommand(IServiceProvider provider)
     {
         using var scope = provider.CreateScope();
         var useCase = scope.ServiceProvider.GetRequiredService<AddDesktopGpuUseCase>();
-        
+
         await useCase.ExecuteAsync(settings.DesktopName, settings.Model, settings.Vram);
 
         AnsiConsole.MarkupLine($"[green]GPU added to desktop '{settings.DesktopName}'.[/]");

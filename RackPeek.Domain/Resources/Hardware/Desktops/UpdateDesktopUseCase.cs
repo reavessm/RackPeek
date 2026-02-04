@@ -13,7 +13,7 @@ public class UpdateDesktopUseCase(IHardwareRepository repository) : IUseCase
     )
     {
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
 
@@ -23,7 +23,7 @@ public class UpdateDesktopUseCase(IHardwareRepository repository) : IUseCase
 
         if (!string.IsNullOrWhiteSpace(model))
             desktop.Model = model;
-        
+
         // ---- RAM ----
         if (ramGb.HasValue)
         {
@@ -31,7 +31,7 @@ public class UpdateDesktopUseCase(IHardwareRepository repository) : IUseCase
             desktop.Ram ??= new Ram();
             desktop.Ram.Size = ramGb.Value;
         }
-        
+
         if (ramMts.HasValue)
         {
             desktop.Ram ??= new Ram();

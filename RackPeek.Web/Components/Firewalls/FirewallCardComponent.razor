@@ -1,26 +1,25 @@
-﻿@inject UpdateFirewallUseCase UpdateFirewallUseCase
+﻿@using RackPeek.Domain.Resources.Hardware.Firewalls
+@using RackPeek.Domain.Resources.Hardware.Firewalls.Ports
+@using RackPeek.Domain.Resources.Hardware.Models
+@using RackPeek.Web.Components.Modals
+@inject UpdateFirewallUseCase UpdateFirewallUseCase
 @inject GetFirewallUseCase GetFirewallUseCase
 @inject AddFirewallPortUseCase AddFirewallPortUseCase
 @inject UpdateFirewallPortUseCase UpdateFirewallPortUseCase
 @inject RemoveFirewallPortUseCase RemoveFirewallPortUseCase
 @inject DeleteFirewallUseCase DeleteUseCase
 
-@using RackPeek.Domain.Resources.Hardware.Firewalls
-@using RackPeek.Domain.Resources.Hardware.Firewalls.Ports
-@using RackPeek.Domain.Resources.Hardware.Models
-@using RackPeek.Web.Components.Modals
-
 <div class="border border-zinc-800 rounded p-4 bg-zinc-900">
     <div class="flex justify-between items-center mb-3">
-        
+
         <div class="text-zinc-100 hover:text-emerald-300">
             <NavLink href="@($"/resources/hardware/{Firewall.Name}")" class="block">
 
-            @Firewall.Name
+                @Firewall.Name
             </NavLink>
-            </div>
-        
-        
+        </div>
+
+
         <div class="flex gap-3 text-xs">
             @if (!_isEditing)
             {
@@ -34,7 +33,6 @@
                     @onclick="ConfirmDelete">
                     Delete
                 </button>
-                
             }
             else
             {
@@ -58,7 +56,7 @@
             @if (_isEditing)
             {
                 <input class="input"
-                       @bind="_edit.Model" />
+                       @bind="_edit.Model"/>
             }
             else if (!string.IsNullOrWhiteSpace(Firewall.Model))
             {
@@ -74,12 +72,12 @@
             {
                 <div class="flex gap-4">
                     <label class="flex items-center gap-2 text-zinc-300">
-                        <input type="checkbox" @bind="_edit.Managed" />
+                        <input type="checkbox" @bind="_edit.Managed"/>
                         Managed
                     </label>
 
                     <label class="flex items-center gap-2 text-zinc-300">
-                        <input type="checkbox" @bind="_edit.Poe" />
+                        <input type="checkbox" @bind="_edit.Poe"/>
                         PoE
                     </label>
                 </div>
@@ -120,7 +118,8 @@
             {
                 @foreach (var port in Firewall.Ports)
                 {
-                    <div class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
+                    <div
+                        class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
                         <button class="hover:text-emerald-400"
                                 title="Edit Port"
                                 @onclick="() => OpenEditPort(port)">
@@ -138,7 +137,7 @@
     IsOpenChanged="v => _portModalOpen = v"
     Value="@_editingPort"
     OnSubmit="HandlePortSubmit"
-    OnDelete="HandlePortDelete" />
+    OnDelete="HandlePortDelete"/>
 
 <ConfirmModal
     IsOpen="_confirmDeleteOpen"
@@ -152,8 +151,7 @@
 
 
 @code {
-    [Parameter, EditorRequired]
-    public Firewall Firewall { get; set; } = default!;
+    [Parameter][EditorRequired] public Firewall Firewall { get; set; } = default!;
 
     bool _isEditing;
     FirewallEditModel _edit = new();
@@ -197,7 +195,7 @@
 
     void OpenEditPort(Port port)
     {
-        Firewall.Ports ??= new();
+        Firewall.Ports ??= new List<Port>();
         _editingPortIndex = Firewall.Ports.IndexOf(port);
         _editingPort = port;
         _portModalOpen = true;
@@ -238,6 +236,7 @@
     }
 
     #endregion
+
     public class FirewallEditModel
     {
         public string? Model { get; set; }
@@ -254,15 +253,14 @@
             };
         }
     }
-    
+
 
 }
 
 @code {
     private bool _confirmDeleteOpen;
-    [Parameter]
-    public EventCallback<string> OnDeleted { get; set; }
-    
+    [Parameter] public EventCallback<string> OnDeleted { get; set; }
+
     void ConfirmDelete()
     {
         _confirmDeleteOpen = true;
@@ -277,4 +275,5 @@
         if (OnDeleted.HasDelegate)
             await OnDeleted.InvokeAsync(Firewall.Name);
     }
+
 }

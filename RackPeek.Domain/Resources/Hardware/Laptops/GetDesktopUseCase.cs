@@ -11,10 +11,7 @@ public class GetLaptopUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var hardware = await repository.GetByNameAsync(name);
-        if (hardware is not Laptop laptop)
-        {
-            throw new NotFoundException($"Laptop '{name}' not found.");
-        }
+        if (hardware is not Laptop laptop) throw new NotFoundException($"Laptop '{name}' not found.");
 
         return laptop;
     }

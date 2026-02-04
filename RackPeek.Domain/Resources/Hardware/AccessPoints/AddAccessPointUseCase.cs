@@ -9,7 +9,7 @@ public class AddAccessPointUseCase(IHardwareRepository repository, IResourceRepo
     {
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
-        
+
         var existingResourceKind = await resourceRepo.GetResourceKindAsync(name);
         if (!string.IsNullOrEmpty(existingResourceKind))
             throw new ConflictException($"{existingResourceKind} resource '{name}' already exists.");

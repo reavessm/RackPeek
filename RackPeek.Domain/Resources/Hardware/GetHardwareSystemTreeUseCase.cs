@@ -14,7 +14,7 @@ public class GetHardwareSystemTreeUseCase(
         ThrowIfInvalid.ResourceName(hardwareName);
 
         var server = await hardwareRepository.GetByNameAsync(hardwareName);
-        if (server is null) 
+        if (server is null)
             throw new NotFoundException($"Hardware '{hardwareName}' not found.");
 
         return await BuildDependencyTreeAsync(server);

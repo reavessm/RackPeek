@@ -16,15 +16,21 @@ public class UpdateSystemUseCase(ISystemRepository repository, IHardwareReposito
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.SystemName(name);
         ThrowIfInvalid.ResourceName(name);
+
+
         var system = await repository.GetByNameAsync(name);
         if (system is null)
             throw new InvalidOperationException($"System '{name}' not found.");
 
         if (!string.IsNullOrWhiteSpace(type))
-            system.Type = type;
+        {
+            var normalizedSystemType = Normalize.SystemType(type);
+            ThrowIfInvalid.SystemType(normalizedSystemType);
+            system.Type = normalizedSystemType;
+        }
 
         if (!string.IsNullOrWhiteSpace(os))
             system.Os = os;

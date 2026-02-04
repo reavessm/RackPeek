@@ -18,7 +18,7 @@ public class AccessPointDescribeCommand(
         var useCase = scope.ServiceProvider.GetRequiredService<DescribeAccessPointUseCase>();
 
         var ap = await useCase.ExecuteAsync(settings.Name);
-        
+
         var grid = new Grid()
             .AddColumn(new GridColumn().NoWrap())
             .AddColumn(new GridColumn().NoWrap());

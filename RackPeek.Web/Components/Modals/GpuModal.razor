@@ -1,6 +1,5 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using RackPeek.Domain.Resources.Hardware.Models
-
 @if (IsOpen)
 {
     <div class="fixed inset-0 z-50 flex items-center justify-center">
@@ -24,8 +23,8 @@
 
             <!-- Form -->
             <EditForm Model="_model" OnValidSubmit="HandleValidSubmit">
-                <DataAnnotationsValidator />
-                <ValidationSummary class="text-xs text-red-400 mb-3" />
+                <DataAnnotationsValidator/>
+                <ValidationSummary class="text-xs text-red-400 mb-3"/>
 
                 <div class="space-y-3 text-sm">
                     <!-- Model -->
@@ -36,7 +35,7 @@
 
                         <InputText
                             class="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-zinc-100"
-                            @bind-Value="_model.Model" />
+                            @bind-Value="_model.Model"/>
                     </div>
 
                     <!-- VRAM -->
@@ -47,7 +46,7 @@
 
                         <InputNumber
                             class="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-zinc-100"
-                            @bind-Value="_model.Vram" />
+                            @bind-Value="_model.Vram"/>
                     </div>
                 </div>
 
@@ -142,16 +141,15 @@
 
     private async Task Close()
     {
-        _model = new();
+        _model = new GpuFormModel();
         await IsOpenChanged.InvokeAsync(false);
     }
 
     private class GpuFormModel
     {
-        [Required]
-        public string? Model { get; set; }
+        [Required] public string? Model { get; set; }
 
-        [Range(1, 256)]
-        public int? Vram { get; set; }
+        [Range(1, 256)] public int? Vram { get; set; }
     }
+
 }

@@ -14,13 +14,13 @@ public class UpdateDesktopNicUseCase(IHardwareRepository repository) : IUseCase
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
-        
+
         var nicType = Normalize.NicType(type);
         ThrowIfInvalid.NicType(nicType);
-        
+
         var desktop = await repository.GetByNameAsync(name) as Desktop
                       ?? throw new NotFoundException($"Desktop '{name}' not found.");
 
@@ -31,7 +31,7 @@ public class UpdateDesktopNicUseCase(IHardwareRepository repository) : IUseCase
         nic.Type = nicType;
         nic.Speed = speed;
         nic.Ports = ports;
-        
+
         await repository.UpdateAsync(desktop);
     }
 }

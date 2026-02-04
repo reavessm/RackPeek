@@ -21,7 +21,7 @@
         <div class="space-y-4">
             @foreach (var Laptop in _Laptops.OrderBy(s => s.Name))
             {
-                    <LaptopCardComponent Laptop="Laptop" OnDeleted="Callback"/>
+                <LaptopCardComponent Laptop="Laptop" OnDeleted="Callback"/>
             }
         </div>
     }
@@ -34,12 +34,13 @@
     {
         _Laptops = await GetLaptops.ExecuteAsync();
     }
-    
+
     private Task NavigateToNewResource(string serverName)
     {
         Nav.NavigateTo($"/resources/hardware/{serverName}");
         return Task.CompletedTask;
     }
+
     private async Task Callback(string obj)
     {
         _Laptops = await GetLaptops.ExecuteAsync();

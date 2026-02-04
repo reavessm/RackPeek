@@ -10,11 +10,8 @@ public class GetServiceUseCase(IServiceRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
         var resource = await repository.GetByNameAsync(name);
 
-        if (resource is null)
-        {
-            throw new NotFoundException($"Service '{name}' not found.");
-        }
-        
+        if (resource is null) throw new NotFoundException($"Service '{name}' not found.");
+
         return resource;
     }
 }

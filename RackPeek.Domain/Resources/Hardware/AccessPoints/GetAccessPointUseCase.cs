@@ -10,10 +10,7 @@ public class GetAccessPointUseCase(IHardwareRepository repository) : IUseCase
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
         var hardware = await repository.GetByNameAsync(name);
-        if (hardware is not AccessPoint ap)
-        {
-            throw new NotFoundException($"Access point '{name}' not found.");
-        }
+        if (hardware is not AccessPoint ap) throw new NotFoundException($"Access point '{name}' not found.");
 
         return ap;
     }

@@ -1,7 +1,4 @@
-using System.ComponentModel.DataAnnotations;
 using RackPeek.Domain.Helpers;
-using RackPeek.Domain.Resources.Hardware.Models;
-using RackPeek.Domain.Resources.SystemResources;
 
 namespace RackPeek.Domain.Resources.SystemResources.UseCases;
 
@@ -11,7 +8,7 @@ public class UpdateSystemDriveUseCase(ISystemRepository repository) : IUseCase
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         ThrowIfInvalid.ResourceName(systemName);
         var driveTypeNormalized = Normalize.DriveType(driveType);
         ThrowIfInvalid.DriveType(driveTypeNormalized);

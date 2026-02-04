@@ -13,10 +13,7 @@ public class GetSystemServiceTreeUseCase(
         name = Normalize.SystemName(name);
         ThrowIfInvalid.ResourceName(name);
         var system = await systemRepository.GetByNameAsync(name);
-        if (system is null)
-        {
-            throw new NotFoundException($"System '{name}' not found.");
-        }
+        if (system is null) throw new NotFoundException($"System '{name}' not found.");
         var services = await serviceRepository.GetBySystemHostAsync(system.Name);
 
         return new SystemDependencyTree(system, services);

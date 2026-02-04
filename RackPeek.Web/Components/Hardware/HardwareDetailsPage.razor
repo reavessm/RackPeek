@@ -4,14 +4,14 @@
 @using RackPeek.Web.Components.AccessPoints
 @using RackPeek.Web.Components.Components
 @using RackPeek.Web.Components.Desktops
-@using RackPeek.Web.Components.Switches
-@using RackPeek.Web.Components.Servers
-@using RackPeek.Web.Components.Systems
-@using RackPeek.Web.Components.Laptops
 @using RackPeek.Web.Components.Firewalls
-@using Router = RackPeek.Domain.Resources.Hardware.Models.Router
+@using RackPeek.Web.Components.Laptops
 @using RackPeek.Web.Components.Routers
+@using RackPeek.Web.Components.Servers
+@using RackPeek.Web.Components.Switches
+@using RackPeek.Web.Components.Systems
 @using RackPeek.Web.Components.Ups
+@using Router = RackPeek.Domain.Resources.Hardware.Models.Router
 @inject IHardwareRepository HardwareRepository
 @inject GetHardwareSystemTreeUseCase GetHardwareSystemTreeUseCase
 
@@ -42,27 +42,31 @@
         }
         else if (_hardware is Desktop desktop)
         {
-            <DesktopCardComponent Desktop="desktop"/>
+            <DesktopCardComponent Desktop="desktop" OnDeleted="Callback"/>
         }
         else if (_hardware is AccessPoint accessPoint)
         {
-            <AccessPointCardComponent AccessPoint="accessPoint"/>
+            <AccessPointCardComponent AccessPoint="accessPoint" OnDeleted="Callback"/>
         }
         else if (_hardware is Switch _switch)
         {
-            <SwitchCardComponent Switch="_switch"/>
-        }        else if (_hardware is Laptop laptop)
+            <SwitchCardComponent Switch="_switch" OnDeleted="Callback"/>
+        }
+        else if (_hardware is Laptop laptop)
         {
-            <LaptopCardComponent Laptop="laptop"/>
-        }     else if (_hardware is Firewall firewall)
+            <LaptopCardComponent Laptop="laptop" OnDeleted="Callback"/>
+        }
+        else if (_hardware is Firewall firewall)
         {
-            <FirewallCardComponent Firewall="firewall"/>
-        }  else if (_hardware is Router router)
+            <FirewallCardComponent Firewall="firewall" OnDeleted="Callback"/>
+        }
+        else if (_hardware is Router router)
         {
-            <RouterCardComponent Router="router"/>
-        } else if (_hardware is Ups ups)
+            <RouterCardComponent Router="router" OnDeleted="Callback"/>
+        }
+        else if (_hardware is Ups ups)
         {
-            <UpsCardComponent Ups="ups"/>
+            <UpsCardComponent Ups="ups" OnDeleted="Callback"/>
         }
         else
         {
@@ -81,7 +85,7 @@
                 No child systems / services
             </div>
         }
-        
+
         <div class="m-4">
             <AddSystemComponent RunsOn="@HardwareName"/>
         </div>

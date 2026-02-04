@@ -84,7 +84,7 @@ public class RemoveDriveUseCaseTests
         var ex = await Assert.ThrowsAsync<NotFoundException>(async () =>
             await sut.ExecuteAsync("node01", 0)
         );
-        
+
         // Assert
         await repo.DidNotReceive().UpdateAsync(Arg.Any<Server>());
     }

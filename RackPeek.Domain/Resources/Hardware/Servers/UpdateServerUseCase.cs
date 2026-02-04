@@ -14,7 +14,7 @@ public class UpdateServerUseCase(IHardwareRepository repository) : IUseCase
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
 
@@ -29,7 +29,7 @@ public class UpdateServerUseCase(IHardwareRepository repository) : IUseCase
             server.Ram ??= new Ram();
             server.Ram.Size = ramGb.Value;
         }
-        
+
         if (ramMts.HasValue)
         {
             server.Ram ??= new Ram();

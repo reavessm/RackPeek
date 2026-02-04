@@ -17,7 +17,6 @@ public class DescribeUpsUseCaseTests
         var sut = new DescribeUpsUseCase(repo);
 
         await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("ups01"));
-
     }
 
     [Fact]

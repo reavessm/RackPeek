@@ -11,10 +11,7 @@ public class GetUpsUnitUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var hardware = await repository.GetByNameAsync(name);
-        if (hardware is not Ups ups)
-        {
-            throw new NotFoundException($"Ups '{name}' not found.");
-        }
+        if (hardware is not Ups ups) throw new NotFoundException($"Ups '{name}' not found.");
         return ups;
     }
 }

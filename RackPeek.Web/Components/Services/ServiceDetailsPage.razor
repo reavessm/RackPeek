@@ -4,6 +4,8 @@
 @using RackPeek.Web.Components.Components
 @inject IServiceRepository ServiceRepository
 @inject UpdateServiceUseCase UpdateServiceUseCase
+@inject NavigationManager NavigationManager
+
 <PageTitle>Service Details</PageTitle>
 
 <ResourceBreadCrumbComponent
@@ -25,7 +27,7 @@
             @_service.Name (@_service.Kind)
         </h1>
 
-        <ServiceCardComponent Service="_service" OnSave="UpdateService"/>
+        <ServiceCardComponent Service="_service" OnSave="UpdateService" OnDeleted="OnDeleted"/>
     }
 </div>
 
@@ -51,6 +53,11 @@
             edit.Url,
             edit.RunsOn
         );
+    }
+
+    private void OnDeleted(string obj)
+    {
+        NavigationManager.NavigateTo("/services/list");
     }
 
 }

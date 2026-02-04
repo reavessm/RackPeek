@@ -1,12 +1,10 @@
 namespace RackPeek.Domain.Resources.Hardware.Models;
 
-public class Firewall : Hardware
+public class Router : Hardware
 {
+    public const string KindLabel = "Router";
     public string? Model { get; set; }
     public bool? Managed { get; set; }
     public bool? Poe { get; set; }
     public List<Port>? Ports { get; set; }
-    
-    public const string KindLabel = "Firewall";
-
 }

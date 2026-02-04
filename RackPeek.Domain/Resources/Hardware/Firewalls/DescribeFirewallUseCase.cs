@@ -23,7 +23,7 @@ public class DescribeFirewallUseCase(IHardwareRepository repository) : IUseCase
         var firewallResource = await repository.GetByNameAsync(name) as Firewall;
         if (firewallResource == null)
             throw new NotFoundException($"Firewall '{name}' not found.");
-        
+
         // If no ports exist, return defaults
         var ports = firewallResource.Ports ?? new List<Port>();
 

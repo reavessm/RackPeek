@@ -13,7 +13,7 @@ public class UpdateFirewallUseCase(IHardwareRepository repository) : IUseCase
     )
     {
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
 

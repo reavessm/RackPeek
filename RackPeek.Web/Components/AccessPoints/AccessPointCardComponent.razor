@@ -1,15 +1,15 @@
-﻿@inject DeleteAccessPointUseCase DeleteUseCase
-@using RackPeek.Domain.Resources.Hardware.AccessPoints
+﻿@using RackPeek.Domain.Resources.Hardware.AccessPoints
 @using RackPeek.Domain.Resources.Hardware.Models
 @using RackPeek.Web.Components.Modals
+@inject DeleteAccessPointUseCase DeleteUseCase
 <div class="border border-zinc-800 rounded p-4 bg-zinc-900">
     <div class="flex justify-between items-center mb-3">
         <div class="text-zinc-100 hover:text-emerald-300">
             <NavLink href="@($"/resources/hardware/{AccessPoint.Name}")" class="block">
 
-            @AccessPoint.Name
-</NavLink>
-            </div>
+                @AccessPoint.Name
+            </NavLink>
+        </div>
 
 
         <div class="flex justify-between items-center mb-3">
@@ -20,7 +20,7 @@
                 </span>
             }
             <div class="flex items-center gap-2">
-                
+
                 <button
                     class="text-xs text-red-400 hover:text-red-300 transition"
                     title="Delete server"
@@ -29,7 +29,7 @@
                 </button>
             </div>
         </div>
-        
+
     </div>
 
     <div class="text-sm">
@@ -63,10 +63,9 @@
 
 @code {
     private bool _confirmDeleteOpen;
-    
-    [Parameter]
-    public EventCallback<string> OnDeleted { get; set; }
-    
+
+    [Parameter] public EventCallback<string> OnDeleted { get; set; }
+
     void ConfirmDelete()
     {
         _confirmDeleteOpen = true;
@@ -81,4 +80,5 @@
         if (OnDeleted.HasDelegate)
             await OnDeleted.InvokeAsync(AccessPoint.Name);
     }
+
 }

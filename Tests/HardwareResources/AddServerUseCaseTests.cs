@@ -1,6 +1,5 @@
 using NSubstitute;
 using RackPeek.Domain.Helpers;
-using RackPeek.Domain.Resources.Hardware;
 using RackPeek.Domain.Resources.Hardware.Models;
 using RackPeek.Domain.Resources.Hardware.Servers;
 
@@ -38,7 +37,7 @@ public class AddServerUseCaseTests
         host.ResourceRepo.GetResourceKindAsync("node01").Returns("Server");
 
         var sut = host.Get<AddServerUseCase>();
-        
+
         // Act
         var ex = await Assert.ThrowsAsync<ConflictException>(async () =>
             await sut.ExecuteAsync(

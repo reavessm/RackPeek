@@ -58,7 +58,7 @@ public class SystemYamlE2ETests(TempYamlCliFixture fs, ITestOutputHelper outputH
         // Update system
         (output, yaml) = await ExecuteAsync(
             "systems", "set", "host01",
-            "--type", "server",
+            "--type", "baremetal",
             "--os", "ubuntu-22.04",
             "--cores", "4",
             "--ram", "8192",
@@ -79,7 +79,7 @@ public class SystemYamlE2ETests(TempYamlCliFixture fs, ITestOutputHelper outputH
                        name: hypervisor01
                        tags: 
                      - kind: System
-                       type: server
+                       type: baremetal
                        os: ubuntu-22.04
                        cores: 4
                        ram: 8192
@@ -93,32 +93,32 @@ public class SystemYamlE2ETests(TempYamlCliFixture fs, ITestOutputHelper outputH
         // Get system by name
         (output, yaml) = await ExecuteAsync("systems", "get", "host01");
         Assert.Equal(
-            "host01  Type: server, OS: ubuntu-22.04, Cores: 4, RAM: 8192GB, Storage: 0GB, \nRunsOn: hypervisor01\n",
+            "host01  Type: baremetal, OS: ubuntu-22.04, Cores: 4, RAM: 8192GB, Storage: 0GB, \nRunsOn: hypervisor01\n",
             output);
 
         // List systems
         (output, yaml) = await ExecuteAsync("systems", "list");
         Assert.Equal("""
-                     ╭────────┬────────┬─────────────┬───────┬──────────┬─────────────┬─────────────╮
-                     │ Name   │ Type   │ OS          │ Cores │ RAM (GB) │ Storage     │ Runs On     │
-                     │        │        │             │       │          │ (GB)        │             │
-                     ├────────┼────────┼─────────────┼───────┼──────────┼─────────────┼─────────────┤
-                     │ host01 │ server │ ubuntu-22.0 │ 4     │ 8192     │ 0           │ hypervisor0 │
-                     │        │        │ 4           │       │          │             │ 1           │
-                     ╰────────┴────────┴─────────────┴───────┴──────────┴─────────────┴─────────────╯
+                     ╭────────┬───────────┬────────────┬───────┬──────────┬────────────┬────────────╮
+                     │ Name   │ Type      │ OS         │ Cores │ RAM (GB) │ Storage    │ Runs On    │
+                     │        │           │            │       │          │ (GB)       │            │
+                     ├────────┼───────────┼────────────┼───────┼──────────┼────────────┼────────────┤
+                     │ host01 │ baremetal │ ubuntu-22. │ 4     │ 8192     │ 0          │ hypervisor │
+                     │        │           │ 04         │       │          │            │ 01         │
+                     ╰────────┴───────────┴────────────┴───────┴──────────┴────────────┴────────────╯
 
                      """, output);
 
         // Report systems
         (output, yaml) = await ExecuteAsync("systems", "summary");
         Assert.Equal("""
-                     ╭────────┬────────┬─────────────┬───────┬──────────┬─────────────┬─────────────╮
-                     │ Name   │ Type   │ OS          │ Cores │ RAM (GB) │ Storage     │ Runs On     │
-                     │        │        │             │       │          │ (GB)        │             │
-                     ├────────┼────────┼─────────────┼───────┼──────────┼─────────────┼─────────────┤
-                     │ host01 │ server │ ubuntu-22.0 │ 4     │ 8192     │ 0           │ hypervisor0 │
-                     │        │        │ 4           │       │          │             │ 1           │
-                     ╰────────┴────────┴─────────────┴───────┴──────────┴─────────────┴─────────────╯
+                     ╭────────┬───────────┬────────────┬───────┬──────────┬────────────┬────────────╮
+                     │ Name   │ Type      │ OS         │ Cores │ RAM (GB) │ Storage    │ Runs On    │
+                     │        │           │            │       │          │ (GB)       │            │
+                     ├────────┼───────────┼────────────┼───────┼──────────┼────────────┼────────────┤
+                     │ host01 │ baremetal │ ubuntu-22. │ 4     │ 8192     │ 0          │ hypervisor │
+                     │        │           │ 04         │       │          │            │ 01         │
+                     ╰────────┴───────────┴────────────┴───────┴──────────┴────────────┴────────────╯
 
                      """, output);
 

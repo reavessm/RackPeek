@@ -1,7 +1,5 @@
 ﻿@using RackPeek.Domain.Resources.Services
 @using RackPeek.Domain.Resources.Services.UseCases
-@using RackPeek.Domain.Resources.SystemResources.UseCases
-@using RackPeek.Web.Components.Systems
 @using RackPeek.Web.Components.Modals
 @inject UpdateServiceUseCase UpdateServiceUseCase
 @inject GetServiceUseCase GetServiceUseCase
@@ -10,9 +8,9 @@
     <div class="flex justify-between items-center mb-3">
         <NavLink href="@($"/resources/services/{Service.Name}")" class="block">
 
-        <div class="text-zinc-100 hover:text-emerald-300">
-            @Service.Name
-        </div>
+            <div class="text-zinc-100 hover:text-emerald-300">
+                @Service.Name
+            </div>
         </NavLink>
 
         <div class="flex gap-3 text-xs">
@@ -22,7 +20,7 @@
                         @onclick="BeginEdit">
                     Edit
                 </button>
-                
+
                 <button
                     class="text-xs text-red-400 hover:text-red-300 transition"
                     title="Delete server"
@@ -125,9 +123,8 @@
                     {
                         @("Edit parent")
                     }
-                   
-                </button>
 
+                </button>
             }
             else if (!string.IsNullOrWhiteSpace(Service.RunsOn))
             {
@@ -146,7 +143,7 @@
     IsOpenChanged="v => _selectParentOpen = v"
     Title="Select a parent"
     Value="@SelectedParentName"
-    OnAccept="HandleParentSelected" />
+    OnAccept="HandleParentSelected"/>
 
 <ConfirmModal
     IsOpen="_confirmDeleteOpen"
@@ -182,7 +179,7 @@
     {
         _isEditing = false;
     }
-    
+
     bool _selectParentOpen;
     string? SelectedParentName;
 
@@ -190,7 +187,7 @@
     {
         SelectedParentName = name;
         await UpdateServiceUseCase.ExecuteAsync(
-            Service.Name, 
+            Service.Name,
             Service.Network?.Ip,
             Service.Network?.Port,
             Service.Network?.Protocol,
@@ -210,14 +207,13 @@
     ConfirmClass="bg-red-600 hover:bg-red-500"
     OnConfirm="DeleteServer">
     Are you sure you want to delete <strong>@Service.Name</strong>?
-    <br />
+    <br/>
 </ConfirmModal>
 
 @code {
     private bool _confirmDeleteOpen;
-    [Parameter]
-    public EventCallback<string> OnDeleted { get; set; }
-    
+    [Parameter] public EventCallback<string> OnDeleted { get; set; }
+
     void ConfirmDelete()
     {
         _confirmDeleteOpen = true;
@@ -232,4 +228,5 @@
         if (OnDeleted.HasDelegate)
             await OnDeleted.InvokeAsync(Service.Name);
     }
+
 }

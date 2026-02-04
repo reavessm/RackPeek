@@ -4,6 +4,19 @@ namespace RackPeek.Domain.Resources.SystemResources;
 
 public class SystemResource : Resource
 {
+    public const string KindLabel = "System";
+
+    public static readonly string[] ValidSystemTypes =
+    [
+        "baremetal",
+        "hypervisor",
+        "vm",
+        "container",
+        "embedded",
+        "cloud",
+        "other"
+    ];
+
     public string? Type { get; set; }
     public string? Os { get; set; }
     public int? Cores { get; set; }
@@ -11,6 +24,4 @@ public class SystemResource : Resource
     public List<Drive>? Drives { get; set; }
 
     public string? RunsOn { get; set; }
-
-    public const string KindLabel = "System";
 }

@@ -9,7 +9,7 @@ public class AddSystemUseCase(ISystemRepository repository, IResourceRepository 
     {
         name = Normalize.SystemName(name);
         ThrowIfInvalid.ResourceName(name);
-        
+
         var existingResourceKind = await resourceRepo.GetResourceKindAsync(name);
         if (!string.IsNullOrEmpty(existingResourceKind))
             throw new ConflictException($"{existingResourceKind} resource '{name}' already exists.");
@@ -20,11 +20,11 @@ public class AddSystemUseCase(ISystemRepository repository, IResourceRepository 
             var parentResourceKind = await resourceRepo.GetResourceKindAsync(runsOn);
             if (string.IsNullOrEmpty(parentResourceKind))
                 throw new NotFoundException($"Parent resource '{runsOn}' does not exist.");
-            
+
             if (parentResourceKind is Service.KindLabel or SystemResource.KindLabel)
                 throw new NotFoundException($"Parent resource '{runsOn}' must be hardware.");
         }
-        
+
         var system = new SystemResource
         {
             Name = name,

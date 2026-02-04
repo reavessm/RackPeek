@@ -37,6 +37,5 @@ public class GetAccessPointUseCaseTests
 
         // Act
         await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("node01"));
-
     }
 }

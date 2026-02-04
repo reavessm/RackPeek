@@ -19,7 +19,6 @@ public class DescribeSwitchUseCaseTests
 
         // Act
         await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("sw01"));
-
     }
 
     [Fact]

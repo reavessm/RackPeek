@@ -5,7 +5,6 @@ namespace Tests.Yaml;
 
 public class SystemDeserializationTests
 {
-    
     public static ISystemRepository CreateSut(string yaml)
     {
         var tempDir = Path.Combine(

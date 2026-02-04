@@ -10,10 +10,7 @@ public class GetServerUseCase(IHardwareRepository repository) : IUseCase
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
         var hardware = await repository.GetByNameAsync(name);
-        if (hardware is not Server server)
-        {
-            throw new NotFoundException($"Server '{name}' not found.");
-        }
+        if (hardware is not Server server) throw new NotFoundException($"Server '{name}' not found.");
 
         return server;
     }

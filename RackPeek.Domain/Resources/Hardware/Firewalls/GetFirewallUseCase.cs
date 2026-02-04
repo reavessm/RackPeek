@@ -11,11 +11,8 @@ public class GetFirewallUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var hardware = await repository.GetByNameAsync(name);
-        if (hardware is not Firewall firewall)
-        {
-            throw new NotFoundException($"Firewall '{name}' not found.");
-        }
-        
+        if (hardware is not Firewall firewall) throw new NotFoundException($"Firewall '{name}' not found.");
+
         return firewall;
     }
 }
