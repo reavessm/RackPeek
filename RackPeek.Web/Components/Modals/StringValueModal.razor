@@ -1,5 +1,4 @@
 ﻿@using System.ComponentModel.DataAnnotations
-
 @if (IsOpen)
 {
     <div class="fixed inset-0 z-50 flex items-center justify-center">
@@ -30,7 +29,7 @@
 
             <!-- Form -->
             <EditForm Model="_model" OnValidSubmit="HandleValidSubmit">
-                <DataAnnotationsValidator />
+                <DataAnnotationsValidator/>
 
                 @if (!string.IsNullOrEmpty(_error))
                 {
@@ -46,7 +45,7 @@
 
                     <InputText
                         class="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-zinc-100"
-                        @bind-Value="_model.Value" />
+                        @bind-Value="_model.Value"/>
                 </div>
 
                 <!-- Actions -->
@@ -80,10 +79,11 @@
     [Parameter] public string? Value { get; set; }
 
     /// <summary>
-    /// Called when Accept is clicked.
-    /// May throw an exception (e.g. validation error).
+    ///     Called when Accept is clicked.
+    ///     May throw an exception (e.g. validation error).
     /// </summary>
-    [Parameter] public EventCallback<string> OnSubmit { get; set; }
+    [Parameter]
+    public EventCallback<string> OnSubmit { get; set; }
 
     private FormModel _model = new();
     private string? _error;
@@ -123,14 +123,14 @@
 
     private async Task Close()
     {
-        _model = new();
+        _model = new FormModel();
         _error = null;
         await IsOpenChanged.InvokeAsync(false);
     }
 
     private class FormModel
     {
-        [Required]
-        public string? Value { get; set; }
+        [Required] public string? Value { get; set; }
     }
+
 }

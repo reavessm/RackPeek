@@ -9,7 +9,7 @@ public class UpdateLaptopDriveUseCase(IHardwareRepository repository) : IUseCase
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
 
@@ -22,7 +22,7 @@ public class UpdateLaptopDriveUseCase(IHardwareRepository repository) : IUseCase
         var drive = laptop.Drives[index];
         drive.Type = type;
         drive.Size = size;
-        
+
         await repository.UpdateAsync(laptop);
     }
 }

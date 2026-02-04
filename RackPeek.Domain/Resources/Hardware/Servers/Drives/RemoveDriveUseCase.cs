@@ -17,7 +17,7 @@ public class RemoveDriveUseCase(IHardwareRepository repository) : IUseCase
         server.Drives ??= [];
         if (index < 0 || index >= server.Drives.Count)
             throw new ArgumentOutOfRangeException(nameof(index), "Drive index out of range.");
-        
+
         server.Drives.RemoveAt(index);
         await repository.UpdateAsync(server);
     }

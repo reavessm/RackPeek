@@ -32,6 +32,5 @@ public class GetUpsUnitUseCaseTests
         var sut = new GetUpsUnitUseCase(repo);
 
         await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("node01"));
-
     }
 }

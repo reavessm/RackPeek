@@ -11,7 +11,7 @@ public class RemoveRouterPortUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var Router = await repository.GetByNameAsync(name) as Router
-                      ?? throw new NotFoundException($"Router '{name}' not found.");
+                     ?? throw new NotFoundException($"Router '{name}' not found.");
 
         if (Router.Ports == null || index < 0 || index >= Router.Ports.Count)
             throw new NotFoundException($"Port index {index} not found on Router '{name}'.");

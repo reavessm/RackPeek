@@ -13,13 +13,13 @@ public class AddSwitchPortUseCase(IHardwareRepository repository) : IUseCase
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
 
         var nicType = Normalize.NicType(type);
         ThrowIfInvalid.NicType(nicType);
-        
+
         var desktop = await repository.GetByNameAsync(name) as Switch
                       ?? throw new NotFoundException($"Switch '{name}' not found.");
 

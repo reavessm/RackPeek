@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using RackPeek.Domain.Resources.Hardware.Desktops.Nics;
-using RackPeek.Domain.Resources.Hardware.Models;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -16,7 +15,7 @@ public class DesktopNicSetCommand(IServiceProvider provider)
     {
         using var scope = provider.CreateScope();
         var useCase = scope.ServiceProvider.GetRequiredService<UpdateDesktopNicUseCase>();
-        
+
         await useCase.ExecuteAsync(settings.DesktopName, settings.Index, settings.Type, settings.Speed, settings.Ports);
 
         AnsiConsole.MarkupLine($"[green]NIC #{settings.Index} updated on desktop '{settings.DesktopName}'.[/]");

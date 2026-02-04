@@ -9,9 +9,9 @@ public class AddDesktopCpuUseCase(IHardwareRepository repository) : IUseCase
     {
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
-        
+
         // ToDo validate / normalize all inputs
-        
+
         var cpu = new Cpu
         {
             Model = model,

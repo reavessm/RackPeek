@@ -2,18 +2,7 @@ namespace RackPeek.Domain.Resources;
 
 public abstract class Resource
 {
-    public string Kind { get; set; } = string.Empty;
-
-    public required string Name { get; set; }
-
-    public Dictionary<string, string>? Tags { get; set; }
-
-    public static string KindToPlural(string kind)
-    {
-        return KindToPluralDictionary.GetValueOrDefault(kind.ToLower().Trim(), kind);
-    }
-
-    private static readonly Dictionary<string, string> KindToPluralDictionary = new Dictionary<string, string>()
+    private static readonly Dictionary<string, string> KindToPluralDictionary = new()
     {
         { "hardware", "hardware" },
         { "server", "servers" },
@@ -25,6 +14,17 @@ public abstract class Resource
         { "laptop", "laptops" },
         { "ups", "ups" },
         { "system", "systems" },
-        { "service", "services" },
+        { "service", "services" }
     };
+
+    public string Kind { get; set; } = string.Empty;
+
+    public required string Name { get; set; }
+
+    public Dictionary<string, string>? Tags { get; set; }
+
+    public static string KindToPlural(string kind)
+    {
+        return KindToPluralDictionary.GetValueOrDefault(kind.ToLower().Trim(), kind);
+    }
 }

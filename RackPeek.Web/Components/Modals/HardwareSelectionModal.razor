@@ -26,7 +26,7 @@
 
             <!-- Form -->
             <EditForm Model="_model" OnValidSubmit="HandleAccept">
-                <DataAnnotationsValidator />
+                <DataAnnotationsValidator/>
 
                 <div class="space-y-3 text-sm">
                     <!-- Search -->
@@ -37,9 +37,9 @@
                             Value="@_search"
                             ValueChanged="OnSearchChanged"
                             ValueExpression="() => _search"
-                            @oninput="OnSearchInput" />
+                            @oninput="OnSearchInput"/>
 
-                        
+
                     </div>
 
                     <!-- Selection -->
@@ -89,17 +89,16 @@
     [Parameter] public bool IsOpen { get; set; }
     [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
 
-    [Parameter, EditorRequired]
-    public string Title { get; set; } = "Select hardware";
+    [Parameter][EditorRequired] public string Title { get; set; } = "Select hardware";
 
     /// <summary>
-    /// Default / pre-selected hardware name (may be null)
+    ///     Default / pre-selected hardware name (may be null)
     /// </summary>
     [Parameter]
     public string? Value { get; set; }
 
     /// <summary>
-    /// Called with the selected hardware name
+    ///     Called with the selected hardware name
     /// </summary>
     [Parameter]
     public EventCallback<string?> OnAccept { get; set; }
@@ -135,11 +134,9 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-        
     }
 
 
-    
     /* ---------- Computed ---------- */
 
     private IReadOnlyDictionary<string, List<Hardware>> FilteredHardware =>
@@ -168,7 +165,7 @@
 
     private async Task Close()
     {
-        _model = new();
+        _model = new SelectionFormModel();
         _search = string.Empty;
         await IsOpenChanged.InvokeAsync(false);
     }
@@ -177,14 +174,14 @@
 
     private sealed class SelectionFormModel
     {
-        [Required]
-        public string? Value { get; set; }
+        [Required] public string? Value { get; set; }
     }
-    
+
     private void OnSearchChanged(string? value)
     {
         _search = value ?? string.Empty;
     }
+
     private void OnSearchInput(ChangeEventArgs e)
     {
         _search = e.Value?.ToString() ?? string.Empty;
@@ -194,4 +191,5 @@
             _model.Value = null;
         }
     }
+
 }

@@ -62,6 +62,5 @@ public class DescribeServerUseCaseTests
 
         // Act
         await Assert.ThrowsAsync<NotFoundException>(() => sut.ExecuteAsync("node01"));
-
     }
 }

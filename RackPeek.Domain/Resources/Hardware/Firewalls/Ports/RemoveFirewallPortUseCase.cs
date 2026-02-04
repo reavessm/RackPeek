@@ -11,7 +11,7 @@ public class RemoveFirewallPortUseCase(IHardwareRepository repository) : IUseCas
         ThrowIfInvalid.ResourceName(name);
 
         var firewall = await repository.GetByNameAsync(name) as Firewall
-                      ?? throw new NotFoundException($"Firewall '{name}' not found.");
+                       ?? throw new NotFoundException($"Firewall '{name}' not found.");
 
         if (firewall.Ports == null || index < 0 || index >= firewall.Ports.Count)
             throw new NotFoundException($"Port index {index} not found on firewall '{name}'.");

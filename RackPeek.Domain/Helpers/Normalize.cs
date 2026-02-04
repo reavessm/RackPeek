@@ -6,7 +6,13 @@ public static class Normalize
     {
         return value.Trim().ToLowerInvariant();
     }
+
     public static string NicType(string value)
+    {
+        return value.Trim().ToLowerInvariant();
+    }
+
+    public static string SystemType(string value)
     {
         return value.Trim().ToLowerInvariant();
     }

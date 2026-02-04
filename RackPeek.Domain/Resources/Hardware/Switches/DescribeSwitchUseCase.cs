@@ -23,7 +23,7 @@ public class DescribeSwitchUseCase(IHardwareRepository repository) : IUseCase
         var switchResource = await repository.GetByNameAsync(name) as Switch;
         if (switchResource == null)
             throw new NotFoundException($"Switch '{name}' not found.");
-        
+
         // If no ports exist, return defaults
         var ports = switchResource.Ports ?? new List<Port>();
 

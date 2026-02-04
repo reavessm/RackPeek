@@ -7,8 +7,7 @@ namespace RackPeek.Commands.Systems.Drives;
 
 public class SystemDriveRemoveSettings : SystemNameSettings
 {
-    [CommandOption("--index <INDEX>")] 
-    public int Index { get; set; }
+    [CommandOption("--index <INDEX>")] public int Index { get; set; }
 }
 
 public class SystemDriveRemoveCommand(IServiceProvider serviceProvider)

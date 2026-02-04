@@ -22,7 +22,7 @@
         <div class="space-y-4">
             @foreach (var server in _servers.OrderBy(s => s.Name))
             {
-                    <ServerCardComponent Server="server" OnDeleted="Callback"/>
+                <ServerCardComponent Server="server" OnDeleted="Callback"/>
             }
         </div>
     }

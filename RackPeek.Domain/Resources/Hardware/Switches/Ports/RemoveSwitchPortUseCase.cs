@@ -11,7 +11,7 @@ public class RemoveSwitchPortUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var Switch = await repository.GetByNameAsync(name) as Switch
-                      ?? throw new NotFoundException($"Switch '{name}' not found.");
+                     ?? throw new NotFoundException($"Switch '{name}' not found.");
 
         if (Switch.Ports == null || index < 0 || index >= Switch.Ports.Count)
             throw new NotFoundException($"Port index {index} not found on Switch '{name}'.");

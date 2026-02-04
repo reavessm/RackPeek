@@ -6,10 +6,10 @@
 <PageTitle>Switches</PageTitle>
 
 <div class="min-h-screen bg-zinc-950 text-zinc-200 font-mono p-6 space-y-6">
-    
+
     <AddSwitchComponent OnCreated="NavigateToNewResource"/>
 
-    
+
     @if (_Switches is null)
     {
         <div class="text-zinc-500">loading Switches…</div>
@@ -23,7 +23,7 @@
         <div class="space-y-4">
             @foreach (var _switch in _Switches.OrderBy(s => s.Name))
             {
-                    <SwitchCardComponent Switch="_switch" OnDeleted="Callback"/>
+                <SwitchCardComponent Switch="_switch" OnDeleted="Callback"/>
             }
         </div>
     }
@@ -36,14 +36,16 @@
     {
         _Switches = await GetSwitches.ExecuteAsync();
     }
-    
+
     private Task NavigateToNewResource(string serverName)
     {
         Nav.NavigateTo($"/resources/hardware/{serverName}");
         return Task.CompletedTask;
     }
+
     private async Task Callback(string obj)
     {
         _Switches = await GetSwitches.ExecuteAsync();
     }
+
 }

@@ -51,14 +51,14 @@ public sealed class YamlResourceCollection(string filePath)
     {
         UpdateWithLock(list => { list.RemoveAll(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase)); });
     }
-    
-    
+
+
     private void UpdateWithLock(Action<List<Resource>> action)
     {
         lock (_fileLock)
         {
             action(_resources);
-            
+
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .Build();
@@ -69,7 +69,6 @@ public sealed class YamlResourceCollection(string filePath)
             };
 
             File.WriteAllText(filePath, serializer.Serialize(payload));
-            
         }
     }
 
@@ -114,7 +113,7 @@ public sealed class YamlResourceCollection(string filePath)
 
         return map;
     }
-    
+
     private static List<Resource> LoadFromFile(string filePath)
     {
         // 1. Robustness: Handle missing or empty files immediately
@@ -158,14 +157,14 @@ public sealed class YamlResourceCollection(string filePath)
         }
     }
 
+    public Resource? GetByName(string name)
+    {
+        return _resources.FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+    }
+
     // Simple wrapper class to match the YAML structure
     private class YamlRoot
     {
         public List<Resource>? Resources { get; set; }
-    }
-
-    public Resource? GetByName(string name)
-    {
-        return _resources.FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
     }
 }

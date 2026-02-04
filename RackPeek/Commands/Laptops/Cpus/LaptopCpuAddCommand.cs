@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using RackPeek.Domain.Resources.Hardware.Laptops.Cpus;
-using RackPeek.Domain.Resources.Hardware.Models;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -16,7 +15,7 @@ public class LaptopCpuAddCommand(IServiceProvider provider)
     {
         using var scope = provider.CreateScope();
         var useCase = scope.ServiceProvider.GetRequiredService<AddLaptopCpuUseCase>();
-        
+
         await useCase.ExecuteAsync(settings.LaptopName, settings.Model, settings.Cores, settings.Threads);
 
         AnsiConsole.MarkupLine($"[green]CPU added to Laptop '{settings.LaptopName}'.[/]");

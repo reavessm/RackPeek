@@ -1,11 +1,9 @@
-﻿@using RackPeek.Domain.Resources.Hardware.Desktops
-@using RackPeek.Domain.Resources.Hardware.Models
-@using RackPeek.Domain.Resources.Hardware.Laptops
+﻿@using RackPeek.Domain.Resources.Hardware.Laptops
 @using RackPeek.Domain.Resources.Hardware.Laptops.Cpus
 @using RackPeek.Domain.Resources.Hardware.Laptops.Drives
 @using RackPeek.Domain.Resources.Hardware.Laptops.Gpus
+@using RackPeek.Domain.Resources.Hardware.Models
 @using RackPeek.Web.Components.Modals
-
 @inject GetLaptopUseCase GetLaptopUseCase
 @inject UpdateLaptopUseCase UpdateLaptopUseCase
 @inject DeleteLaptopUseCase DeleteLaptopUseCase
@@ -27,12 +25,11 @@
         <div class="text-zinc-100 hover:text-emerald-300">
             <NavLink href="@($"/resources/hardware/{Laptop.Name}")" class="block">
 
-            @Laptop.Name
-</NavLink>
-            </div>
+                @Laptop.Name
+            </NavLink>
+        </div>
 
 
-        
         <div class="flex justify-between items-center mb-3">
             @if (!string.IsNullOrWhiteSpace(Laptop.Model))
             {
@@ -41,7 +38,7 @@
                 </span>
             }
             <div class="flex items-center gap-2">
-                
+
                 <button
                     class="text-xs text-red-400 hover:text-red-300 transition"
                     title="Delete server"
@@ -50,7 +47,7 @@
                 </button>
             </div>
         </div>
-        
+
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
@@ -73,7 +70,8 @@
             {
                 @foreach (var cpu in Laptop.Cpus)
                 {
-                    <div class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
+                    <div
+                        class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
                         <button
                             class="hover:text-emerald-400"
                             title="Edit CPU"
@@ -99,7 +97,8 @@
 
             @if (Laptop.Ram is not null)
             {
-                <div class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
+                <div
+                    class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
                     <button
                         class="hover:text-emerald-400"
                         @onclick="EditRam">
@@ -127,7 +126,8 @@
             {
                 @foreach (var drive in Laptop.Drives)
                 {
-                    <div class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
+                    <div
+                        class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
                         <button
                             class="hover:text-emerald-400"
                             @onclick="() => OpenEditDrive(drive)">
@@ -156,7 +156,8 @@
             {
                 @foreach (var gpu in Laptop.Gpus)
                 {
-                    <div class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
+                    <div
+                        class="flex items-center justify-between text-zinc-300 group hover:bg-zinc-800/40 rounded px-1 py-0.5">
                         <button
                             class="hover:text-emerald-400"
                             @onclick="() => OpenEditGpu(gpu)">
@@ -173,7 +174,7 @@
     IsOpen="@_cpuModalOpen"
     IsOpenChanged="v => _cpuModalOpen = v"
     Value="@_editingCpu"
-    OnSubmit="HandleCpuSubmit" 
+    OnSubmit="HandleCpuSubmit"
     OnDelete="HandleCpuDelete"/>
 
 <RamModal
@@ -186,7 +187,7 @@
     IsOpen="@_driveModalOpen"
     IsOpenChanged="v => _driveModalOpen = v"
     Value="@_editingDrive"
-    OnSubmit="HandleDriveSubmit" 
+    OnSubmit="HandleDriveSubmit"
     OnDelete="HandleDriveDelete"/>
 
 <GpuModal
@@ -194,7 +195,7 @@
     IsOpenChanged="v => _gpuModalOpen = v"
     Value="@_editingGpu"
     OnSubmit="HandleGpuSubmit"
-    OnDelete="HandleGpuDelete" />
+    OnDelete="HandleGpuDelete"/>
 
 <ConfirmModal
     IsOpen="_confirmDeleteOpen"
@@ -204,16 +205,17 @@
     ConfirmClass="bg-red-600 hover:bg-red-500"
     OnConfirm="DeleteServer">
     Are you sure you want to delete <strong>@Laptop.Name</strong>?
-    <br />
+    <br/>
     This will detach all dependent systems.
 </ConfirmModal>
 
 @code {
-    [Parameter] [EditorRequired]
-    public Laptop Laptop { get; set; } = default!;
+    [Parameter] [EditorRequired] public Laptop Laptop { get; set; } = default!;
 
     #region RAM
+
     private bool _isRamModalOpen;
+
     private void EditRam()
     {
         _isRamModalOpen = true;
@@ -225,32 +227,34 @@
         await UpdateLaptopUseCase.ExecuteAsync(Laptop.Name, Laptop.Model, value.Size, value.Mts);
         Laptop = await GetLaptopUseCase.ExecuteAsync(Laptop.Name);
     }
-    
+
     #endregion
-    
+
     #region CPU
+
     bool _cpuModalOpen;
     int _editingCpuIndex;
     Cpu? _editingCpu;
-    
+
     void OpenAddCpu()
     {
         _editingCpuIndex = -1;
         _editingCpu = null;
         _cpuModalOpen = true;
     }
-    
+
     void OpenEditCpu(Cpu cpu)
     {
         _editingCpu = cpu;
-        Laptop.Cpus ??= new();
-        _editingCpuIndex = Laptop.Cpus.IndexOf(cpu);;
+        Laptop.Cpus ??= new List<Cpu>();
+        _editingCpuIndex = Laptop.Cpus.IndexOf(cpu);
+        ;
         _cpuModalOpen = true;
     }
-    
+
     async Task HandleCpuSubmit(Cpu cpu)
     {
-        Laptop.Cpus ??= new();
+        Laptop.Cpus ??= new List<Cpu>();
 
         if (_editingCpuIndex < 0)
         {
@@ -260,7 +264,7 @@
         {
             await UpdateCpuUseCase.ExecuteAsync(Laptop.Name, _editingCpuIndex, cpu.Model, cpu.Cores, cpu.Threads);
         }
-        
+
         Laptop = await GetLaptopUseCase.ExecuteAsync(Laptop.Name);
     }
 
@@ -269,33 +273,34 @@
         await RemoveCpuUseCase.ExecuteAsync(Laptop.Name, _editingCpuIndex);
         Laptop = await GetLaptopUseCase.ExecuteAsync(Laptop.Name);
     }
-    
-        
+
     #endregion
-    
+
     #region Drives
+
     bool _driveModalOpen;
     int _editingDriveIndex;
     Drive? _editingDrive;
-    
+
     void OpenAddDrive()
     {
         _editingDriveIndex = -1;
         _editingDrive = null;
         _driveModalOpen = true;
     }
-    
+
     void OpenEditDrive(Drive drive)
     {
         _editingDrive = drive;
-        Laptop.Drives ??= new();
-        _editingDriveIndex = Laptop.Drives.IndexOf(drive);;
+        Laptop.Drives ??= new List<Drive>();
+        _editingDriveIndex = Laptop.Drives.IndexOf(drive);
+        ;
         _driveModalOpen = true;
     }
-    
+
     async Task HandleDriveSubmit(Drive drive)
     {
-        Laptop.Drives ??= new();
+        Laptop.Drives ??= new List<Drive>();
 
         if (_editingDriveIndex < 0)
         {
@@ -303,9 +308,9 @@
         }
         else
         {
-            await UpdateDriveUseCase.ExecuteAsync(Laptop.Name, _editingDriveIndex,  drive.Type, drive.Size);
+            await UpdateDriveUseCase.ExecuteAsync(Laptop.Name, _editingDriveIndex, drive.Type, drive.Size);
         }
-        
+
         Laptop = await GetLaptopUseCase.ExecuteAsync(Laptop.Name);
         StateHasChanged();
     }
@@ -316,11 +321,11 @@
         Laptop = await GetLaptopUseCase.ExecuteAsync(Laptop.Name);
         StateHasChanged();
     }
-    
-        
+
     #endregion
 
     #region GPUs
+
     bool _gpuModalOpen;
     int _editingGpuIndex;
     Gpu? _editingGpu;
@@ -334,7 +339,7 @@
 
     void OpenEditGpu(Gpu gpu)
     {
-        Laptop.Gpus ??= new();
+        Laptop.Gpus ??= new List<Gpu>();
         _editingGpuIndex = Laptop.Gpus.IndexOf(gpu);
         _editingGpu = gpu;
         _gpuModalOpen = true;
@@ -342,7 +347,7 @@
 
     async Task HandleGpuSubmit(Gpu gpu)
     {
-        Laptop.Gpus ??= new();
+        Laptop.Gpus ??= new List<Gpu>();
 
         if (_editingGpuIndex < 0)
         {
@@ -368,15 +373,15 @@
         await RemoveGpuUseCase.ExecuteAsync(Laptop.Name, _editingGpuIndex);
         Laptop = await GetLaptopUseCase.ExecuteAsync(Laptop.Name);
     }
+
     #endregion
 
 }
 
 @code {
     private bool _confirmDeleteOpen;
-    [Parameter]
-    public EventCallback<string> OnDeleted { get; set; }
-    
+    [Parameter] public EventCallback<string> OnDeleted { get; set; }
+
     void ConfirmDelete()
     {
         _confirmDeleteOpen = true;
@@ -391,5 +396,6 @@
         if (OnDeleted.HasDelegate)
             await OnDeleted.InvokeAsync(Laptop.Name);
     }
+
 }
 

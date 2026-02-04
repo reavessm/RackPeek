@@ -97,7 +97,7 @@ public class UpdateDriveUseCaseTests
                 500
             )
         );
-        
+
         // Assert
         await repo.DidNotReceive().UpdateAsync(Arg.Any<Server>());
     }

@@ -14,15 +14,15 @@ public class UpdateFirewallPortUseCase(IHardwareRepository repository) : IUseCas
     {
         // ToDo pass in properties as inputs, construct the entity in the usecase, ensure optional inputs are nullable
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
-        
+
         var nicType = Normalize.NicType(type);
         ThrowIfInvalid.NicType(nicType);
-        
+
         var firewall = await repository.GetByNameAsync(name) as Firewall
-                      ?? throw new NotFoundException($"Firewall '{name}' not found.");
+                       ?? throw new NotFoundException($"Firewall '{name}' not found.");
 
         if (firewall.Ports == null || index < 0 || index >= firewall.Ports.Count)
             throw new NotFoundException($"Port index {index} not found on firewall '{name}'.");
@@ -31,7 +31,7 @@ public class UpdateFirewallPortUseCase(IHardwareRepository repository) : IUseCas
         nic.Type = nicType;
         nic.Speed = speed;
         nic.Count = ports;
-        
+
         await repository.UpdateAsync(firewall);
     }
 }

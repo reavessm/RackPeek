@@ -20,11 +20,11 @@ public class AddServiceUseCase(IServiceRepository repository, IResourceRepositor
             if (string.IsNullOrEmpty(parentResourceKind))
                 throw new ConflictException($"Parent resource '{runsOn}' does not exist.");
         }
-        
+
         var service = new Service
         {
             Name = name,
-            RunsOn = runsOn,
+            RunsOn = runsOn
         };
 
         await repository.AddAsync(service);

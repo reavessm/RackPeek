@@ -7,14 +7,11 @@ namespace RackPeek.Commands.Systems.Drives;
 
 public class SystemDriveUpdateSettings : SystemNameSettings
 {
-    [CommandOption("--index <INDEX>")] 
-    public int Index { get; set; }
+    [CommandOption("--index <INDEX>")] public int Index { get; set; }
 
-    [CommandOption("--type <TYPE>")] 
-    public string Type { get; set; } = default!;
+    [CommandOption("--type <TYPE>")] public string Type { get; set; } = default!;
 
-    [CommandOption("--size <SIZE>")] 
-    public int Size { get; set; }
+    [CommandOption("--size <SIZE>")] public int Size { get; set; }
 }
 
 public class SystemDriveUpdateCommand(IServiceProvider serviceProvider)

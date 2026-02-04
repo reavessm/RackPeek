@@ -13,7 +13,7 @@ public class UpdateLaptopUseCase(IHardwareRepository repository) : IUseCase
     )
     {
         // ToDo validate / normalize all inputs
-        
+
         name = Normalize.HardwareName(name);
         ThrowIfInvalid.ResourceName(name);
 
@@ -23,7 +23,7 @@ public class UpdateLaptopUseCase(IHardwareRepository repository) : IUseCase
 
         if (!string.IsNullOrWhiteSpace(model))
             laptop.Model = model;
-        
+
         // ---- RAM ----
         if (ramGb.HasValue)
         {
@@ -31,7 +31,7 @@ public class UpdateLaptopUseCase(IHardwareRepository repository) : IUseCase
             laptop.Ram ??= new Ram();
             laptop.Ram.Size = ramGb.Value;
         }
-        
+
         if (ramMts.HasValue)
         {
             laptop.Ram ??= new Ram();

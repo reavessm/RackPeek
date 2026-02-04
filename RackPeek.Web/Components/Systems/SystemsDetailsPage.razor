@@ -7,6 +7,8 @@
 @inject ISystemRepository SystemRepository
 @inject UpdateSystemUseCase UpdateSystemUseCase
 @inject GetSystemServiceTreeUseCase GetSystemServiceTreeUseCase
+@inject NavigationManager NavigationManager
+
 <PageTitle>System Details</PageTitle>
 
 <ResourceBreadCrumbComponent
@@ -28,7 +30,7 @@
             @_system.Name (@_system.Kind)
         </h1>
 
-        <SystemCardComponent System="_system" OnSave="UpdateSystem"/>
+        <SystemCardComponent System="_system" OnSave="UpdateSystem" OnDeleted="OnDeleted"/>
 
         @if (_tree is not null && _tree.Services.Any())
         {
@@ -40,11 +42,10 @@
                 No child systems / services
             </div>
         }
-        
+
         <div class="m-4">
             <AddServiceComponent RunsOn="@SystemName"/>
         </div>
-        
     }
 </div>
 
@@ -77,6 +78,11 @@
             edit.Ram,
             edit.RunsOn
         );
+    }
+
+    private async Task OnDeleted()
+    {
+        NavigationManager.NavigateTo("/systems/list");
     }
 
 }

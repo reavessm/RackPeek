@@ -17,7 +17,7 @@ public class DesktopDescribeCommand(IServiceProvider provider)
         var useCase = scope.ServiceProvider.GetRequiredService<DescribeDesktopUseCase>();
 
         var result = await useCase.ExecuteAsync(settings.Name);
-        
+
         var grid = new Grid().AddColumn().AddColumn();
 
         grid.AddRow("Name:", result.Name);

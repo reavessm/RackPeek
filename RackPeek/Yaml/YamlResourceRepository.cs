@@ -11,7 +11,7 @@ public class YamlResourceRepository(YamlResourceCollection resources) : IResourc
     {
         // Use the centralized GetByName which handles casing correctly
         var resource = resources.GetByName(name);
-        
+
         // Return the Kind label if it exists
         return Task.FromResult(resource switch
         {

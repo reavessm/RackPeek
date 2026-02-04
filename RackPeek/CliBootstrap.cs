@@ -57,7 +57,7 @@ public static class CliBootstrap
             throw new DirectoryNotFoundException(
                 $"YAML directory not found: {yamlPath}"
             );
-        
+
         services.AddSingleton(new YamlResourceCollection(Path.Combine(yamlDir, yamlFile)));
 
         // Infrastructure
@@ -65,7 +65,7 @@ public static class CliBootstrap
         services.AddScoped<ISystemRepository, YamlSystemRepository>();
         services.AddScoped<IServiceRepository, YamlServiceRepository>();
         services.AddScoped<IResourceRepository, YamlResourceRepository>();
-        
+
         // Application
         services.AddUseCases();
         services.AddCommands();

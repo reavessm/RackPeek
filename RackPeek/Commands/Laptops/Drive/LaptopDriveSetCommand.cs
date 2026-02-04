@@ -15,7 +15,7 @@ public class LaptopDriveSetCommand(IServiceProvider provider)
     {
         using var scope = provider.CreateScope();
         var useCase = scope.ServiceProvider.GetRequiredService<UpdateLaptopDriveUseCase>();
-        
+
         await useCase.ExecuteAsync(settings.LaptopName, settings.Index, settings.Type, settings.Size);
 
         AnsiConsole.MarkupLine($"[green]Drive #{settings.Index} updated on Laptop '{settings.LaptopName}'.[/]");

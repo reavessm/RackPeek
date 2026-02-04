@@ -15,7 +15,7 @@ public class LaptopDriveAddCommand(IServiceProvider provider)
     {
         using var scope = provider.CreateScope();
         var useCase = scope.ServiceProvider.GetRequiredService<AddLaptopDriveUseCase>();
-        
+
         await useCase.ExecuteAsync(settings.LaptopName, settings.Type, settings.Size);
 
         AnsiConsole.MarkupLine($"[green]Drive added to Laptop '{settings.LaptopName}'.[/]");

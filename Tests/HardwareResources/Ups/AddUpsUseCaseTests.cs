@@ -1,6 +1,5 @@
 using NSubstitute;
 using RackPeek.Domain.Helpers;
-using RackPeek.Domain.Resources.Hardware;
 using RackPeek.Domain.Resources.Hardware.Models;
 using RackPeek.Domain.Resources.Hardware.UpsUnits;
 
@@ -32,7 +31,7 @@ public class AddUpsUseCaseTests
         host.ResourceRepo.GetResourceKindAsync("ups01").Returns("Server");
 
         var sut = host.Get<AddUpsUseCase>();
-        
+
         var ex = await Assert.ThrowsAsync<ConflictException>(async () =>
             await sut.ExecuteAsync("ups01")
         );

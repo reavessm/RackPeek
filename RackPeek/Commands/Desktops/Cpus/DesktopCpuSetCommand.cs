@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using RackPeek.Domain.Resources.Hardware.Desktops.Cpus;
-using RackPeek.Domain.Resources.Hardware.Models;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -17,7 +16,8 @@ public class DesktopCpuSetCommand(IServiceProvider provider)
         using var scope = provider.CreateScope();
         var useCase = scope.ServiceProvider.GetRequiredService<UpdateDesktopCpuUseCase>();
 
-        await useCase.ExecuteAsync(settings.DesktopName, settings.Index, settings.Model, settings.Cores, settings.Threads);
+        await useCase.ExecuteAsync(settings.DesktopName, settings.Index, settings.Model, settings.Cores,
+            settings.Threads);
 
         AnsiConsole.MarkupLine($"[green]CPU #{settings.Index} updated on desktop '{settings.DesktopName}'.[/]");
         return 0;

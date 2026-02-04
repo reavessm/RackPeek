@@ -11,11 +11,8 @@ public class GetRouterUseCase(IHardwareRepository repository) : IUseCase
         ThrowIfInvalid.ResourceName(name);
 
         var hardware = await repository.GetByNameAsync(name);
-        if (hardware is not Router router)
-        {
-            throw new NotFoundException($"Router '{name}' not found.");
-        }
-        
+        if (hardware is not Router router) throw new NotFoundException($"Router '{name}' not found.");
+
         return router;
     }
 }
