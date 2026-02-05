@@ -9,11 +9,13 @@ using RackPeek.Commands.Desktops.Drive;
 using RackPeek.Commands.Desktops.Gpus;
 using RackPeek.Commands.Desktops.Nics;
 using RackPeek.Commands.Firewalls;
+using RackPeek.Commands.Firewalls.Ports;
 using RackPeek.Commands.Laptops;
 using RackPeek.Commands.Laptops.Cpus;
 using RackPeek.Commands.Laptops.Drive;
 using RackPeek.Commands.Laptops.Gpus;
 using RackPeek.Commands.Routers;
+using RackPeek.Commands.Routers.Ports;
 using RackPeek.Commands.Servers;
 using RackPeek.Commands.Servers.Cpus;
 using RackPeek.Commands.Servers.Drives;
@@ -21,6 +23,7 @@ using RackPeek.Commands.Servers.Gpus;
 using RackPeek.Commands.Servers.Nics;
 using RackPeek.Commands.Services;
 using RackPeek.Commands.Switches;
+using RackPeek.Commands.Switches.Ports;
 using RackPeek.Commands.Systems;
 using RackPeek.Commands.Ups;
 using RackPeek.Domain;
@@ -37,27 +40,17 @@ namespace RackPeek;
 
 public static class CliBootstrap
 {
-    public static void BuildApp(
-        CommandApp app,
-        IServiceCollection services,
-        IConfiguration configuration,
-        string yamlDir,
-        string yamlFile
-    )
+    public static void BuildApp(CommandApp app, IServiceCollection services, IConfiguration configuration,
+        string yamlDir, string yamlFile)
     {
         services.AddSingleton(configuration);
 
         var basePath = configuration["HardwarePath"] ?? Directory.GetCurrentDirectory();
 
         // Resolve yamlDir as relative to basePath
-        var yamlPath = Path.IsPathRooted(yamlDir)
-            ? yamlDir
-            : Path.Combine(basePath, yamlDir);
+        var yamlPath = Path.IsPathRooted(yamlDir) ? yamlDir : Path.Combine(basePath, yamlDir);
 
-        if (!Directory.Exists(yamlPath))
-            throw new DirectoryNotFoundException(
-                $"YAML directory not found: {yamlPath}"
-            );
+        if (!Directory.Exists(yamlPath)) throw new DirectoryNotFoundException($"YAML directory not found: {yamlPath}");
 
         services.AddSingleton(new YamlResourceCollection(Path.Combine(yamlDir, yamlFile)));
 
@@ -93,8 +86,7 @@ public static class CliBootstrap
                 server.AddCommand<ServerReportCommand>("summary")
                     .WithDescription("Show a summarized hardware report for all servers.");
 
-                server.AddCommand<ServerAddCommand>("add")
-                    .WithDescription("Add a new server to the inventory.");
+                server.AddCommand<ServerAddCommand>("add").WithDescription("Add a new server to the inventory.");
 
                 server.AddCommand<ServerGetByNameCommand>("get")
                     .WithDescription("List all servers or retrieve a specific server by name.");
@@ -102,11 +94,9 @@ public static class CliBootstrap
                 server.AddCommand<ServerDescribeCommand>("describe")
                     .WithDescription("Display detailed information about a specific server.");
 
-                server.AddCommand<ServerSetCommand>("set")
-                    .WithDescription("Update properties of an existing server.");
+                server.AddCommand<ServerSetCommand>("set").WithDescription("Update properties of an existing server.");
 
-                server.AddCommand<ServerDeleteCommand>("del")
-                    .WithDescription("Delete a server from the inventory.");
+                server.AddCommand<ServerDeleteCommand>("del").WithDescription("Delete a server from the inventory.");
 
                 server.AddCommand<ServerTreeCommand>("tree")
                     .WithDescription("Display the dependency tree of a server.");
@@ -116,14 +106,11 @@ public static class CliBootstrap
                 {
                     cpu.SetDescription("Manage CPUs attached to a server.");
 
-                    cpu.AddCommand<ServerCpuAddCommand>("add")
-                        .WithDescription("Add a CPU to a specific server.");
+                    cpu.AddCommand<ServerCpuAddCommand>("add").WithDescription("Add a CPU to a specific server.");
 
-                    cpu.AddCommand<ServerCpuSetCommand>("set")
-                        .WithDescription("Update configuration of a server CPU.");
+                    cpu.AddCommand<ServerCpuSetCommand>("set").WithDescription("Update configuration of a server CPU.");
 
-                    cpu.AddCommand<ServerCpuRemoveCommand>("del")
-                        .WithDescription("Remove a CPU from a server.");
+                    cpu.AddCommand<ServerCpuRemoveCommand>("del").WithDescription("Remove a CPU from a server.");
                 });
 
                 // Server Drives
@@ -131,14 +118,12 @@ public static class CliBootstrap
                 {
                     drive.SetDescription("Manage drives attached to a server.");
 
-                    drive.AddCommand<ServerDriveAddCommand>("add")
-                        .WithDescription("Add a storage drive to a server.");
+                    drive.AddCommand<ServerDriveAddCommand>("add").WithDescription("Add a storage drive to a server.");
 
                     drive.AddCommand<ServerDriveUpdateCommand>("set")
                         .WithDescription("Update properties of a server drive.");
 
-                    drive.AddCommand<ServerDriveRemoveCommand>("del")
-                        .WithDescription("Remove a drive from a server.");
+                    drive.AddCommand<ServerDriveRemoveCommand>("del").WithDescription("Remove a drive from a server.");
                 });
 
                 // Server GPUs
@@ -146,14 +131,11 @@ public static class CliBootstrap
                 {
                     gpu.SetDescription("Manage GPUs attached to a server.");
 
-                    gpu.AddCommand<ServerGpuAddCommand>("add")
-                        .WithDescription("Add a GPU to a server.");
+                    gpu.AddCommand<ServerGpuAddCommand>("add").WithDescription("Add a GPU to a server.");
 
-                    gpu.AddCommand<ServerGpuUpdateCommand>("set")
-                        .WithDescription("Update properties of a server GPU.");
+                    gpu.AddCommand<ServerGpuUpdateCommand>("set").WithDescription("Update properties of a server GPU.");
 
-                    gpu.AddCommand<ServerGpuRemoveCommand>("del")
-                        .WithDescription("Remove a GPU from a server.");
+                    gpu.AddCommand<ServerGpuRemoveCommand>("del").WithDescription("Remove a GPU from a server.");
                 });
 
                 // Server NICs
@@ -161,14 +143,11 @@ public static class CliBootstrap
                 {
                     nic.SetDescription("Manage network interface cards (NICs) for a server.");
 
-                    nic.AddCommand<ServerNicAddCommand>("add")
-                        .WithDescription("Add a NIC to a server.");
+                    nic.AddCommand<ServerNicAddCommand>("add").WithDescription("Add a NIC to a server.");
 
-                    nic.AddCommand<ServerNicUpdateCommand>("set")
-                        .WithDescription("Update properties of a server NIC.");
+                    nic.AddCommand<ServerNicUpdateCommand>("set").WithDescription("Update properties of a server NIC.");
 
-                    nic.AddCommand<ServerNicRemoveCommand>("del")
-                        .WithDescription("Remove a NIC from a server.");
+                    nic.AddCommand<ServerNicRemoveCommand>("del").WithDescription("Remove a NIC from a server.");
                 });
             });
 
@@ -185,8 +164,7 @@ public static class CliBootstrap
                 switches.AddCommand<SwitchAddCommand>("add")
                     .WithDescription("Add a new network switch to the inventory.");
 
-                switches.AddCommand<SwitchGetCommand>("list")
-                    .WithDescription("List all switches in the system.");
+                switches.AddCommand<SwitchGetCommand>("list").WithDescription("List all switches in the system.");
 
                 switches.AddCommand<SwitchGetByNameCommand>("get")
                     .WithDescription("Retrieve details of a specific switch by name.");
@@ -194,11 +172,19 @@ public static class CliBootstrap
                 switches.AddCommand<SwitchDescribeCommand>("describe")
                     .WithDescription("Show detailed information about a switch.");
 
-                switches.AddCommand<SwitchSetCommand>("set")
-                    .WithDescription("Update properties of a switch.");
+                switches.AddCommand<SwitchSetCommand>("set").WithDescription("Update properties of a switch.");
 
-                switches.AddCommand<SwitchDeleteCommand>("del")
-                    .WithDescription("Delete a switch from the inventory.");
+                switches.AddCommand<SwitchDeleteCommand>("del").WithDescription("Delete a switch from the inventory.");
+                switches.AddBranch("port", port =>
+                {
+                    port.SetDescription("Manage ports on a network switch.");
+
+                    port.AddCommand<SwitchPortAddCommand>("add").WithDescription("Add a port to a switch.");
+
+                    port.AddCommand<SwitchPortUpdateCommand>("set").WithDescription("Update a switch port.");
+
+                    port.AddCommand<SwitchPortRemoveCommand>("del").WithDescription("Remove a port from a switch.");
+                });
             });
 
             // ----------------------------
@@ -214,8 +200,7 @@ public static class CliBootstrap
                 routers.AddCommand<RouterAddCommand>("add")
                     .WithDescription("Add a new network router to the inventory.");
 
-                routers.AddCommand<RouterGetCommand>("list")
-                    .WithDescription("List all routers in the system.");
+                routers.AddCommand<RouterGetCommand>("list").WithDescription("List all routers in the system.");
 
                 routers.AddCommand<RouterGetByNameCommand>("get")
                     .WithDescription("Retrieve details of a specific router by name.");
@@ -223,11 +208,19 @@ public static class CliBootstrap
                 routers.AddCommand<RouterDescribeCommand>("describe")
                     .WithDescription("Show detailed information about a router.");
 
-                routers.AddCommand<RouterSetCommand>("set")
-                    .WithDescription("Update properties of a router.");
+                routers.AddCommand<RouterSetCommand>("set").WithDescription("Update properties of a router.");
 
-                routers.AddCommand<RouterDeleteCommand>("del")
-                    .WithDescription("Delete a router from the inventory.");
+                routers.AddCommand<RouterDeleteCommand>("del").WithDescription("Delete a router from the inventory.");
+                routers.AddBranch("port", port =>
+                {
+                    port.SetDescription("Manage ports on a router.");
+
+                    port.AddCommand<RouterPortAddCommand>("add").WithDescription("Add a port to a router.");
+
+                    port.AddCommand<RouterPortUpdateCommand>("set").WithDescription("Update a router port.");
+
+                    port.AddCommand<RouterPortRemoveCommand>("del").WithDescription("Remove a port from a router.");
+                });
             });
 
             // ----------------------------
@@ -240,11 +233,9 @@ public static class CliBootstrap
                 firewalls.AddCommand<FirewallReportCommand>("summary")
                     .WithDescription("Show a hardware report for all firewalls.");
 
-                firewalls.AddCommand<FirewallAddCommand>("add")
-                    .WithDescription("Add a new firewall to the inventory.");
+                firewalls.AddCommand<FirewallAddCommand>("add").WithDescription("Add a new firewall to the inventory.");
 
-                firewalls.AddCommand<FirewallGetCommand>("list")
-                    .WithDescription("List all firewalls in the system.");
+                firewalls.AddCommand<FirewallGetCommand>("list").WithDescription("List all firewalls in the system.");
 
                 firewalls.AddCommand<FirewallGetByNameCommand>("get")
                     .WithDescription("Retrieve details of a specific firewall by name.");
@@ -252,11 +243,20 @@ public static class CliBootstrap
                 firewalls.AddCommand<FirewallDescribeCommand>("describe")
                     .WithDescription("Show detailed information about a firewall.");
 
-                firewalls.AddCommand<FirewallSetCommand>("set")
-                    .WithDescription("Update properties of a firewall.");
+                firewalls.AddCommand<FirewallSetCommand>("set").WithDescription("Update properties of a firewall.");
 
                 firewalls.AddCommand<FirewallDeleteCommand>("del")
                     .WithDescription("Delete a firewall from the inventory.");
+                firewalls.AddBranch("port", port =>
+                {
+                    port.SetDescription("Manage ports on a firewall.");
+
+                    port.AddCommand<FirewallPortAddCommand>("add").WithDescription("Add a port to a firewall.");
+
+                    port.AddCommand<FirewallPortUpdateCommand>("set").WithDescription("Update a firewall port.");
+
+                    port.AddCommand<FirewallPortRemoveCommand>("del").WithDescription("Remove a port from a firewall.");
+                });
             });
 
             // ----------------------------
@@ -269,23 +269,18 @@ public static class CliBootstrap
                 system.AddCommand<SystemReportCommand>("summary")
                     .WithDescription("Show a summary report for all systems.");
 
-                system.AddCommand<SystemAddCommand>("add")
-                    .WithDescription("Add a new system to the inventory.");
+                system.AddCommand<SystemAddCommand>("add").WithDescription("Add a new system to the inventory.");
 
-                system.AddCommand<SystemGetCommand>("list")
-                    .WithDescription("List all systems.");
+                system.AddCommand<SystemGetCommand>("list").WithDescription("List all systems.");
 
-                system.AddCommand<SystemGetByNameCommand>("get")
-                    .WithDescription("Retrieve a system by name.");
+                system.AddCommand<SystemGetByNameCommand>("get").WithDescription("Retrieve a system by name.");
 
                 system.AddCommand<SystemDescribeCommand>("describe")
                     .WithDescription("Display detailed information about a system.");
 
-                system.AddCommand<SystemSetCommand>("set")
-                    .WithDescription("Update properties of a system.");
+                system.AddCommand<SystemSetCommand>("set").WithDescription("Update properties of a system.");
 
-                system.AddCommand<SystemDeleteCommand>("del")
-                    .WithDescription("Delete a system from the inventory.");
+                system.AddCommand<SystemDeleteCommand>("del").WithDescription("Delete a system from the inventory.");
 
                 system.AddCommand<SystemTreeCommand>("tree")
                     .WithDescription("Display the dependency tree for a system.");
@@ -301,23 +296,18 @@ public static class CliBootstrap
                 ap.AddCommand<AccessPointReportCommand>("summary")
                     .WithDescription("Show a hardware report for all access points.");
 
-                ap.AddCommand<AccessPointAddCommand>("add")
-                    .WithDescription("Add a new access point.");
+                ap.AddCommand<AccessPointAddCommand>("add").WithDescription("Add a new access point.");
 
-                ap.AddCommand<AccessPointGetCommand>("list")
-                    .WithDescription("List all access points.");
+                ap.AddCommand<AccessPointGetCommand>("list").WithDescription("List all access points.");
 
-                ap.AddCommand<AccessPointGetByNameCommand>("get")
-                    .WithDescription("Retrieve an access point by name.");
+                ap.AddCommand<AccessPointGetByNameCommand>("get").WithDescription("Retrieve an access point by name.");
 
                 ap.AddCommand<AccessPointDescribeCommand>("describe")
                     .WithDescription("Show detailed information about an access point.");
 
-                ap.AddCommand<AccessPointSetCommand>("set")
-                    .WithDescription("Update properties of an access point.");
+                ap.AddCommand<AccessPointSetCommand>("set").WithDescription("Update properties of an access point.");
 
-                ap.AddCommand<AccessPointDeleteCommand>("del")
-                    .WithDescription("Delete an access point.");
+                ap.AddCommand<AccessPointDeleteCommand>("del").WithDescription("Delete an access point.");
             });
 
             // ----------------------------
@@ -330,23 +320,18 @@ public static class CliBootstrap
                 ups.AddCommand<UpsReportCommand>("summary")
                     .WithDescription("Show a hardware report for all UPS units.");
 
-                ups.AddCommand<UpsAddCommand>("add")
-                    .WithDescription("Add a new UPS unit.");
+                ups.AddCommand<UpsAddCommand>("add").WithDescription("Add a new UPS unit.");
 
-                ups.AddCommand<UpsGetCommand>("list")
-                    .WithDescription("List all UPS units.");
+                ups.AddCommand<UpsGetCommand>("list").WithDescription("List all UPS units.");
 
-                ups.AddCommand<UpsGetByNameCommand>("get")
-                    .WithDescription("Retrieve a UPS unit by name.");
+                ups.AddCommand<UpsGetByNameCommand>("get").WithDescription("Retrieve a UPS unit by name.");
 
                 ups.AddCommand<UpsDescribeCommand>("describe")
                     .WithDescription("Show detailed information about a UPS unit.");
 
-                ups.AddCommand<UpsSetCommand>("set")
-                    .WithDescription("Update properties of a UPS unit.");
+                ups.AddCommand<UpsSetCommand>("set").WithDescription("Update properties of a UPS unit.");
 
-                ups.AddCommand<UpsDeleteCommand>("del")
-                    .WithDescription("Delete a UPS unit.");
+                ups.AddCommand<UpsDeleteCommand>("del").WithDescription("Delete a UPS unit.");
             });
 
             // ----------------------------
@@ -357,16 +342,12 @@ public static class CliBootstrap
                 desktops.SetDescription("Manage desktop computers and their components.");
 
                 // CRUD
-                desktops.AddCommand<DesktopAddCommand>("add")
-                    .WithDescription("Add a new desktop.");
-                desktops.AddCommand<DesktopGetCommand>("list")
-                    .WithDescription("List all desktops.");
-                desktops.AddCommand<DesktopGetByNameCommand>("get")
-                    .WithDescription("Retrieve a desktop by name.");
+                desktops.AddCommand<DesktopAddCommand>("add").WithDescription("Add a new desktop.");
+                desktops.AddCommand<DesktopGetCommand>("list").WithDescription("List all desktops.");
+                desktops.AddCommand<DesktopGetByNameCommand>("get").WithDescription("Retrieve a desktop by name.");
                 desktops.AddCommand<DesktopDescribeCommand>("describe")
                     .WithDescription("Show detailed information about a desktop.");
-                desktops.AddCommand<DesktopSetCommand>("set")
-                    .WithDescription("Update properties of a desktop.");
+                desktops.AddCommand<DesktopSetCommand>("set").WithDescription("Update properties of a desktop.");
                 desktops.AddCommand<DesktopDeleteCommand>("del")
                     .WithDescription("Delete a desktop from the inventory.");
                 desktops.AddCommand<DesktopReportCommand>("summary")
@@ -378,22 +359,17 @@ public static class CliBootstrap
                 desktops.AddBranch("cpu", cpu =>
                 {
                     cpu.SetDescription("Manage CPUs attached to desktops.");
-                    cpu.AddCommand<DesktopCpuAddCommand>("add")
-                        .WithDescription("Add a CPU to a desktop.");
-                    cpu.AddCommand<DesktopCpuSetCommand>("set")
-                        .WithDescription("Update a desktop CPU.");
-                    cpu.AddCommand<DesktopCpuRemoveCommand>("del")
-                        .WithDescription("Remove a CPU from a desktop.");
+                    cpu.AddCommand<DesktopCpuAddCommand>("add").WithDescription("Add a CPU to a desktop.");
+                    cpu.AddCommand<DesktopCpuSetCommand>("set").WithDescription("Update a desktop CPU.");
+                    cpu.AddCommand<DesktopCpuRemoveCommand>("del").WithDescription("Remove a CPU from a desktop.");
                 });
 
                 // Drives
                 desktops.AddBranch("drive", drive =>
                 {
                     drive.SetDescription("Manage storage drives attached to desktops.");
-                    drive.AddCommand<DesktopDriveAddCommand>("add")
-                        .WithDescription("Add a drive to a desktop.");
-                    drive.AddCommand<DesktopDriveSetCommand>("set")
-                        .WithDescription("Update a desktop drive.");
+                    drive.AddCommand<DesktopDriveAddCommand>("add").WithDescription("Add a drive to a desktop.");
+                    drive.AddCommand<DesktopDriveSetCommand>("set").WithDescription("Update a desktop drive.");
                     drive.AddCommand<DesktopDriveRemoveCommand>("del")
                         .WithDescription("Remove a drive from a desktop.");
                 });
@@ -402,24 +378,18 @@ public static class CliBootstrap
                 desktops.AddBranch("gpu", gpu =>
                 {
                     gpu.SetDescription("Manage GPUs attached to desktops.");
-                    gpu.AddCommand<DesktopGpuAddCommand>("add")
-                        .WithDescription("Add a GPU to a desktop.");
-                    gpu.AddCommand<DesktopGpuSetCommand>("set")
-                        .WithDescription("Update a desktop GPU.");
-                    gpu.AddCommand<DesktopGpuRemoveCommand>("del")
-                        .WithDescription("Remove a GPU from a desktop.");
+                    gpu.AddCommand<DesktopGpuAddCommand>("add").WithDescription("Add a GPU to a desktop.");
+                    gpu.AddCommand<DesktopGpuSetCommand>("set").WithDescription("Update a desktop GPU.");
+                    gpu.AddCommand<DesktopGpuRemoveCommand>("del").WithDescription("Remove a GPU from a desktop.");
                 });
 
                 // NICs
                 desktops.AddBranch("nic", nic =>
                 {
                     nic.SetDescription("Manage network interface cards (NICs) for desktops.");
-                    nic.AddCommand<DesktopNicAddCommand>("add")
-                        .WithDescription("Add a NIC to a desktop.");
-                    nic.AddCommand<DesktopNicSetCommand>("set")
-                        .WithDescription("Update a desktop NIC.");
-                    nic.AddCommand<DesktopNicRemoveCommand>("del")
-                        .WithDescription("Remove a NIC from a desktop.");
+                    nic.AddCommand<DesktopNicAddCommand>("add").WithDescription("Add a NIC to a desktop.");
+                    nic.AddCommand<DesktopNicSetCommand>("set").WithDescription("Update a desktop NIC.");
+                    nic.AddCommand<DesktopNicRemoveCommand>("del").WithDescription("Remove a NIC from a desktop.");
                 });
             });
 
@@ -431,16 +401,12 @@ public static class CliBootstrap
                 Laptops.SetDescription("Manage Laptop computers and their components.");
 
                 // CRUD
-                Laptops.AddCommand<LaptopAddCommand>("add")
-                    .WithDescription("Add a new Laptop.");
-                Laptops.AddCommand<LaptopGetCommand>("list")
-                    .WithDescription("List all Laptops.");
-                Laptops.AddCommand<LaptopGetByNameCommand>("get")
-                    .WithDescription("Retrieve a Laptop by name.");
+                Laptops.AddCommand<LaptopAddCommand>("add").WithDescription("Add a new Laptop.");
+                Laptops.AddCommand<LaptopGetCommand>("list").WithDescription("List all Laptops.");
+                Laptops.AddCommand<LaptopGetByNameCommand>("get").WithDescription("Retrieve a Laptop by name.");
                 Laptops.AddCommand<LaptopDescribeCommand>("describe")
                     .WithDescription("Show detailed information about a Laptop.");
-                Laptops.AddCommand<LaptopDeleteCommand>("del")
-                    .WithDescription("Delete a Laptop from the inventory.");
+                Laptops.AddCommand<LaptopDeleteCommand>("del").WithDescription("Delete a Laptop from the inventory.");
                 Laptops.AddCommand<LaptopReportCommand>("summary")
                     .WithDescription("Show a summarized hardware report for all Laptops.");
                 Laptops.AddCommand<LaptopTreeCommand>("tree")
@@ -450,39 +416,29 @@ public static class CliBootstrap
                 Laptops.AddBranch("cpu", cpu =>
                 {
                     cpu.SetDescription("Manage CPUs attached to Laptops.");
-                    cpu.AddCommand<LaptopCpuAddCommand>("add")
-                        .WithDescription("Add a CPU to a Laptop.");
-                    cpu.AddCommand<LaptopCpuSetCommand>("set")
-                        .WithDescription("Update a Laptop CPU.");
-                    cpu.AddCommand<LaptopCpuRemoveCommand>("del")
-                        .WithDescription("Remove a CPU from a Laptop.");
+                    cpu.AddCommand<LaptopCpuAddCommand>("add").WithDescription("Add a CPU to a Laptop.");
+                    cpu.AddCommand<LaptopCpuSetCommand>("set").WithDescription("Update a Laptop CPU.");
+                    cpu.AddCommand<LaptopCpuRemoveCommand>("del").WithDescription("Remove a CPU from a Laptop.");
                 });
 
                 // Drives
                 Laptops.AddBranch("drive", drive =>
                 {
                     drive.SetDescription("Manage storage drives attached to Laptops.");
-                    drive.AddCommand<LaptopDriveAddCommand>("add")
-                        .WithDescription("Add a drive to a Laptop.");
-                    drive.AddCommand<LaptopDriveSetCommand>("set")
-                        .WithDescription("Update a Laptop drive.");
-                    drive.AddCommand<LaptopDriveRemoveCommand>("del")
-                        .WithDescription("Remove a drive from a Laptop.");
+                    drive.AddCommand<LaptopDriveAddCommand>("add").WithDescription("Add a drive to a Laptop.");
+                    drive.AddCommand<LaptopDriveSetCommand>("set").WithDescription("Update a Laptop drive.");
+                    drive.AddCommand<LaptopDriveRemoveCommand>("del").WithDescription("Remove a drive from a Laptop.");
                 });
 
                 // GPUs
                 Laptops.AddBranch("gpu", gpu =>
                 {
                     gpu.SetDescription("Manage GPUs attached to Laptops.");
-                    gpu.AddCommand<LaptopGpuAddCommand>("add")
-                        .WithDescription("Add a GPU to a Laptop.");
-                    gpu.AddCommand<LaptopGpuSetCommand>("set")
-                        .WithDescription("Update a Laptop GPU.");
-                    gpu.AddCommand<LaptopGpuRemoveCommand>("del")
-                        .WithDescription("Remove a GPU from a Laptop.");
+                    gpu.AddCommand<LaptopGpuAddCommand>("add").WithDescription("Add a GPU to a Laptop.");
+                    gpu.AddCommand<LaptopGpuSetCommand>("set").WithDescription("Update a Laptop GPU.");
+                    gpu.AddCommand<LaptopGpuRemoveCommand>("del").WithDescription("Remove a GPU from a Laptop.");
                 });
             });
-
 
             // ----------------------------
             // Services
@@ -494,23 +450,18 @@ public static class CliBootstrap
                 service.AddCommand<ServiceReportCommand>("summary")
                     .WithDescription("Show a summary report for all services.");
 
-                service.AddCommand<ServiceAddCommand>("add")
-                    .WithDescription("Add a new service.");
+                service.AddCommand<ServiceAddCommand>("add").WithDescription("Add a new service.");
 
-                service.AddCommand<ServiceGetCommand>("list")
-                    .WithDescription("List all services.");
+                service.AddCommand<ServiceGetCommand>("list").WithDescription("List all services.");
 
-                service.AddCommand<ServiceGetByNameCommand>("get")
-                    .WithDescription("Retrieve a service by name.");
+                service.AddCommand<ServiceGetByNameCommand>("get").WithDescription("Retrieve a service by name.");
 
                 service.AddCommand<ServiceDescribeCommand>("describe")
                     .WithDescription("Show detailed information about a service.");
 
-                service.AddCommand<ServiceSetCommand>("set")
-                    .WithDescription("Update properties of a service.");
+                service.AddCommand<ServiceSetCommand>("set").WithDescription("Update properties of a service.");
 
-                service.AddCommand<ServiceDeleteCommand>("del")
-                    .WithDescription("Delete a service.");
+                service.AddCommand<ServiceDeleteCommand>("del").WithDescription("Delete a service.");
 
                 service.AddCommand<ServiceSubnetsCommand>("subnets")
                     .WithDescription("List subnets associated with a service, optionally filtered by CIDR.");
