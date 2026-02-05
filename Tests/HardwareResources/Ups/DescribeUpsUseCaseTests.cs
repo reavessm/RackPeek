@@ -1,8 +1,8 @@
 using NSubstitute;
 using RackPeek.Domain.Helpers;
 using RackPeek.Domain.Resources.Hardware;
-using RackPeek.Domain.Resources.Hardware.Models;
 using RackPeek.Domain.Resources.Hardware.UpsUnits;
+using RackPeek.Domain.Resources.Models;
 
 namespace Tests.HardwareResources.Ups;
 
@@ -23,7 +23,7 @@ public class DescribeUpsUseCaseTests
     public async Task ExecuteAsync_Returns_description_when_ups_exists()
     {
         var repo = Substitute.For<IHardwareRepository>();
-        repo.GetByNameAsync("ups01").Returns(new RackPeek.Domain.Resources.Hardware.Models.Ups
+        repo.GetByNameAsync("ups01").Returns(new RackPeek.Domain.Resources.Models.Ups
         {
             Name = "ups01",
             Model = "APC-1500",

@@ -1,7 +1,7 @@
 using NSubstitute;
 using RackPeek.Domain.Resources.Hardware;
-using RackPeek.Domain.Resources.Hardware.Models;
 using RackPeek.Domain.Resources.Hardware.UpsUnits;
+using RackPeek.Domain.Resources.Models;
 
 namespace Tests.HardwareResources.Ups;
 
@@ -20,13 +20,13 @@ public class UpdateUpsUseCaseTests
         );
 
         Assert.Equal("UPS 'ups01' not found.", ex.Message);
-        await repo.DidNotReceive().UpdateAsync(Arg.Any<RackPeek.Domain.Resources.Hardware.Models.Ups>());
+        await repo.DidNotReceive().UpdateAsync(Arg.Any<RackPeek.Domain.Resources.Models.Ups>());
     }
 
     [Fact]
     public async Task ExecuteAsync_Updates_only_provided_fields()
     {
-        var existing = new RackPeek.Domain.Resources.Hardware.Models.Ups
+        var existing = new RackPeek.Domain.Resources.Models.Ups
         {
             Name = "ups01",
             Model = "OldModel",
@@ -44,7 +44,7 @@ public class UpdateUpsUseCaseTests
             1500
         );
 
-        await repo.Received(1).UpdateAsync(Arg.Is<RackPeek.Domain.Resources.Hardware.Models.Ups>(u =>
+        await repo.Received(1).UpdateAsync(Arg.Is<RackPeek.Domain.Resources.Models.Ups>(u =>
             u.Name == "ups01" &&
             u.Model == "NewModel" &&
             u.Va == 1500
@@ -54,7 +54,7 @@ public class UpdateUpsUseCaseTests
     [Fact]
     public async Task ExecuteAsync_Does_not_update_model_when_empty_or_whitespace()
     {
-        var existing = new RackPeek.Domain.Resources.Hardware.Models.Ups
+        var existing = new RackPeek.Domain.Resources.Models.Ups
         {
             Name = "ups01",
             Model = "KeepMe",
@@ -71,7 +71,7 @@ public class UpdateUpsUseCaseTests
             "   "
         );
 
-        await repo.Received(1).UpdateAsync(Arg.Is<RackPeek.Domain.Resources.Hardware.Models.Ups>(u =>
+        await repo.Received(1).UpdateAsync(Arg.Is<RackPeek.Domain.Resources.Models.Ups>(u =>
             u.Model == "KeepMe"
         ));
     }

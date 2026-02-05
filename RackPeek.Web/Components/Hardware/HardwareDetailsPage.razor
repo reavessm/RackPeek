@@ -1,6 +1,6 @@
 ﻿@page "/resources/hardware/{HardwareName}"
 @using RackPeek.Domain.Resources.Hardware
-@using RackPeek.Domain.Resources.Hardware.Models
+@using RackPeek.Domain.Resources.Models
 @using RackPeek.Web.Components.AccessPoints
 @using RackPeek.Web.Components.Components
 @using RackPeek.Web.Components.Desktops
@@ -11,7 +11,7 @@
 @using RackPeek.Web.Components.Switches
 @using RackPeek.Web.Components.Systems
 @using RackPeek.Web.Components.Ups
-@using Router = RackPeek.Domain.Resources.Hardware.Models.Router
+@using Router = RackPeek.Domain.Resources.Models.Router
 @inject IHardwareRepository HardwareRepository
 @inject GetHardwareSystemTreeUseCase GetHardwareSystemTreeUseCase
 

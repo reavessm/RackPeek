@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using NSubstitute;
 using RackPeek.Domain.Helpers;
-using RackPeek.Domain.Resources.Hardware.Models;
+using RackPeek.Domain.Resources.Models;
 using RackPeek.Domain.Resources.SystemResources;
 using RackPeek.Domain.Resources.SystemResources.UseCases;
 

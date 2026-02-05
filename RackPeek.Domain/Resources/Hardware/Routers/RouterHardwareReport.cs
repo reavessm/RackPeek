@@ -1,4 +1,4 @@
-using RackPeek.Domain.Resources.Hardware.Models;
+using RackPeek.Domain.Resources.Models;
 
 namespace RackPeek.Domain.Resources.Hardware.Routers;
 

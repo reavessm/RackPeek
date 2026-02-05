@@ -1,7 +1,7 @@
 using NSubstitute;
 using RackPeek.Domain.Resources.Hardware;
-using RackPeek.Domain.Resources.Hardware.Models;
 using RackPeek.Domain.Resources.Hardware.Switches;
+using RackPeek.Domain.Resources.Models;
 
 namespace Tests.HardwareResources.Switches;
 
