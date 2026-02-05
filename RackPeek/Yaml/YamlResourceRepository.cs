@@ -1,5 +1,5 @@
 using RackPeek.Domain.Resources;
-using RackPeek.Domain.Resources.Hardware.Models;
+using RackPeek.Domain.Resources.Models;
 using RackPeek.Domain.Resources.Services;
 using RackPeek.Domain.Resources.SystemResources;
 

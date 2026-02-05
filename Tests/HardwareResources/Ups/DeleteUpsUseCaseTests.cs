@@ -1,7 +1,7 @@
 using NSubstitute;
 using RackPeek.Domain.Helpers;
-using RackPeek.Domain.Resources.Hardware.Models;
 using RackPeek.Domain.Resources.Hardware.UpsUnits;
+using RackPeek.Domain.Resources.Models;
 
 namespace Tests.HardwareResources.Ups;
 
@@ -12,7 +12,7 @@ public class DeleteUpsUseCaseTests
     {
         var host = new UsecaseTestHost();
         var repo = host.HardwareRepo;
-        repo.GetByNameAsync("ups01").Returns(new RackPeek.Domain.Resources.Hardware.Models.Ups { Name = "ups01" });
+        repo.GetByNameAsync("ups01").Returns(new RackPeek.Domain.Resources.Models.Ups { Name = "ups01" });
 
         var sut = host.Get<DeleteUpsUseCase>();
 

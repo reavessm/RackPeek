@@ -1,5 +1,5 @@
 using RackPeek.Domain.Helpers;
-using RackPeek.Domain.Resources.Hardware.Models;
+using RackPeek.Domain.Resources.Models;
 using RackPeek.Domain.Resources.SystemResources;
 
 namespace RackPeek.Domain.Resources.Hardware.AccessPoints;

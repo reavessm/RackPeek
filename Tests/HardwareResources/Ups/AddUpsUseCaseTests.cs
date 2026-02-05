@@ -1,7 +1,7 @@
 using NSubstitute;
 using RackPeek.Domain.Helpers;
-using RackPeek.Domain.Resources.Hardware.Models;
 using RackPeek.Domain.Resources.Hardware.UpsUnits;
+using RackPeek.Domain.Resources.Models;
 
 namespace Tests.HardwareResources.Ups;
 
@@ -18,7 +18,7 @@ public class AddUpsUseCaseTests
 
         await sut.ExecuteAsync("ups01");
 
-        await repo.Received(1).AddAsync(Arg.Is<RackPeek.Domain.Resources.Hardware.Models.Ups>(u =>
+        await repo.Received(1).AddAsync(Arg.Is<RackPeek.Domain.Resources.Models.Ups>(u =>
             u.Name == "ups01"
         ));
     }
@@ -36,6 +36,6 @@ public class AddUpsUseCaseTests
             await sut.ExecuteAsync("ups01")
         );
 
-        await repo.DidNotReceive().AddAsync(Arg.Any<RackPeek.Domain.Resources.Hardware.Models.Ups>());
+        await repo.DidNotReceive().AddAsync(Arg.Any<RackPeek.Domain.Resources.Models.Ups>());
     }
 }

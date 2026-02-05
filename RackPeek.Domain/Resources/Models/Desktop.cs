@@ -1,4 +1,4 @@
-namespace RackPeek.Domain.Resources.Hardware.Models;
+namespace RackPeek.Domain.Resources.Models;
 
 public class Desktop : Hardware
 {
