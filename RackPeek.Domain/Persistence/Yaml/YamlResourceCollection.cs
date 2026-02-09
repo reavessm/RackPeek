@@ -14,8 +14,8 @@ public sealed class YamlResourceCollection : IResourceCollection
 {
     private readonly string _filePath;
     private readonly ITextFileStore _fileStore;
-    private readonly SemaphoreSlim _fileLock = new(1, 1);
-    private readonly List<Resource> _resources = new();
+    private static readonly SemaphoreSlim _fileLock = new(1, 1);
+    private static readonly List<Resource> _resources = new();
 
     public YamlResourceCollection(string filePath, ITextFileStore fileStore)
     {

@@ -35,6 +35,9 @@ public class Program
         services.AddScoped<IServiceRepository, YamlServiceRepository>();
         services.AddScoped<IResourceRepository, YamlResourceRepository>();
         
+        var consoleEmulator = new ConsoleEmulator(services);
+        builder.Services.AddScoped<IConsoleEmulator>(_ => consoleEmulator);
+        
         builder.Services.AddUseCases();
         
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
