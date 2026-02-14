@@ -95,7 +95,6 @@
             }
         </div>
 
-        <!-- NOTES — FULL WIDTH -->
         <div class="md:col-span-2">
             <div class="text-zinc-400 mb-1">Notes</div>
 
@@ -103,7 +102,7 @@
             {
                 <MarkdownEditor
                     @bind-Value="_edit.Notes"
-                    ShowSaveButton="false" />
+                    ShowActionButtons="false" />
             }
             else
             {
@@ -177,6 +176,7 @@
         AccessPoint.Model = _edit.Model;
         AccessPoint.Speed = _edit.Speed;
         AccessPoint.Notes = _edit.Notes; 
+        
     }
 
     void Cancel()

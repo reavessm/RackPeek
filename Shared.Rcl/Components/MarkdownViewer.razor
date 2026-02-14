@@ -1,13 +1,13 @@
 @using Markdig
 
-<div class="border border-zinc-800 rounded p-4 bg-zinc-900">
+<div class="relative border border-zinc-800 rounded p-4 bg-zinc-900">
 
     @if (ShowEditButton)
     {
-        <div class="flex justify-end mb-2 text-xs">
-            <button class="text-blue-400 hover:text-blue-300 transition"
+        <div class="absolute top-2 right-2 z-10">
+            <button class="text-xs text-blue-400 hover:text-blue-300 transition"
                     @onclick="HandleEdit">
-                Edit
+                @(string.IsNullOrWhiteSpace(Value) ? "Add" : "Edit")
             </button>
         </div>
     }
@@ -32,22 +32,18 @@
     [Parameter] public bool ShowEditButton { get; set; }
     [Parameter] public EventCallback OnEdit { get; set; }
 
-    private string _html = "";
+    private string _html = string.Empty;
 
     private static readonly MarkdownPipeline Pipeline =
         new MarkdownPipelineBuilder()
             .UseAdvancedExtensions()
-            
             .Build();
 
     protected override void OnParametersSet()
     {
-        _html = Markdown.ToHtml(Value ?? "", Pipeline);
+        _html = Markdown.ToHtml(Value ?? string.Empty, Pipeline);
     }
 
-    private async Task HandleEdit()
-    {
-        if (OnEdit.HasDelegate)
-            await OnEdit.InvokeAsync();
-    }
+    private Task HandleEdit()
+        => OnEdit.HasDelegate ? OnEdit.InvokeAsync() : Task.CompletedTask;
 }

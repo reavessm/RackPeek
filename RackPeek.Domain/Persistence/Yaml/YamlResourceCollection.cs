@@ -83,7 +83,12 @@ public sealed class YamlResourceCollection(
 
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .WithTypeConverter(new StorageSizeYamlConverter())
                 .WithTypeConverter(new NotesStringYamlConverter())
+                .ConfigureDefaultValuesHandling(
+                    DefaultValuesHandling.OmitNull |
+                    DefaultValuesHandling.OmitEmptyCollections
+                )
                 .Build();
 
             var payload = new OrderedDictionary
@@ -112,6 +117,7 @@ public sealed class YamlResourceCollection(
             .WithCaseInsensitivePropertyMatching()
             .WithTypeConverter(new StorageSizeYamlConverter())
             .WithTypeConverter(new NotesStringYamlConverter())
+            
             .WithTypeDiscriminatingNodeDeserializer(options =>
             {
                 options.AddKeyValueTypeDiscriminator<Resource>("kind", new Dictionary<string, Type>
@@ -166,6 +172,10 @@ public sealed class YamlResourceCollection(
         var serializer = new SerializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .WithTypeConverter(new NotesStringYamlConverter())
+            .ConfigureDefaultValuesHandling(
+                DefaultValuesHandling.OmitNull |
+                DefaultValuesHandling.OmitEmptyCollections
+            )
             .Build();
 
         var yaml = serializer.Serialize(resource);
