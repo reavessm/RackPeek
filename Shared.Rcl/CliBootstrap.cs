@@ -63,11 +63,16 @@ public static class CliBootstrap
             ? yamlDir
             : Path.Combine(appBasePath, yamlDir);
         
-        if (!Directory.Exists(resolvedYamlDir))
-            throw new DirectoryNotFoundException(
-                $"YAML directory not found: {resolvedYamlDir}");
-        
+
+        Directory.CreateDirectory(resolvedYamlDir);
+
         var fullYamlPath = Path.Combine(resolvedYamlDir, yamlFile);
+
+        if (!File.Exists(fullYamlPath))
+        {
+            await File.WriteAllTextAsync(fullYamlPath, "");
+        }
+        
         var collection = new YamlResourceCollection(
             fullYamlPath,
             new PhysicalTextFileStore(),
