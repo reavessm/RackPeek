@@ -1,6 +1,6 @@
 # RackPeek
 
-RackPeek is a lightweight, opinionated CLI tool for documenting and managing home lab and small-scale IT infrastructure.
+RackPeek is a lightweight, opinionated CLI tool / webui for documenting and managing home lab and small-scale IT infrastructure.
 
 It helps you track hardware, services, networks, and their relationships in a clear, scriptable, and reusable way without enterprise bloat or proprietary lock-in.
 
@@ -9,6 +9,10 @@ Code, docs, ideas, bug reports, and real-world usage feedback are all massively 
 If you run a home lab, you belong here.
 
 [![Join our Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/egXRPdesee) [![Live Demo](https://img.shields.io/badge/Live%20Demo-Try%20RackPeek%20Online-2ea44f?logo=githubpages&logoColor=white)](https://timmoth.github.io/RackPeek/) [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-rackpeek-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/aptacode/rackpeek/)
+
+Brandon Lee recently posted an article on how / why to use RackPeek, if you're interested in the project make sure to check it out! 
+
+[![Brandon Lee — I’m Documenting My Entire Home Lab as Code with RackPeek](https://img.shields.io/badge/Brandon%20Lee-I%E2%80%99m%20Documenting%20My%20Entire%20Home%20Lab%20as%20Code%20with%20RackPeek-blue?style=for-the-badge)](https://www.virtualizationhowto.com/2026/02/im-documenting-my-entire-home-lab-as-code-with-rackpeek/)
 
 We’re gathering feedback from homelabbers to validate direction and prioritize features.  
 Answer whichever questions stand out to you, your input directly shapes the project.
@@ -20,12 +24,10 @@ RackPeek treats infrastructure documentation as living reference data rather tha
 
 You should be able to document your environment as you build it, explore relationships between systems, and quickly understand how everything fits together, without drowning in unnecessary metadata or process.
 
-RackPeek is not a CMDB replacement. It’s a clean framework for understanding and maintaining your lab.
-
 [![RackPeek demo](./vhs/rpk-demo.gif)](./rpk-demo.gif)
 [![RackPeek demo](./vhs/webui_screenshots/output.gif)](./rpk-webui-demo.gif)
 
-
+[![RackPeek demo](./vhs/webui_screenshots/output.gif)](./rpk-webui-demo.gif)
 ## Running RackPeek with Docker
 ```text
 
@@ -131,8 +133,8 @@ The project is optimized for home labs and self-hosted environments, not enterpr
 ```
 [x] Ideation
 [x] Development
-[~] Alpha Release
-[ ] Beta Release
+[x] Alpha Release
+[~] Beta Release
 [ ] v1.0.0 Release
 ```
 
