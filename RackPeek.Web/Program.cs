@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using RackPeek.Domain;
 using RackPeek.Domain.Persistence;
@@ -51,6 +52,17 @@ public class Program
 
         builder.Services.AddScoped<ITextFileStore, PhysicalTextFileStore>();
 
+        
+        builder.Services.AddScoped(sp =>
+        {
+            var nav = sp.GetRequiredService<NavigationManager>();
+            return new HttpClient
+            {
+                BaseAddress = new Uri(nav.BaseUri)
+            };
+        });
+
+        
         var resources = new ResourceCollection();
         builder.Services.AddSingleton(resources);
 
