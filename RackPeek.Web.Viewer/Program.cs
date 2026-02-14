@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using RackPeek.Domain;
@@ -19,9 +20,18 @@ public class Program
         builder.RootComponents.Add<HeadOutlet>("head::after");
 
         var services = builder.Services;
-        builder.Services.AddScoped(sp =>
-            new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+
+        builder.Services.AddScoped(sp =>
+        {
+            var nav = sp.GetRequiredService<NavigationManager>();
+            return new HttpClient
+            {
+                BaseAddress = new Uri(nav.BaseUri)
+            };
+        });
+
+        
         builder.Services.AddScoped<ITextFileStore, WasmTextFileStore>();
 
         var resources = new ResourceCollection();

@@ -115,6 +115,12 @@ generate_help_recursive() {
     return
   fi
 
+if is_invalid_help "$help_output"; then
+  echo "Skipping: $map_key (invalid command)" >&2
+  return
+fi
+
+
   # 2. Extract Description
   local description
   description=$(get_description "$help_output")
@@ -167,6 +173,19 @@ generate_help_recursive() {
   done
 }
 
+is_invalid_help() {
+  local output="$1"
+
+  # Detect common failure patterns
+  if echo "$output" | grep -qiE \
+    "Unknown command|CommandParseException|Unexpected error occurred"; then
+    return 0
+  fi
+
+  return 1
+}
+
+
 # ----------------------------
 # Main
 # ----------------------------
@@ -178,12 +197,12 @@ generate_help_recursive ""
 {
   echo ""
   cat "$TREE_TEMP"
-} > "CommandIndex.md"
+} > "docs/CommandIndex.md"
 
 {
   echo "# CLI Commands"
   echo ""
   cat "$BODY_TEMP"
-} > "Commands.md"
+} > "docs/Commands.md"
 
 echo "Generated Successfully."
