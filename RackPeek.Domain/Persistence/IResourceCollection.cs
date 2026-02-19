@@ -16,6 +16,7 @@ public interface IResourceCollection
     Task UpdateAsync(Resource resource);
     Task DeleteAsync(string name);
     Task<Resource?> GetByNameAsync(string name);
+    Task<T?> GetByNameAsync<T>(string name) where T : Resource;
 
     Resource? GetByName(string name);
     Task<bool> Exists(string name);
@@ -26,4 +27,6 @@ public interface IResourceCollection
 
     Task<IReadOnlyList<T>> GetAllOfTypeAsync<T>();
     Task<IReadOnlyList<Resource>>  GetDependantsAsync(string name);
+    
+    
 }

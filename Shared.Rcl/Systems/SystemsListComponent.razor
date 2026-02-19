@@ -1,6 +1,9 @@
-﻿@using RackPeek.Domain.Resources.SystemResources
+﻿@using RackPeek.Domain.Persistence
+@using RackPeek.Domain.Resources.SystemResources
 @using RackPeek.Domain.Resources.SystemResources.UseCases
-@inject ISystemRepository SystemRepository
+@inject IResourceCollection Repo
+@inject ISystemRepository SystemRepo
+
 @inject UpdateSystemUseCase UpdateSystemUseCase
 @inject NavigationManager Nav
 
@@ -52,11 +55,11 @@
 
         if (string.IsNullOrEmpty(type) && string.IsNullOrEmpty(os))
         {
-            _systems = await SystemRepository.GetAllAsync();
+            _systems = await Repo.GetAllOfTypeAsync<SystemResource>();
         }
         else
         {
-            _systems = await SystemRepository.GetFilteredAsync(
+            _systems = await SystemRepo.GetFilteredAsync(
             type,
             os
             );

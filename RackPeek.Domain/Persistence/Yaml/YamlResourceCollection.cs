@@ -84,6 +84,12 @@ public sealed class YamlResourceCollection(
             r.Name.Equals(name, StringComparison.OrdinalIgnoreCase)));
     }
 
+    public Task<T?> GetByNameAsync<T>(string name) where T : Resource
+    {
+        var resource = resourceCollection.Resources.FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        return Task.FromResult<T?>(resource as T);
+    }
+
     public Resource? GetByName(string name) =>
         resourceCollection.Resources.FirstOrDefault(r =>
             r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));

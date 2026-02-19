@@ -1,9 +1,8 @@
-﻿@using RackPeek.Domain.Resources.Hardware
+﻿@using RackPeek.Domain.Persistence
+@using RackPeek.Domain.Resources.Hardware
 @using RackPeek.Domain.Resources.Services
 @using RackPeek.Domain.Resources.SystemResources
-@inject IHardwareRepository HardwareRepository
-@inject ISystemRepository SystemRepository
-@inject IServiceRepository ServiceRepository
+@inject IResourceCollection Repo
 @inject NavigationManager Nav
 
 <div class="text-sm text-zinc-300 flex gap-1 items-center">
@@ -52,7 +51,7 @@
 
     private async Task BuildSystemPath(string systemName)
     {
-        var system = await SystemRepository.GetByNameAsync(systemName);
+        var system = await Repo.GetByNameAsync(systemName);
 
         if (system?.RunsOn is not null)
         {
@@ -70,11 +69,11 @@
 
     private async Task BuildServicePath(string serviceName)
     {
-        var service = await ServiceRepository.GetByNameAsync(serviceName);
+        var service = await Repo.GetByNameAsync(serviceName);
 
         if (service?.RunsOn is not null)
         {
-            var system = await SystemRepository.GetByNameAsync(service.RunsOn);
+            var system = await Repo.GetByNameAsync(service.RunsOn);
 
             if (system?.RunsOn is not null)
             {

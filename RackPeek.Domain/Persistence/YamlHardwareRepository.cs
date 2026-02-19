@@ -16,17 +16,7 @@ public class YamlHardwareRepository(IResourceCollection resources) : IHardwareRe
             .GroupBy(h => h.Kind)
             .ToDictionary(k => k.Key, v => v.Count()));
     }
-
-    public Task<IReadOnlyList<Hardware>> GetAllAsync()
-    {
-        return Task.FromResult(resources.HardwareResources);
-    }
-
-    public Task<Hardware?> GetByNameAsync(string name)
-    {
-        return Task.FromResult(resources.GetByName(name) as Hardware);
-    }
-
+    
     public Task<List<HardwareTree>> GetTreeAsync()
     {
         var hardwareTree = new List<HardwareTree>();
@@ -71,38 +61,5 @@ public class YamlHardwareRepository(IResourceCollection resources) : IHardwareRe
         }
 
         return Task.FromResult(hardwareTree);
-    }
-
-
-    public async Task AddAsync(Hardware hardware)
-    {
-        if (resources.HardwareResources.Any(r =>
-                r.Name.Equals(hardware.Name, StringComparison.OrdinalIgnoreCase)))
-            throw new InvalidOperationException(
-                $"Hardware with name '{hardware.Name}' already exists.");
-
-        await resources.AddAsync(hardware);
-    }
-
-    public async Task UpdateAsync(Hardware hardware)
-    {
-        var existing = resources.HardwareResources
-            .FirstOrDefault(r => r.Name.Equals(hardware.Name, StringComparison.OrdinalIgnoreCase));
-
-        if (existing == null)
-            throw new InvalidOperationException($"Hardware '{hardware.Name}' not found.");
-
-        await resources.UpdateAsync(hardware);
-    }
-
-    public async Task DeleteAsync(string name)
-    {
-        var existing = resources.HardwareResources
-            .FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-        if (existing == null)
-            throw new InvalidOperationException($"Hardware '{name}' not found.");
-
-        await resources.DeleteAsync(name);
     }
 }

@@ -75,22 +75,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IHardwareRepository, YamlHardwareRepository>();
         services.AddScoped<ISystemRepository, YamlSystemRepository>();
         services.AddScoped<IServiceRepository, YamlServiceRepository>();
-        services.AddScoped<IResourceRepository, YamlResourceRepository>();
-        
-        services.AddScoped<IResourceRepo<AccessPoint>, YamlHardwareRepo<AccessPoint>>();
-        services.AddScoped<IResourceRepo<Desktop>, YamlHardwareRepo<Desktop>>();
-        services.AddScoped<IResourceRepo<Firewall>, YamlHardwareRepo<Firewall>>();
-        services.AddScoped<IResourceRepo<Laptop>, YamlHardwareRepo<Laptop>>();
-        services.AddScoped<IResourceRepo<Router>, YamlHardwareRepo<Router>>();
-        services.AddScoped<IResourceRepo<Server>, YamlHardwareRepo<Server>>();
-        services.AddScoped<IResourceRepo<Switch>, YamlHardwareRepo<Switch>>();
-        services.AddScoped<IResourceRepo<Ups>, YamlHardwareRepo<Ups>>();
-        
-        services.AddScoped<IResourceRepo<SystemResource>, YamlSystemRepository>();
-        services.AddScoped<IResourceRepo<Service>, YamlServiceRepository>();
-        
-
-
         return services;
     }
     

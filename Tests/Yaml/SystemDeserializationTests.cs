@@ -7,7 +7,7 @@ namespace Tests.Yaml;
 
 public class SystemDeserializationTests
 {
-    public static async Task<ISystemRepository> CreateSut(string yaml)
+    public static async Task<IResourceCollection> CreateSut(string yaml)
     {
         var tempDir = Path.Combine(
             Path.GetTempPath(),
@@ -22,8 +22,8 @@ public class SystemDeserializationTests
         var yamlResourceCollection = new YamlResourceCollection(filePath, new PhysicalTextFileStore(), new ResourceCollection());
         await yamlResourceCollection.LoadAsync();
 
-        
-        return new YamlSystemRepository(yamlResourceCollection);
+
+        return yamlResourceCollection;
     }
 
     [Fact]
@@ -48,7 +48,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<SystemResource>();
 
         // Then
         var resource = Assert.Single(resources);

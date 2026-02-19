@@ -1,6 +1,7 @@
-﻿@using RackPeek.Domain.Resources.Services
+﻿@using RackPeek.Domain.Persistence
+@using RackPeek.Domain.Resources.Services
 @using RackPeek.Domain.Resources.Services.UseCases
-@inject IServiceRepository ServiceRepository
+@inject IResourceCollection Repo
 @inject UpdateServiceUseCase UpdateServiceUseCase
 @inject NavigationManager Nav
 
@@ -36,7 +37,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _services = await ServiceRepository.GetAllAsync();
+        _services = await Repo.GetAllOfTypeAsync<Service>();
     }
 
     async Task UpdateService(ServiceEditModel edit)
@@ -60,7 +61,7 @@
 
     private async Task Callback(string obj)
     {
-        _services = await ServiceRepository.GetAllAsync();
+        _services = await Repo.GetAllOfTypeAsync<Service>();
     }
 
 }

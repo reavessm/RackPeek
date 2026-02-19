@@ -1,9 +1,10 @@
 ﻿@page "/resources/systems/{SystemName}"
+@using RackPeek.Domain.Persistence
 @using RackPeek.Domain.Resources.Hardware
 @using RackPeek.Domain.Resources.SystemResources
 @using RackPeek.Domain.Resources.SystemResources.UseCases
 @using Shared.Rcl.Services
-@inject ISystemRepository SystemRepository
+@inject IResourceCollection Repo
 @inject UpdateSystemUseCase UpdateSystemUseCase
 @inject GetSystemServiceTreeUseCase GetSystemServiceTreeUseCase
 @inject NavigationManager NavigationManager
@@ -57,7 +58,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _system = await SystemRepository.GetByNameAsync(SystemName);
+        _system = await Repo.GetByNameAsync<SystemResource>(SystemName);
         _tree = null;
         if (!string.IsNullOrEmpty(_system?.Name))
         {

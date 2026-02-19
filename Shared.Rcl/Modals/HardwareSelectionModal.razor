@@ -1,7 +1,8 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using RackPeek.Domain.Persistence
 @using RackPeek.Domain.Resources.Hardware
 @using RackPeek.Domain.Resources.Models
-@inject IHardwareRepository HardwareRepository
+@inject IResourceCollection Repo
 
 @if (IsOpen)
 {
@@ -118,7 +119,7 @@
     {
         if (IsOpen)
         {
-            _hardware = (await HardwareRepository.GetAllAsync())
+            _hardware = (await Repo.GetAllOfTypeAsync<Hardware>())
                 .OrderBy(h => h.Kind)
                 .ThenBy(h => h.Name)
                 .ToList();

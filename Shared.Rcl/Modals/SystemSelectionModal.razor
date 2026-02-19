@@ -1,6 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using RackPeek.Domain.Persistence
 @using RackPeek.Domain.Resources.SystemResources
-@inject ISystemRepository SystemRepository
+@inject IResourceCollection Repo
 
 @if (IsOpen)
 {
@@ -117,7 +118,7 @@
     {
         if (IsOpen)
         {
-            _systems = (await SystemRepository.GetAllAsync())
+            _systems = (await Repo.GetAllOfTypeAsync<SystemResource>())
                 .OrderBy(s => s.Type)
                 .ThenBy(s => s.Name)
                 .ToList();

@@ -134,6 +134,15 @@ public sealed class InMemoryResourceCollection(IEnumerable<Resource>? seed = nul
         }
         
     }
+    
+    public Task<T?> GetByNameAsync<T>(string name) where T : Resource
+    {
+        lock (_lock)
+        {
+            var resource = _resources.FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return Task.FromResult<T?>(resource as T);
+        }
+    }
 
     public Resource? GetByName(string name)
     {

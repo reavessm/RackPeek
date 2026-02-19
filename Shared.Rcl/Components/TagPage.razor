@@ -1,9 +1,10 @@
 ﻿@page "/tags/{TagName}"
 
+@using RackPeek.Domain.Persistence
 @using RackPeek.Domain.Resources
 @using RackPeek.Domain.Resources.SystemResources
 
-@inject IResourceRepository ResourceRepository
+@inject IResourceCollection ResourceRepository
 @inject NavigationManager Nav
 
 <PageTitle>Tag: @TagName</PageTitle>

@@ -2,7 +2,7 @@ using RackPeek.Domain.Resources.Services;
 
 namespace RackPeek.Domain.Resources.SystemResources;
 
-public interface ISystemRepository : IResourceRepo<SystemResource> 
+public interface ISystemRepository
 {
     Task<int> GetSystemCountAsync();
     Task<Dictionary<string, int>> GetSystemTypeCountAsync();

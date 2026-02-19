@@ -3,7 +3,7 @@ using RackPeek.Domain.Resources.SystemResources;
 
 namespace RackPeek.Domain.Resources.Hardware;
 
-public interface IHardwareRepository : IResourceRepo<Models.Hardware> 
+public interface IHardwareRepository
 {
     Task<int> GetCountAsync();
     Task<Dictionary<string, int>> GetKindCountAsync();

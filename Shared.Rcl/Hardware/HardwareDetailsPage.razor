@@ -1,4 +1,5 @@
 ﻿@page "/resources/hardware/{HardwareName}"
+@using RackPeek.Domain.Persistence
 @using RackPeek.Domain.Resources.Hardware
 @using RackPeek.Domain.Resources.Models
 
@@ -13,7 +14,7 @@
 @using Shared.Rcl.Routers
 @using Shared.Rcl.Ups
 @using Shared.Rcl.Systems
-@inject IHardwareRepository HardwareRepository
+@inject IResourceCollection Repo
 @inject GetHardwareSystemTreeUseCase GetHardwareSystemTreeUseCase
 @inject NavigationManager Nav
 
@@ -103,7 +104,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _hardware = await HardwareRepository.GetByNameAsync(HardwareName);
+        _hardware = await Repo.GetByNameAsync(HardwareName) as Hardware;
         _tree = null;
         if (!string.IsNullOrEmpty(_hardware?.Name))
         {

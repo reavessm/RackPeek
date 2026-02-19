@@ -8,7 +8,7 @@ namespace Tests.Yaml;
 
 public class HardwareDeserializationTests
 {
-    public async Task<IHardwareRepository> CreateSut(string yaml)
+    public async Task<IResourceCollection> CreateSut(string yaml)
     {
         var tempDir = Path.Combine(
             Path.GetTempPath(),
@@ -22,7 +22,7 @@ public class HardwareDeserializationTests
 
         var yamlResourceCollection = new YamlResourceCollection(filePath, new PhysicalTextFileStore(), new ResourceCollection());
         await yamlResourceCollection.LoadAsync();
-        return new YamlHardwareRepository(yamlResourceCollection);
+        return yamlResourceCollection;
     }
 
 
@@ -46,7 +46,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<Hardware>();
 
         // Then
         var hardware = Assert.Single(resources);
@@ -88,7 +88,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<Hardware>();
 
 
         // Then
@@ -162,7 +162,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<Hardware>();
 
 
         // Then
@@ -212,7 +212,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<Hardware>();
 
 
         // Then
@@ -262,7 +262,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<Hardware>();
 
 
         // Then
@@ -319,7 +319,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<Hardware>();
 
 
         // Then
@@ -380,7 +380,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<Hardware>();
 
 
         // Then
@@ -424,7 +424,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<Hardware>();
 
 
         // Then
@@ -454,7 +454,7 @@ resources:
         var sut = await CreateSut(yaml);
 
         // When
-        var resources = await sut.GetAllAsync();
+        var resources = await sut.GetAllOfTypeAsync<Hardware>();
 
 
         // Then
