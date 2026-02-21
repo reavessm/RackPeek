@@ -8,7 +8,6 @@ public class PlaywrightFixture : IAsyncLifetime
 {
     // Change this if needed
     private const string DockerImage = "rackpeek:ci";
-    private string _configDirectory = default!;
     private IContainer _container = default!;
 
     private IPlaywright _playwright = default!;
@@ -17,22 +16,8 @@ public class PlaywrightFixture : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        // Create isolated config directory per test run
-        _configDirectory = Path.Combine(
-            Path.GetTempPath(),
-            "rackpeek-e2e",
-            Guid.NewGuid().ToString());
-
-        Directory.CreateDirectory(_configDirectory);
-
-        File.WriteAllText(
-            Path.Combine(_configDirectory, "config.yaml"),
-            "# E2E test config");
-
-        _container = new ContainerBuilder()
-            .WithImage(DockerImage)
+        _container = new ContainerBuilder(DockerImage)
             .WithPortBinding(8080, true) // random host port
-            .WithBindMount(_configDirectory, "/app/config")
             .WithWaitStrategy(
                 Wait.ForUnixContainer()
                     .UntilHttpRequestIsSucceeded(r => r
@@ -73,9 +58,5 @@ public class PlaywrightFixture : IAsyncLifetime
 
         if (_container != null)
             await _container.DisposeAsync();
-
-        if (!string.IsNullOrWhiteSpace(_configDirectory) &&
-            Directory.Exists(_configDirectory))
-            Directory.Delete(_configDirectory, true);
     }
 }
