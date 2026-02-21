@@ -141,3 +141,11 @@ RackPeek is built to solve real problems we actively have. If a feature isn’t 
 **Opinionated**  
 The project is optimized for home labs and self-hosted environments, not enterprise CMDBs or corporate documentation workflows.
 
+Here’s a clean section you can drop into your **README.md**.
+
+
+## Development Docs
+
+* [`contribution-guidelines.md`](docs/development/contribution-guidelines.md) – How to propose changes and submit PRs
+* [`dev-cheat-sheet.md`](docs/development/dev-cheat-sheet.md) – Build, release, Docker, and testing commands
+* [`testing-guidelines.md`](docs/development/testing-guidelines.md) – Testing principles and standards
