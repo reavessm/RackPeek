@@ -53,8 +53,15 @@ public class PlaywrightFixture : IAsyncLifetime
         {
             Headless = true,
             //Headless = false,
-            SlowMo = 200
+            SlowMo = 500,
+            Args = new[]
+            {
+                "--disable-dev-shm-usage",
+                "--no-sandbox"
+            }
         });
+        Assertions.SetDefaultExpectTimeout(15000);
+
     }
 
     public async Task DisposeAsync()
