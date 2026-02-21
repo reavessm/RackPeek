@@ -38,6 +38,24 @@ public class UpdateServerUseCase(IResourceCollection repository) : IUseCase
             server.Ram.Mts = ramMts.Value;
         }
 
+        if (server.Ram != null)
+        {
+            if (server.Ram.Size == 0)
+            {
+                server.Ram.Size = null;
+            }
+            
+            if (server.Ram.Mts == 0)
+            {
+                server.Ram.Mts = null;
+            }
+
+            if (server.Ram.Size == null && server.Ram.Mts == null)
+            {
+                server.Ram = null;
+            }
+        }
+
         // ---- IPMI ----
         if (ipmi.HasValue) server.Ipmi = ipmi.Value;
         if (notes != null) server.Notes = notes;
