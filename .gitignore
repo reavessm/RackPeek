@@ -420,3 +420,10 @@ FodyWeavers.xsd
 **/config/
 !RackPeek.Web.Viewer/wwwroot/config/
 !RackPeek.Web.Viewer/wwwroot/config/**
+
+# IDE folders
+.idea/
+.run/
+
+# macOS
+.DS_Store
