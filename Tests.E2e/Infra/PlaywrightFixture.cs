@@ -52,9 +52,9 @@ public class PlaywrightFixture : IAsyncLifetime
 
         Browser = await _playwright.Chromium.LaunchAsync(new()
         {
-            Headless = true
-            //Headless = false,
-            //SlowMo = 1000
+            //Headless = true
+            Headless = false, 
+            SlowMo = 200
         });
     }
 

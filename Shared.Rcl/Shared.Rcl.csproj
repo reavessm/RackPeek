@@ -24,7 +24,6 @@
       <AdditionalFiles Include="AccessPoints\AccessPointCardComponent.razor" />
       <AdditionalFiles Include="AccessPoints\AccessPointsListComponent.razor" />
       <AdditionalFiles Include="AccessPoints\AccessPointsListPage.razor" />
-      <AdditionalFiles Include="AccessPoints\AddAccessPointComponent.razor" />
       <AdditionalFiles Include="Components\ResourceBreadCrumbComponent.razor" />
       <AdditionalFiles Include="Desktops\AddDesktopComponent.razor" />
       <AdditionalFiles Include="Desktops\DesktopCardComponent.razor" />
@@ -49,9 +48,6 @@
       <AdditionalFiles Include="Modals\RamModal.razor" />
       <AdditionalFiles Include="Modals\StringValueModal.razor" />
       <AdditionalFiles Include="Modals\SystemSelectionModal.razor" />
-      <AdditionalFiles Include="Pages\Error.razor" />
-      <AdditionalFiles Include="Pages\Home.razor" />
-      <AdditionalFiles Include="Pages\NotFound.razor" />
       <AdditionalFiles Include="Routers\AddRouterComponent.razor" />
       <AdditionalFiles Include="Routers\RouterCardComponent.razor" />
       <AdditionalFiles Include="Routers\RouterListComponent.razor" />
@@ -80,10 +76,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RackPeek.Domain\RackPeek.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Pages\" />
     </ItemGroup>
     
 

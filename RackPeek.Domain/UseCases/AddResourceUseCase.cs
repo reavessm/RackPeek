@@ -19,7 +19,7 @@ public class AddResourceUseCase<T>(IResourceCollection repo) : IAddResourceUseCa
 
         var existingResource = await repo.GetByNameAsync(name);
         if (existingResource != null)
-            throw new ConflictException($"{existingResource.Kind} resource '{name}' already exists.");
+            throw new ConflictException($"Resource '{name}' ({existingResource.Kind}) already exists.");
 
         if (runsOn != null)
         {

@@ -264,7 +264,7 @@
 @code {
     [Parameter] [EditorRequired] public Service Service { get; set; } = default!;
 
-    [Parameter] public EventCallback<ServiceEditModel> OnSave { get; set; }
+    [Parameter] public EventCallback<string> OnSave { get; set; }
 
     private bool _isEditing;
     private ServiceEditModel _edit = new();
@@ -278,9 +278,19 @@
     async Task Save()
     {
         _isEditing = false;
-        await OnSave.InvokeAsync(_edit);
+        await UpdateServiceUseCase.ExecuteAsync(
+            _edit.Name,
+            _edit.Ip,
+            _edit.Port,
+            _edit.Protocol,
+            _edit.Url,
+            _edit.RunsOn,
+            _edit.Notes
+        );
+        
+        await OnSave.InvokeAsync(Service.Name);
     }
-
+    
     void Cancel()
     {
         _isEditing = false;
