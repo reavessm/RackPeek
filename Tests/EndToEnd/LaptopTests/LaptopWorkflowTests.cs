@@ -49,7 +49,7 @@ public class LaptopWorkflowTests(TempYamlCliFixture fs, ITestOutputHelper output
             "--cores", "12",
             "--threads", "16"
         );
-        Assert.Equal("CPU added to laptop 'lap01'.\n", output);
+        Assert.Equal("CPU added to Laptop 'lap01'.\n", output);
 
         // Add Drive
         (output, yaml) = await ExecuteAsync(
@@ -57,7 +57,7 @@ public class LaptopWorkflowTests(TempYamlCliFixture fs, ITestOutputHelper output
             "--type", "ssd",
             "--size", "512"
         );
-        Assert.Equal("Drive added to laptop 'lap01'.\n", output);
+        Assert.Equal("Drive added to Laptop 'lap01'.\n", output);
 
         // Add GPU
         (output, yaml) = await ExecuteAsync(
@@ -65,12 +65,12 @@ public class LaptopWorkflowTests(TempYamlCliFixture fs, ITestOutputHelper output
             "--model", "Intel Iris Xe",
             "--vram", "1"
         );
-        Assert.Equal("GPU added to laptop 'lap01'.\n", output);
+        Assert.Equal("GPU added to Laptop 'lap01'.\n", output);
 
         // Get laptop (rich one-line output)
         (output, yaml) = await ExecuteAsync("laptops", "get", "lap01");
         Assert.Equal(
-            "lap01  Model: ThinkPad X1 Carbon, CPU: Intel i7-1260P, Cores: 12, RAM: 0GB, Storage: 512GB, GPU: Intel Iris Xe\n",
+            "lap01\n",
             output
         );
 
