@@ -74,19 +74,19 @@ public class LaptopWorkflowTests(TempYamlCliFixture fs, ITestOutputHelper output
             output
         );
 
-        // List laptops (strict table)
+        // List laptops 
         (output, yaml) = await ExecuteAsync("laptops", "list");
         Assert.Contains("lap01", output);
 
-        // Summary (strict table)
+        // Summary 
         (output, yaml) = await ExecuteAsync("laptops", "summary");
         Assert.Contains("lap01", output);
 
-        // Describe (loose)
+        // Describe 
         (output, yaml) = await ExecuteAsync("laptops", "describe", "lap01");
         Assert.Contains("lap01", output);
 
-        // Tree (loose)
+        // Tree 
         (output, yaml) = await ExecuteAsync("laptops", "tree", "lap01");
         Assert.Contains("lap01", output);
 
