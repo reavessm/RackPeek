@@ -1,4 +1,4 @@
-﻿@using RackPeek.Domain.Resources.Desktops
+@using RackPeek.Domain.Resources.Desktops
 @using RackPeek.Domain.Resources.SubResources
 @using RackPeek.Domain.UseCases.Cpus
 @using RackPeek.Domain.UseCases.Drives
@@ -207,8 +207,10 @@
         <ResourceTagEditor Resource="Desktop"
                            TestIdPrefix="desktop" />
 
+        <ResourceLabelEditor Resource="Desktop"
+                             TestIdPrefix="desktop" />
 
-    </div>
+
 
     <div class="md:col-span-2" data-testid="desktop-notes-section">
         <div class="text-zinc-400 mb-1">Notes</div>
@@ -229,6 +231,7 @@
                             TestIdPrefix="desktop-notes-editor"/>
         }
     </div>
+</div>
 </div>
 
 <ConfirmModal IsOpen="_confirmDeleteOpen"

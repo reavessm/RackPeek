@@ -5,6 +5,7 @@ namespace Tests.E2e.PageObjectModels;
 public class ServerCardPom(IPage page)
 {
     public TagsPom Tags => new(page);
+    public LabelsPom Labels => new(page);
 
     // -------------------------------------------------
     // Root / Identity

@@ -26,6 +26,9 @@ public class UpsDescribeCommand(IServiceProvider provider)
         grid.AddRow("Model:", ups.Model ?? "Unknown");
         grid.AddRow("VA:", ups.Va?.ToString() ?? "Unknown");
 
+        if (ups.Labels.Count > 0)
+            grid.AddRow("Labels:", string.Join(", ", ups.Labels.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+
         AnsiConsole.Write(new Panel(grid).Header("UPS").Border(BoxBorder.Rounded));
 
         return 0;

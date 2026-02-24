@@ -1,4 +1,4 @@
-﻿using Tests.E2e.Infra;
+using Tests.E2e.Infra;
 using Tests.E2e.PageObjectModels;
 using Xunit.Abstractions;
 
@@ -161,6 +161,110 @@ public class ServerCardTests(
             await tags.AssertTagVisibleAsync("server", "Foo");
             await tags.AssertTagVisibleAsync("server", "Baz");
             await tags.AssertTagNotVisibleAsync("server", "Bar");
+
+            await context.CloseAsync();
+        }
+        finally
+        {
+            await context.CloseAsync();
+        }
+    }
+
+    [Fact]
+    public async Task User_Can_Add_And_Remove_Labels_From_Server_Card()
+    {
+        var (context, page) = await CreatePageAsync();
+        var name = $"e2e-srv-lbl-{Guid.NewGuid():N}"[..16];
+
+        try
+        {
+            await page.GotoAsync(fixture.BaseUrl);
+
+            var layout = new MainLayoutPom(page);
+            await layout.AssertLoadedAsync();
+            await layout.GotoHardwareAsync();
+
+            var hardwareTree = new HardwareTreePom(page);
+            await hardwareTree.AssertLoadedAsync();
+            await hardwareTree.GotoServersListAsync();
+
+            var list = new ServersListPom(page);
+            await list.AssertLoadedAsync();
+
+            await list.AddServerAsync(name);
+            await page.WaitForURLAsync($"**/resources/hardware/{name}");
+
+            var card = new ServerCardPom(page);
+            await card.AssertVisibleAsync(name);
+
+            var labels = card.Labels;
+
+            await labels.AddLabelAsync("server", "env", "production");
+            await labels.AssertLabelVisibleAsync("server", "env");
+
+            await labels.AddLabelAsync("server", "owner", "team-a");
+            await labels.AssertLabelVisibleAsync("server", "owner");
+
+            await labels.RemoveLabelAsync("server", "owner");
+            await labels.AssertLabelNotVisibleAsync("server", "owner");
+            await labels.AssertLabelVisibleAsync("server", "env");
+
+            await page.ReloadAsync();
+            await labels.AssertLabelVisibleAsync("server", "env");
+            await labels.AssertLabelNotVisibleAsync("server", "owner");
+
+            await context.CloseAsync();
+        }
+        finally
+        {
+            await context.CloseAsync();
+        }
+    }
+
+    [Fact]
+    public async Task User_Can_Edit_Label_From_Server_Card()
+    {
+        var (context, page) = await CreatePageAsync();
+        var name = $"e2e-srv-edit-{Guid.NewGuid():N}"[..16];
+
+        try
+        {
+            await page.GotoAsync(fixture.BaseUrl);
+
+            var layout = new MainLayoutPom(page);
+            await layout.AssertLoadedAsync();
+            await layout.GotoHardwareAsync();
+
+            var hardwareTree = new HardwareTreePom(page);
+            await hardwareTree.AssertLoadedAsync();
+            await hardwareTree.GotoServersListAsync();
+
+            var list = new ServersListPom(page);
+            await list.AssertLoadedAsync();
+
+            await list.AddServerAsync(name);
+            await page.WaitForURLAsync($"**/resources/hardware/{name}");
+
+            var card = new ServerCardPom(page);
+            await card.AssertVisibleAsync(name);
+
+            var labels = card.Labels;
+
+            await labels.AddLabelAsync("server", "env", "production");
+            await labels.AssertLabelDisplaysAsync("server", "env", "production");
+
+            await labels.EditLabelAsync("server", "env", "env", "staging");
+            await labels.AssertLabelDisplaysAsync("server", "env", "staging");
+
+            await page.ReloadAsync();
+            await labels.AssertLabelDisplaysAsync("server", "env", "staging");
+
+            await labels.EditLabelAsync("server", "env", "environment", "staging");
+            await labels.AssertLabelNotVisibleAsync("server", "env");
+            await labels.AssertLabelDisplaysAsync("server", "environment", "staging");
+
+            await page.ReloadAsync();
+            await labels.AssertLabelDisplaysAsync("server", "environment", "staging");
 
             await context.CloseAsync();
         }

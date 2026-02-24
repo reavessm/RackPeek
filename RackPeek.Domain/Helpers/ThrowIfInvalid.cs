@@ -13,6 +13,18 @@ public static class ThrowIfInvalid
         if (name.Length > 50) throw new ValidationException("Name is too long.");
     }
 
+    public static void LabelKey(string key)
+    {
+        if (string.IsNullOrWhiteSpace(key)) throw new ValidationException("Label key is required.");
+        if (key.Length > 50) throw new ValidationException("Label key is too long.");
+    }
+
+    public static void LabelValue(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) throw new ValidationException("Label value is required.");
+        if (value.Length > 200) throw new ValidationException("Label value is too long.");
+    }
+
     public static void AccessPointModelName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

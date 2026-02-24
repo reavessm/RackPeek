@@ -26,6 +26,9 @@ public class LaptopDescribeCommand(IServiceProvider provider)
         grid.AddRow("Drives:", result.DriveCount.ToString());
         grid.AddRow("GPUs:", result.GpuCount.ToString());
 
+        if (result.Labels.Count > 0)
+            grid.AddRow("Labels:", string.Join(", ", result.Labels.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+
         AnsiConsole.Write(new Panel(grid).Header("Laptop").Border(BoxBorder.Rounded));
 
         return 0;

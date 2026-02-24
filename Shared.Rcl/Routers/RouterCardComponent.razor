@@ -1,4 +1,4 @@
-﻿@using RackPeek.Domain.Resources.Routers
+@using RackPeek.Domain.Resources.Routers
 @using RackPeek.Domain.Resources.SubResources
 @using RackPeek.Domain.UseCases.Ports
 @using Router = RackPeek.Domain.Resources.Routers.Router
@@ -166,6 +166,9 @@
 
         <ResourceTagEditor Resource="Router" 
                            TestIdPrefix="router" />
+
+        <ResourceLabelEditor Resource="Router"
+                             TestIdPrefix="router" />
 
 
         <div class="md:col-span-2"

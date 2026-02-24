@@ -1,4 +1,4 @@
-﻿@using RackPeek.Domain.Resources.SubResources
+@using RackPeek.Domain.Resources.SubResources
 @using RackPeek.Domain.Resources.Switches
 @using RackPeek.Domain.UseCases.Ports
 @inject UpdateSwitchUseCase UpdateUseCase
@@ -164,6 +164,9 @@
 
         <ResourceTagEditor Resource="Switch" 
                            TestIdPrefix="switch" />
+
+        <ResourceLabelEditor Resource="Switch"
+                             TestIdPrefix="switch" />
 
 
         <div class="md:col-span-2"
