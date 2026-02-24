@@ -41,4 +41,14 @@ public static class Normalize
     {
         return name.Trim();
     }
+
+    public static string LabelKey(string key)
+    {
+        return key.Trim();
+    }
+
+    public static string LabelValue(string value)
+    {
+        return value.Trim();
+    }
 }

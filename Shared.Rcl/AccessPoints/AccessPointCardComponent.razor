@@ -1,4 +1,4 @@
-﻿@using RackPeek.Domain.Resources.AccessPoints
+@using RackPeek.Domain.Resources.AccessPoints
 @inject UpdateAccessPointUseCase UpdateUseCase
 @inject IDeleteResourceUseCase<AccessPoint> DeleteUseCase
 @inject IRenameResourceUseCase<AccessPoint> RenameUseCase
@@ -106,6 +106,9 @@
 
         <ResourceTagEditor Resource="AccessPoint"
                            TestIdPrefix="accesspoint" />
+
+        <ResourceLabelEditor Resource="AccessPoint"
+                             TestIdPrefix="accesspoint" />
 
         <div class="md:col-span-2"
              data-testid="accesspoint-notes-section">

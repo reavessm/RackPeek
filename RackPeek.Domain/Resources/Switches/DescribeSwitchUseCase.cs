@@ -11,7 +11,8 @@ public record SwitchDescription(
     bool? Poe,
     int TotalPorts,
     double TotalSpeedGb,
-    string PortSummary
+    string PortSummary,
+    Dictionary<string, string> Labels
 );
 
 public class DescribeSwitchUseCase(IResourceCollection repository) : IUseCase
@@ -53,7 +54,8 @@ public class DescribeSwitchUseCase(IResourceCollection repository) : IUseCase
             switchResource.Poe,
             totalPorts,
             totalSpeedGb,
-            portSummary
+            portSummary,
+            switchResource.Labels
         );
     }
 }

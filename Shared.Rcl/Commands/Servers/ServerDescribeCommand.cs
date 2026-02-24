@@ -32,6 +32,9 @@ public class ServerDescribeCommand(
             foreach (var cpu in server.Cpus)
                 grid.AddRow("CPU", $"{cpu.Model} ({cpu.Cores}/{cpu.Threads})");
 
+        if (server.Labels.Count > 0)
+            grid.AddRow("Labels", string.Join(", ", server.Labels.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+
         AnsiConsole.Write(
             new Panel(grid)
                 .Header("Server")

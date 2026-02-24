@@ -11,7 +11,8 @@ public record RouterDescription(
     bool? Poe,
     int TotalPorts,
     double TotalSpeedGb,
-    string PortSummary
+    string PortSummary,
+    Dictionary<string, string> Labels
 );
 
 public class DescribeRouterUseCase(IResourceCollection repository) : IUseCase
@@ -53,7 +54,8 @@ public class DescribeRouterUseCase(IResourceCollection repository) : IUseCase
             routerResource.Poe,
             totalPorts,
             totalSpeedGb,
-            portSummary
+            portSummary,
+            routerResource.Labels
         );
     }
 }

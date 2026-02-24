@@ -31,6 +31,9 @@ public class FirewallDescribeCommand(
         grid.AddRow("Total Speed (Gb):", sw.TotalSpeedGb.ToString());
         grid.AddRow("Ports:", sw.PortSummary);
 
+        if (sw.Labels.Count > 0)
+            grid.AddRow("Labels:", string.Join(", ", sw.Labels.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+
         AnsiConsole.Write(
             new Panel(grid)
                 .Header("Firewall")

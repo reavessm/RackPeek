@@ -7,29 +7,39 @@ using RackPeek.Domain.Persistence;
 using RackPeek.Domain.Persistence.Yaml;
 using Shared.Rcl.Commands;
 using Shared.Rcl.Commands.AccessPoints;
+using Shared.Rcl.Commands.AccessPoints.Labels;
 using Shared.Rcl.Commands.Desktops;
+using Shared.Rcl.Commands.Desktops.Labels;
 using Shared.Rcl.Commands.Desktops.Cpus;
 using Shared.Rcl.Commands.Desktops.Drive;
 using Shared.Rcl.Commands.Desktops.Gpus;
 using Shared.Rcl.Commands.Desktops.Nics;
 using Shared.Rcl.Commands.Firewalls;
+using Shared.Rcl.Commands.Firewalls.Labels;
 using Shared.Rcl.Commands.Firewalls.Ports;
 using Shared.Rcl.Commands.Laptops;
+using Shared.Rcl.Commands.Laptops.Labels;
 using Shared.Rcl.Commands.Laptops.Cpus;
 using Shared.Rcl.Commands.Laptops.Drive;
 using Shared.Rcl.Commands.Laptops.Gpus;
 using Shared.Rcl.Commands.Routers;
+using Shared.Rcl.Commands.Routers.Labels;
 using Shared.Rcl.Commands.Routers.Ports;
 using Shared.Rcl.Commands.Servers;
 using Shared.Rcl.Commands.Servers.Cpus;
 using Shared.Rcl.Commands.Servers.Drives;
 using Shared.Rcl.Commands.Servers.Gpus;
+using Shared.Rcl.Commands.Servers.Labels;
 using Shared.Rcl.Commands.Servers.Nics;
 using Shared.Rcl.Commands.Services;
+using Shared.Rcl.Commands.Services.Labels;
 using Shared.Rcl.Commands.Switches;
+using Shared.Rcl.Commands.Switches.Labels;
 using Shared.Rcl.Commands.Switches.Ports;
 using Shared.Rcl.Commands.Systems;
+using Shared.Rcl.Commands.Systems.Labels;
 using Shared.Rcl.Commands.Ups;
+using Shared.Rcl.Commands.Ups.Labels;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -172,6 +182,16 @@ public static class CliBootstrap
 
                     nic.AddCommand<ServerNicRemoveCommand>("del").WithDescription("Remove a NIC from a server.");
                 });
+
+                // Server Labels
+                server.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on a server.");
+
+                    label.AddCommand<ServerLabelAddCommand>("add").WithDescription("Add a label to a server.");
+
+                    label.AddCommand<ServerLabelRemoveCommand>("remove").WithDescription("Remove a label from a server.");
+                });
             });
 
             // ----------------------------
@@ -207,6 +227,13 @@ public static class CliBootstrap
                     port.AddCommand<SwitchPortUpdateCommand>("set").WithDescription("Update a switch port.");
 
                     port.AddCommand<SwitchPortRemoveCommand>("del").WithDescription("Remove a port from a switch.");
+                });
+
+                switches.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on a switch.");
+                    label.AddCommand<SwitchLabelAddCommand>("add").WithDescription("Add a label to a switch.");
+                    label.AddCommand<SwitchLabelRemoveCommand>("remove").WithDescription("Remove a label from a switch.");
                 });
             });
 
@@ -244,6 +271,13 @@ public static class CliBootstrap
 
                     port.AddCommand<RouterPortRemoveCommand>("del").WithDescription("Remove a port from a router.");
                 });
+
+                routers.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on a router.");
+                    label.AddCommand<RouterLabelAddCommand>("add").WithDescription("Add a label to a router.");
+                    label.AddCommand<RouterLabelRemoveCommand>("remove").WithDescription("Remove a label from a router.");
+                });
             });
 
             // ----------------------------
@@ -280,6 +314,13 @@ public static class CliBootstrap
 
                     port.AddCommand<FirewallPortRemoveCommand>("del").WithDescription("Remove a port from a firewall.");
                 });
+
+                firewalls.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on a firewall.");
+                    label.AddCommand<FirewallLabelAddCommand>("add").WithDescription("Add a label to a firewall.");
+                    label.AddCommand<FirewallLabelRemoveCommand>("remove").WithDescription("Remove a label from a firewall.");
+                });
             });
 
             // ----------------------------
@@ -307,6 +348,13 @@ public static class CliBootstrap
 
                 system.AddCommand<SystemTreeCommand>("tree")
                     .WithDescription("Display the dependency tree for a system.");
+
+                system.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on a system.");
+                    label.AddCommand<SystemLabelAddCommand>("add").WithDescription("Add a label to a system.");
+                    label.AddCommand<SystemLabelRemoveCommand>("remove").WithDescription("Remove a label from a system.");
+                });
             });
 
             // ----------------------------
@@ -331,6 +379,13 @@ public static class CliBootstrap
                 ap.AddCommand<AccessPointSetCommand>("set").WithDescription("Update properties of an access point.");
 
                 ap.AddCommand<AccessPointDeleteCommand>("del").WithDescription("Delete an access point.");
+
+                ap.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on an access point.");
+                    label.AddCommand<AccessPointLabelAddCommand>("add").WithDescription("Add a label to an access point.");
+                    label.AddCommand<AccessPointLabelRemoveCommand>("remove").WithDescription("Remove a label from an access point.");
+                });
             });
 
             // ----------------------------
@@ -355,6 +410,13 @@ public static class CliBootstrap
                 ups.AddCommand<UpsSetCommand>("set").WithDescription("Update properties of a UPS unit.");
 
                 ups.AddCommand<UpsDeleteCommand>("del").WithDescription("Delete a UPS unit.");
+
+                ups.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on a UPS unit.");
+                    label.AddCommand<UpsLabelAddCommand>("add").WithDescription("Add a label to a UPS unit.");
+                    label.AddCommand<UpsLabelRemoveCommand>("remove").WithDescription("Remove a label from a UPS unit.");
+                });
             });
 
             // ----------------------------
@@ -414,6 +476,13 @@ public static class CliBootstrap
                     nic.AddCommand<DesktopNicSetCommand>("set").WithDescription("Update a desktop NIC.");
                     nic.AddCommand<DesktopNicRemoveCommand>("del").WithDescription("Remove a NIC from a desktop.");
                 });
+
+                desktops.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on a desktop.");
+                    label.AddCommand<DesktopLabelAddCommand>("add").WithDescription("Add a label to a desktop.");
+                    label.AddCommand<DesktopLabelRemoveCommand>("remove").WithDescription("Remove a label from a desktop.");
+                });
             });
 
             // ----------------------------
@@ -462,6 +531,13 @@ public static class CliBootstrap
                     gpu.AddCommand<LaptopGpuSetCommand>("set").WithDescription("Update a Laptop GPU.");
                     gpu.AddCommand<LaptopGpuRemoveCommand>("del").WithDescription("Remove a GPU from a Laptop.");
                 });
+
+                laptops.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on a laptop.");
+                    label.AddCommand<LaptopLabelAddCommand>("add").WithDescription("Add a label to a laptop.");
+                    label.AddCommand<LaptopLabelRemoveCommand>("remove").WithDescription("Remove a label from a laptop.");
+                });
             });
 
             // ----------------------------
@@ -489,6 +565,13 @@ public static class CliBootstrap
 
                 service.AddCommand<ServiceSubnetsCommand>("subnets")
                     .WithDescription("List subnets associated with a service, optionally filtered by CIDR.");
+
+                service.AddBranch("label", label =>
+                {
+                    label.SetDescription("Manage labels on a service.");
+                    label.AddCommand<ServiceLabelAddCommand>("add").WithDescription("Add a label to a service.");
+                    label.AddCommand<ServiceLabelRemoveCommand>("remove").WithDescription("Remove a label from a service.");
+                });
             });
         });
     }

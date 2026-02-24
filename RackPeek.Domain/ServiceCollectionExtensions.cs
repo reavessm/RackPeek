@@ -10,6 +10,7 @@ using RackPeek.Domain.UseCases.Cpus;
 using RackPeek.Domain.UseCases.Drives;
 using RackPeek.Domain.UseCases.Gpus;
 using RackPeek.Domain.UseCases.Nics;
+using RackPeek.Domain.UseCases.Labels;
 using RackPeek.Domain.UseCases.Ports;
 using RackPeek.Domain.UseCases.Tags;
 
@@ -48,9 +49,11 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services)
     {
         services.AddScoped(typeof(IAddResourceUseCase<>), typeof(AddResourceUseCase<>));
+        services.AddScoped(typeof(IAddLabelUseCase<>), typeof(AddLabelUseCase<>));
         services.AddScoped(typeof(IAddTagUseCase<>), typeof(AddTagUseCase<>));
         services.AddScoped(typeof(ICloneResourceUseCase<>), typeof(CloneResourceUseCase<>));
         services.AddScoped(typeof(IDeleteResourceUseCase<>), typeof(DeleteResourceUseCase<>));
+        services.AddScoped(typeof(IRemoveLabelUseCase<>), typeof(RemoveLabelUseCase<>));
         services.AddScoped(typeof(IRemoveTagUseCase<>), typeof(RemoveTagUseCase<>));
         services.AddScoped(typeof(IGetAllResourcesByKindUseCase<>), typeof(GetAllResourcesByKindUseCase<>));
         services.AddScoped(typeof(IGetResourceByNameUseCase<>), typeof(GetResourceByNameUseCase<>));

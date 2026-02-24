@@ -28,6 +28,9 @@ public class DesktopDescribeCommand(IServiceProvider provider)
         grid.AddRow("NICs:", result.NicCount.ToString());
         grid.AddRow("GPUs:", result.GpuCount.ToString());
 
+        if (result.Labels.Count > 0)
+            grid.AddRow("Labels:", string.Join(", ", result.Labels.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+
         AnsiConsole.Write(new Panel(grid).Header("Desktop").Border(BoxBorder.Rounded));
 
         return 0;
