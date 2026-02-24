@@ -1,4 +1,4 @@
-﻿@using RackPeek.Domain.Resources.UpsUnits
+@using RackPeek.Domain.Resources.UpsUnits
 @inject UpdateUpsUseCase UpdateUseCase
 @inject IGetResourceByNameUseCase<Ups> GetByNameUseCase
 @inject IDeleteResourceUseCase<Ups> DeleteUseCase
@@ -106,6 +106,9 @@
 
         <ResourceTagEditor Resource="Ups" 
                            TestIdPrefix="ups" />
+
+        <ResourceLabelEditor Resource="Ups"
+                             TestIdPrefix="ups" />
 
 
         <div class="md:col-span-2"

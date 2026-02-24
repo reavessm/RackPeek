@@ -1,4 +1,4 @@
-﻿@inject UpdateServiceUseCase UpdateUseCase
+@inject UpdateServiceUseCase UpdateUseCase
 @inject IGetResourceByNameUseCase<Service> GetByNameUseCase
 @inject IDeleteResourceUseCase<Service> DeleteUseCase
 @inject ICloneResourceUseCase<Service> CloneUseCase
@@ -190,6 +190,9 @@
 
         <ResourceTagEditor Resource="Service"
                            TestIdPrefix="service" />
+
+        <ResourceLabelEditor Resource="Service"
+                             TestIdPrefix="service" />
 
 
         <div class="md:col-span-2">

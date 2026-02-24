@@ -23,7 +23,8 @@ public class DescribeLaptopUseCase(IResourceCollection repository) : IUseCase
             laptop.Cpus?.Count ?? 0,
             ramSummary,
             laptop.Drives?.Count ?? 0,
-            laptop.Gpus?.Count ?? 0
+            laptop.Gpus?.Count ?? 0,
+            laptop.Labels
         );
     }
 }
@@ -33,5 +34,6 @@ public record LaptopDescription(
     int CpuCount,
     string? RamSummary,
     int DriveCount,
-    int GpuCount
+    int GpuCount,
+    Dictionary<string, string> Labels
 );

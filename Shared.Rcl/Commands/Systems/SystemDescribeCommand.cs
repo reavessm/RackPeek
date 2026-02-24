@@ -31,6 +31,9 @@ public class SystemDescribeCommand(
         grid.AddRow("Total Storage (GB):", system.TotalStorageGb.ToString());
         grid.AddRow("Runs On:", system.RunsOn ?? "Unknown");
 
+        if (system.Labels.Count > 0)
+            grid.AddRow("Labels:", string.Join(", ", system.Labels.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+
         AnsiConsole.Write(
             new Panel(grid)
                 .Header("System")

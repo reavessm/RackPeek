@@ -1,0 +1,118 @@
+@using RackPeek.Domain.UseCases.Labels
+@typeparam TResource where TResource : RackPeek.Domain.Resources.Resource
+@inject IAddLabelUseCase<TResource> AddLabelUseCase
+@inject IRemoveLabelUseCase<TResource> RemoveLabelUseCase
+
+<div class="md:col-span-2"
+     data-testid="@BaseTestId">
+
+    <div class="flex items-center justify-between mb-1 group"
+         data-testid="@($"{BaseTestId}-header")">
+
+        <div class="text-zinc-400">
+            Labels
+            <button class="hover:text-emerald-400 ml-1"
+                    title="Add Label"
+                    data-testid="@($"{BaseTestId}-add")"
+                    @onclick="OpenAddLabel">
+                +
+            </button>
+        </div>
+    </div>
+
+    @if (Resource.Labels.Any())
+    {
+        <div class="flex flex-wrap gap-2"
+             data-testid="@($"{BaseTestId}-list")">
+
+            @foreach (var kvp in Resource.Labels.OrderBy(k => k.Key))
+            {
+                <div class="flex text-xs rounded overflow-hidden border border-zinc-700"
+                     data-testid="@($"{BaseTestId}-label-{kvp.Key}")">
+
+                    <button type="button"
+                            class="px-2 py-0.5 bg-zinc-800 text-zinc-300 hover:bg-emerald-800 hover:text-emerald-200 transition text-left"
+                            title="Edit label"
+                            data-testid="@($"{BaseTestId}-label-{kvp.Key}-view")"
+                            @onclick="() => OpenEditLabel(kvp.Key, kvp.Value)">
+                        @kvp.Key: @kvp.Value
+                    </button>
+
+                    <button type="button"
+                            class="px-1 py-0.5 bg-zinc-800 text-zinc-400 hover:bg-red-800 hover:text-red-200 transition border-l border-zinc-700"
+                            title="Remove label"
+                            data-testid="@($"{BaseTestId}-label-{kvp.Key}-remove")"
+                            @onclick="() => RemoveLabel(kvp.Key)">
+                        ✕
+                    </button>
+
+                </div>
+            }
+        </div>
+    }
+
+</div>
+
+<KeyValueModal
+    IsOpen="_labelModalOpen"
+    IsOpenChanged="v => { _labelModalOpen = v; if (!v) { _editingKey = null; _editingValue = null; } }"
+    Title="@(_editingKey is null ? "Add Label" : "Edit Label")"
+    Description="@(_editingKey is null ? "Enter a key and value for the label" : "Update the key and value for the label")"
+    KeyLabel="Key"
+    ValueLabel="Value"
+    Key="@_editingKey"
+    Value="@_editingValue"
+    TestIdPrefix="@BaseTestId"
+    OnSubmit="HandleLabelSubmit" />
+
+@code {
+    [Parameter][EditorRequired] public TResource Resource { get; set; } = default!;
+    [Parameter] public EventCallback OnLabelsChanged { get; set; }
+    [Parameter] public string? TestIdPrefix { get; set; }
+
+    private bool _labelModalOpen;
+    private string? _editingKey;
+    private string? _editingValue;
+
+    private string BaseTestId =>
+        string.IsNullOrWhiteSpace(TestIdPrefix)
+            ? "resource-label-editor"
+            : $"{TestIdPrefix}-resource-label-editor";
+
+    void OpenAddLabel()
+    {
+        _editingKey = null;
+        _editingValue = null;
+        _labelModalOpen = true;
+    }
+
+    void OpenEditLabel(string key, string value)
+    {
+        _editingKey = key;
+        _editingValue = value;
+        _labelModalOpen = true;
+    }
+
+    public async Task HandleLabelSubmit((string Key, string Value) label)
+    {
+        var originalKey = _editingKey;
+        _editingKey = null;
+        _editingValue = null;
+
+        if (originalKey is not null && originalKey != label.Key)
+            await RemoveLabelUseCase.ExecuteAsync(Resource.Name, originalKey);
+
+        await AddLabelUseCase.ExecuteAsync(Resource.Name, label.Key, label.Value);
+
+        if (OnLabelsChanged.HasDelegate)
+            await OnLabelsChanged.InvokeAsync();
+    }
+
+    async Task RemoveLabel(string key)
+    {
+        await RemoveLabelUseCase.ExecuteAsync(Resource.Name, key);
+
+        if (OnLabelsChanged.HasDelegate)
+            await OnLabelsChanged.InvokeAsync();
+    }
+}

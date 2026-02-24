@@ -11,7 +11,8 @@ public record FirewallDescription(
     bool? Poe,
     int TotalPorts,
     double TotalSpeedGb,
-    string PortSummary
+    string PortSummary,
+    Dictionary<string, string> Labels
 );
 
 public class DescribeFirewallUseCase(IResourceCollection repository) : IUseCase
@@ -53,7 +54,8 @@ public class DescribeFirewallUseCase(IResourceCollection repository) : IUseCase
             firewallResource.Poe,
             totalPorts,
             totalSpeedGb,
-            portSummary
+            portSummary,
+            firewallResource.Labels
         );
     }
 }

@@ -48,6 +48,7 @@ public abstract class Resource
     public required string Name { get; set; }
 
     public string[] Tags { get; set; } = [];
+    public Dictionary<string, string> Labels { get; set; } = new();
     public string? Notes { get; set; }
 
     public string? RunsOn { get; set; }

@@ -10,7 +10,8 @@ public record DesktopDescription(
     string? RamSummary,
     int DriveCount,
     int NicCount,
-    int GpuCount
+    int GpuCount,
+    Dictionary<string, string> Labels
 );
 
 public class DescribeDesktopUseCase(IResourceCollection repository) : IUseCase
@@ -35,7 +36,8 @@ public class DescribeDesktopUseCase(IResourceCollection repository) : IUseCase
             ramSummary,
             desktop.Drives?.Count ?? 0,
             desktop.Nics?.Count ?? 0,
-            desktop.Gpus?.Count ?? 0
+            desktop.Gpus?.Count ?? 0,
+            desktop.Labels
         );
     }
 }

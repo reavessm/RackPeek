@@ -11,7 +11,8 @@ public record ServiceDescription(
     string? Protocol,
     string? Url,
     string? RunsOnSystemHost,
-    string? RunsOnPhysicalHost
+    string? RunsOnPhysicalHost,
+    Dictionary<string, string> Labels
 );
 
 public class DescribeServiceUseCase(IResourceCollection repository) : IUseCase
@@ -38,7 +39,8 @@ public class DescribeServiceUseCase(IResourceCollection repository) : IUseCase
             service.Network?.Protocol,
             service.Network?.Url,
             service.RunsOn,
-            runsOnPhysicalHost
+            runsOnPhysicalHost,
+            service.Labels
         );
     }
 }

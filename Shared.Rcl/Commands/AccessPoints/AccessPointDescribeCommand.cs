@@ -28,6 +28,9 @@ public class AccessPointDescribeCommand(
         grid.AddRow("Model:", ap.Model ?? "Unknown");
         grid.AddRow("Speed (Gbps):", ap.Speed?.ToString() ?? "Unknown");
 
+        if (ap.Labels.Count > 0)
+            grid.AddRow("Labels:", string.Join(", ", ap.Labels.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+
         AnsiConsole.Write(
             new Panel(grid)
                 .Header("Access Point")

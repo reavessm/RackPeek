@@ -10,7 +10,8 @@ public record SystemDescription(
     int Cores,
     double RamGb,
     int TotalStorageGb,
-    string? RunsOn
+    string? RunsOn,
+    Dictionary<string, string> Labels
 );
 
 public class DescribeSystemUseCase(IResourceCollection repository) : IUseCase
@@ -30,7 +31,8 @@ public class DescribeSystemUseCase(IResourceCollection repository) : IUseCase
             system.Cores ?? 0,
             system.Ram ?? 0,
             system.Drives?.Sum(d => d.Size) ?? 0,
-            system.RunsOn
+            system.RunsOn,
+            system.Labels
         );
     }
 }

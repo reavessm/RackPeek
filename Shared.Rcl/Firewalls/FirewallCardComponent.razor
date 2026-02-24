@@ -1,4 +1,4 @@
-﻿@using RackPeek.Domain.Resources.Firewalls
+@using RackPeek.Domain.Resources.Firewalls
 @using RackPeek.Domain.Resources.SubResources
 @using RackPeek.Domain.UseCases.Ports
 @inject UpdateFirewallUseCase UpdateUseCase
@@ -164,6 +164,9 @@
 
         <ResourceTagEditor Resource="Firewall" 
                            TestIdPrefix="firewall" />
+
+        <ResourceLabelEditor Resource="Firewall"
+                             TestIdPrefix="firewall" />
 
 
         <div class="md:col-span-2"

@@ -6,7 +6,8 @@ namespace RackPeek.Domain.Resources.UpsUnits;
 public record UpsDescription(
     string Name,
     string? Model,
-    int? Va
+    int? Va,
+    Dictionary<string, string> Labels
 );
 
 public class DescribeUpsUseCase(IResourceCollection repository) : IUseCase
@@ -23,7 +24,8 @@ public class DescribeUpsUseCase(IResourceCollection repository) : IUseCase
         return new UpsDescription(
             ups.Name,
             ups.Model,
-            ups.Va
+            ups.Va,
+            ups.Labels
         );
     }
 }

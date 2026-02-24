@@ -35,6 +35,9 @@ public class ServiceDescribeCommand(
         grid.AddRow("Runs On:",
             ServicesFormatExtensions.FormatRunsOn(service.RunsOnSystemHost, service.RunsOnPhysicalHost));
 
+        if (service.Labels.Count > 0)
+            grid.AddRow("Labels:", string.Join(", ", service.Labels.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+
         AnsiConsole.Write(
             new Panel(grid)
                 .Header("Service")
