@@ -111,7 +111,12 @@ docker-push version:
 [group("run")]
 run-docker: _check-dotnet
     docker build -t {{ _image }} -f {{ _dockerfile }} .
-    docker run -d --name rackpeek -p 8080:8080 {{ _image }}
+    docker run -d -p 8080:8080 {{ _image }}
+
+[doc("Use the locally built CLI")]
+[group("run")]
+rpk *args: _check-dotnet
+    ./RackPeek/bin/Debug/net10.0/RackPeek {{ args }}
 
 # ─── Utility ────────────────────────────────────────────────────────────────
 
