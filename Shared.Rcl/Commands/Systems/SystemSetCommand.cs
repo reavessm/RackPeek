@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using RackPeek.Domain.Resources.SystemResources.UseCases;
 using Shared.Rcl.Commands.Servers;
@@ -16,7 +17,10 @@ public class SystemSetSettings : ServerNameSettings
 
     [CommandOption("--ram")] public int? Ram { get; set; }
 
-    [CommandOption("--runs-on")] public string? RunsOn { get; set; }
+    [CommandOption("--runs-on <RUNSON>")]
+    [Description("The physical machine(s) the service is running on.")]
+    public string[]? RunsOn { get; set; }
+    
 }
 
 public class SystemSetCommand(
@@ -31,19 +35,13 @@ public class SystemSetCommand(
         using var scope = serviceProvider.CreateScope();
         var useCase = scope.ServiceProvider.GetRequiredService<UpdateSystemUseCase>();
 
-        List<string> runsOn = new List<string>();
-        if (settings.RunsOn is not null)
-        {
-            runsOn.Add(settings.RunsOn);
-        }
-
         await useCase.ExecuteAsync(
             settings.Name,
             settings.Type,
             settings.Os,
             settings.Cores,
             settings.Ram,
-            runsOn
+            settings.RunsOn?.ToList()
         );
 
         AnsiConsole.MarkupLine($"[green]System '{settings.Name}' updated.[/]");

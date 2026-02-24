@@ -35,8 +35,8 @@ public class ServiceReportCommand(
 
         foreach (var s in report.Services)
         {
-            string sys = "Unknown";
-            string phys = "Unknown";
+            string? sys = null;
+            string? phys = null;
 
             if (s.RunsOnSystemHost?.Count > 0 )
             {

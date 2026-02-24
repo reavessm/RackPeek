@@ -54,12 +54,14 @@ public sealed class YamlResourceCollection(
     {
         return Task.FromResult<IReadOnlyList<T>>(resourceCollection.Resources.OfType<T>().ToList());
     }
-
+    
     public Task<IReadOnlyList<Resource>> GetDependantsAsync(string name)
     {
-        return Task.FromResult<IReadOnlyList<Resource>>(resourceCollection.Resources
-            .Where(r => r.RunsOn.Select(p => p.Equals(name, StringComparison.OrdinalIgnoreCase)).ToList().Count > 0 )
-            .ToList());
+        var result = resourceCollection.Resources
+            .Where(r => r.RunsOn.Any(p => p.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+
+        return Task.FromResult<IReadOnlyList<Resource>>(result);
     }
 
     public Task<IReadOnlyList<Resource>> GetByTagAsync(string name)

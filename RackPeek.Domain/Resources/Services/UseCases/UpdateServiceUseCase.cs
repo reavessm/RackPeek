@@ -50,16 +50,24 @@ public class UpdateServiceUseCase(IResourceCollection repository) : IUseCase
 
         if (runsOn is not null)
         {
-            foreach (var parent in runsOn)
+            var normalizedParents = new List<string>();
+
+            foreach (var parent in runsOn
+                         .Where(p => !string.IsNullOrWhiteSpace(p))
+                         .Select(p => p.Trim())
+                         .Distinct(StringComparer.OrdinalIgnoreCase))
             {
                 ThrowIfInvalid.ResourceName(parent);
 
                 var parentSystem = await repository.GetByNameAsync(parent);
 
-                if (parentSystem == null) throw new NotFoundException($"Parent system '{parent}' not found.");
+                if (parentSystem == null)
+                    throw new NotFoundException($"Parent system '{parent}' not found.");
 
-                if (!service.RunsOn.Contains(parent)) service.RunsOn.Add(parent);
+                normalizedParents.Add(parent);
             }
+
+            service.RunsOn = normalizedParents;
         }
 
         if (notes != null) service.Notes = notes;

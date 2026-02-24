@@ -19,23 +19,36 @@ public class YamlHardwareRepository(IResourceCollection resources) : IHardwareRe
     public Task<List<HardwareTree>> GetTreeAsync()
     {
         var hardwareTree = new List<HardwareTree>();
+        
+            var systemGroups = resources.SystemResources
+                .Where(s => s.RunsOn.Count != 0)
+                .SelectMany(
+                    s => s.RunsOn,
+                    (system, hardwareName) => new
+                    {
+                        Hardware = hardwareName.Trim(),
+                        System = system
+                    })
+                .GroupBy(x => x.Hardware, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(x => x.System).ToList(),
+                    StringComparer.OrdinalIgnoreCase);
 
-        // List<string> systemGroups = resources.SystemResources.ToList<string>();
-            // .Where(s => s.RunsOn != null)
-            // .ToList();
-
-        var systemGroups = resources.SystemResources
-            // .Where(s => !string.IsNullOrWhiteSpace(s.RunsOn))
-            // .Where(s => s.RunsOn != null)
-            // TODO: Get rid of 'First'
-            .GroupBy(s => s.RunsOn.First().Trim(), StringComparer.OrdinalIgnoreCase)
-            .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.OrdinalIgnoreCase);
-
-        var serviceGroups = resources.ServiceResources
-            // .Where(s => !string.IsNullOrWhiteSpace(s.RunsOn))
-            // TODO: Get rid of 'First'
-            .GroupBy(s => s.RunsOn.First().Trim(), StringComparer.OrdinalIgnoreCase)
-            .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.OrdinalIgnoreCase);
+            var serviceGroups = resources.ServiceResources
+                .Where(s => s.RunsOn.Count != 0)
+                .SelectMany(
+                    s => s.RunsOn,
+                    (service, systemName) => new
+                    {
+                        System = systemName.Trim(),
+                        Service = service
+                    })
+                .GroupBy(x => x.System, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(x => x.Service).ToList(),
+                    StringComparer.OrdinalIgnoreCase);
 
         foreach (var hardware in resources.HardwareResources)
         {

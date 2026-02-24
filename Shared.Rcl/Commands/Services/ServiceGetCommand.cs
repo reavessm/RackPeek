@@ -35,10 +35,9 @@ public class ServiceGetCommand(
 
         foreach (var s in report.Services)
         {
-            var sys = "Unknown";
-            var phys = "Unkown";
-
-
+            string? sys = null;
+            string? phys = null;
+            
             if (s.RunsOnSystemHost is not null)
             {
                 sys = string.Join(", ", s.RunsOnSystemHost);

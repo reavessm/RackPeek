@@ -70,39 +70,49 @@ public class RackPeekConfigMigrationDeserializer : YamlMigrationDeserializer<Yam
         
         return ValueTask.CompletedTask;
     }
-
-    public static ValueTask ConvertScalarRunsOnToList(IServiceProvider serviceProvider, Dictionary<object, object> obj)
+    public static ValueTask ConvertScalarRunsOnToList(
+        IServiceProvider serviceProvider,
+        Dictionary<object, object> obj)
     {
         const string key = "runsOn";
-        var resourceList = obj["resources"];
-        if (resourceList is List<object> resources)
+
+        if (!obj.TryGetValue("resources", out var resourceListObj))
+            return ValueTask.CompletedTask;
+
+        if (resourceListObj is not List<object> resources)
+            return ValueTask.CompletedTask;
+
+        foreach (var resourceObj in resources)
         {
-            foreach(var resourceObj in resources)
+            if (resourceObj is not Dictionary<object, object> resourceDict)
+                continue;
+
+            if (!resourceDict.TryGetValue(key, out var runsOn))
+                continue;
+
+            switch (runsOn)
             {
-                if (resourceObj is Dictionary<object,object> resourceDict)
-                {
-                    if (resourceDict.ContainsKey(key))
-                    {
-                        var runsOn = resourceDict[key];
-                        Type t = runsOn.GetType();
-                        switch (runsOn)
-                        {
-                            case string r:
-                                resourceDict[key] = new List<string>{r};
-                                break;
-                            case List<string> r:
-                                // Nothing to do
-                                break;
-                            default:
-                                throw new InvalidCastException($"Cannot convert from {t} to List<string> in {resourceDict}[{key}]");
-                        }
-                    }
-                }
+                case string single:
+                    resourceDict[key] = new List<string> { single };
+                    break;
+
+                case List<object> list:
+                    resourceDict[key] = list
+                        .OfType<string>()
+                        .ToList();
+                    break;
+
+                case List<string>:
+                    // Already correct
+                    break;
+
+                default:
+                    throw new InvalidCastException(
+                        $"Cannot convert {runsOn.GetType()} to List<string> for resource '{resourceDict}'.");
             }
         }
 
         return ValueTask.CompletedTask;
     }
-
     #endregion
 }
